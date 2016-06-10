@@ -9,9 +9,9 @@ namespace Route
 	{
 		//Internal Variabes
 		[SerializeField]
-		protected List<RoutePoint> _points;
+		protected HashSet<RoutePoint> _points = new HashSet<RoutePoint>();
 
-		public List<RoutePoint> Points
+		public HashSet<RoutePoint> Points
 		{
 			get
 			{
@@ -19,12 +19,65 @@ namespace Route
 			}
 		}
 
+		protected HashSet<PointToBeProcessed> pointQueue = new HashSet<PointToBeProcessed>();
+
 		//Properties
 		public abstract float Length
 		{
 			get;
 		}
 
-		public abstract Traveller GenerateNewTraveller(Traveller oldTraveller = null);
+		public abstract Traveller GenerateNewTraveller();
+
+		public abstract RoutePoint GenerateNewPoint();
+
+		public void QueuePointForRemoval(RoutePoint point)
+		{
+			pointQueue.Add(new PointToBeProcessed(point, false));
+		}
+
+		public void QueuePointForAddition(RoutePoint point)
+		{
+			pointQueue.Add(new PointToBeProcessed(point, true));
+		}
+
+		protected void ModifyPoints()
+		{
+			foreach (PointToBeProcessed pointModification in pointQueue)
+			{
+				if (pointModification._isAdding)
+				{
+					_points.Add(pointModification._point);
+				}
+				else
+				{
+					_points.Remove(pointModification._point);
+				}
+			}
+			pointQueue.Clear();
+		}
+
+		protected struct PointToBeProcessed
+		{
+			public RoutePoint _point;
+			public bool _isAdding;
+
+			//if isAdding is false, then we are deleting
+			public PointToBeProcessed(RoutePoint point, bool isAdding)
+			{
+				_point = point;
+				_isAdding = isAdding;
+			}
+
+			public override int GetHashCode()
+			{
+				return _point.GetHashCode();
+			}
+
+			public override bool Equals(object obj)
+			{
+				return _point.Equals(obj);
+			}
+		}
 	}
 }

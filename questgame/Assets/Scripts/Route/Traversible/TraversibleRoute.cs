@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 using Shapes;
@@ -28,27 +28,34 @@ namespace Route
 			}
 		}
 
-		public override Traveller GenerateNewTraveller(Traveller oldTraveller = null)
+		public override Traveller GenerateNewTraveller()
 		{
-			return GenerateNewTraveller(null, oldTraveller);
+			return GenerateNewTraveller(null);
 		}
 
-		public Traveller GenerateNewTraveller(RouteBranch branch, Traveller oldTraveller = null)
+		public Traveller GenerateNewTraveller(RouteBranch branch)
 		{
 			TraversibleRouteTraveller newTraveller = new GameObject("Traveller").AddComponent<TraversibleRouteTraveller>();
 
-			newTraveller.Assign(this, branch, oldTraveller);
+			newTraveller.Assign(this, branch);
 
 			return newTraveller;
 		}
 
-		public void CheckPoints(Traveller travellerToCheck)
+		public void CheckCollision(Traveller travellerToCheck, Ray travellerMovement, float distance)
 		{
-			Traveller newTraveller = travellerToCheck;
-			for (int i = 0; i < _points.Count; i++)
+			foreach (RoutePoint point in _points)
 			{
-				_points[i].TestTraveller(travellerToCheck);
+				point.TestTraveller(travellerToCheck, travellerMovement, distance);
 			}
+			ModifyPoints();
+		}
+
+		public override RoutePoint GenerateNewPoint()
+		{
+			TraversibleRoutePoint point = new GameObject("Traveller").AddComponent<TraversibleRoutePoint>();
+			point.Assign(this);
+			return point;
 		}
 
 		void OnEnable()

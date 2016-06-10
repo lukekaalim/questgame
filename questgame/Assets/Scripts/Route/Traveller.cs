@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using Controllers;
+
 namespace Route
 {
 	//Traveller Base
@@ -14,7 +16,14 @@ namespace Route
 	 */
 	public abstract class Traveller : MonoBehaviour
 	{
+		protected Controller _activeController;
+
 		public abstract bool IsAssigned
+		{
+			get;
+		}
+
+		public abstract RouteBase CurrentGenericRoute
 		{
 			get;
 		}
@@ -27,15 +36,10 @@ namespace Route
 
 		public abstract void UpdatePosition();
 
-		public abstract RouteBase CurrentGenericRoute
-		{
-			get;
-		}
-
 
 #if UNITY_EDITOR
 
-		void OnDrawGizmos()
+		protected virtual void OnDrawGizmos()
 		{
 			float size = UnityEditor.HandleUtility.GetHandleSize(transform.position) * 0.2f;
 			Gizmos.color = new Color(1, 0, 0, 0.6f);

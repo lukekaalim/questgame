@@ -11,7 +11,7 @@ namespace Route
 
 			Traveller traveller = target as Traveller;
 
-			if (traveller.CurrentGenericRoute != null)
+			if (!EditorApplication.isPlaying && traveller.CurrentGenericRoute != null)
 			{
 				traveller.UpdatePosition();
 			}

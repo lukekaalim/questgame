@@ -9,9 +9,26 @@ namespace Route
 		[SerializeField]
 		TraversibleRoute _parent;
 
-		[SerializeField]
-		protected float _position;
-		public float Position
+		[SerializeField, HideInInspector]
+		Bounds _collisionBounds;
+
+		public Vector3 Extents
+		{
+			get
+			{
+				return _collisionBounds.extents;
+			}
+			set
+			{
+				_collisionBounds.extents = value;
+			}
+		}
+
+		[SerializeField, HideInInspector]
+		Vector2 _position;
+
+		//Readonly copy of the vector
+		public Vector2 Position
 		{
 			get
 			{
@@ -20,6 +37,7 @@ namespace Route
 			set
 			{
 				_position = value;
+				_collisionBounds.center = value;
 			}
 		}
 
@@ -33,9 +51,15 @@ namespace Route
 
 		protected override Vector3 GetDebugPosition()
 		{
-			return _parent.LinearTraversable.GetPointAlongDistance(_position);
+			return GetDebugPosition(0);
 		}
 
+		protected Vector3 GetDebugPosition(float modifier = 0)
+		{
+			return _parent.LinearTraversable.GetPointAlongDistance(_position.x + modifier) + new Vector3(0,Position.y);
+		}
+
+		//Assign
 		public override void Assign(RouteBase newRoute)
 		{
 			if (_parent != null)
@@ -51,11 +75,15 @@ namespace Route
 			}
 
 			_parent.Points.Add(this);
+
+			_position = new Vector2();
+			_collisionBounds.center = _position;
 		}
 
-		public void Assign(RouteBase newRoute, float position)
+		public void Assign(RouteBase newRoute, Vector2 position)
 		{
 			_position = position;
+			_collisionBounds.center = position;
 			Assign(newRoute);
 		}
 
@@ -64,12 +92,10 @@ namespace Route
 			_parent.Points.Remove(this);
 		}
 
-		public override bool TestTraveller(Traveller travellerToTest)
+		public override bool TestTraveller(Traveller travellerToTest, Ray travellerMovement, float distance)
 		{
-			TraversibleRouteTraveller traveller = travellerToTest as TraversibleRouteTraveller;
-
-			if ((_position < traveller.AbsoluteDistance && _position > traveller.AbsoluteDistanceLastFrame) ||
-				(_position > traveller.AbsoluteDistance && _position < traveller.AbsoluteDistanceLastFrame))
+			float collisionDistance;
+			if (_collisionBounds.IntersectRay(travellerMovement, out collisionDistance) && collisionDistance <= distance)
 			{
 				ActivatePoint(travellerToTest);
 				return true;
@@ -100,6 +126,29 @@ namespace Route
 		static bool CheckIfSelectionValidTargetForNewRoutePoint(UnityEditor.MenuCommand menuCommand)
 		{
 			return UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponent<TraversibleRoute>() != null;
+		}
+
+
+		protected override void OnDrawGizmos()
+		{
+			Vector3 position = GetDebugPosition();
+			Matrix4x4 originalMatrix = Gizmos.matrix;
+
+			Vector3 velocity = _parent.LinearTraversable.GetVelocityAtIndex(_parent.LinearTraversable.GetIndexAtPoint(_position.x));
+			Gizmos.matrix = Matrix4x4.TRS(position, Quaternion.LookRotation(velocity, Vector3.up), Vector3.one);
+
+			Gizmos.color = new Color(0.8f, 0.6f, 0, 0.5f);
+			Gizmos.DrawCube(Vector3.zero, new Vector3(0.1f, _collisionBounds.extents.y, _collisionBounds.extents.x * 2));
+
+			Gizmos.color = Color.white;
+			Gizmos.DrawWireCube(Vector3.zero, new Vector3(0.1f, _collisionBounds.extents.y, _collisionBounds.extents.x * 2));
+
+			Gizmos.matrix = originalMatrix;
+
+			Gizmos.color = Color.red;
+			Gizmos.DrawCube(GetDebugPosition(-_collisionBounds.extents.x), new Vector3(0.1f, _collisionBounds.extents.y, 0.1f));
+			Gizmos.DrawCube(GetDebugPosition(_collisionBounds.extents.x), new Vector3(0.1f, _collisionBounds.extents.y, 0.1f));
+			base.OnDrawGizmos();
 		}
 
 #endif

@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using Controllers;
+
 namespace Route
 {
 	public class TraversibleRouteTraveller : Traveller<TraversibleRoute>
@@ -11,13 +13,22 @@ namespace Route
 		[SerializeField]
 		float distanceFromIndex;
 
-		float _absoluteDistance;
-		float _absoluteDistanceLastFrame;
+		[SerializeField]
+		Vector2 _position;
+
+		//Readonly copy of the vector
+		public Vector2 Position
+		{
+			get
+			{
+				return new Vector2(_position.x, _position.y);
+			}
+		}
 
 		Traveller _nextTraveller;
 
 		[SerializeField]
-		float naturalVelocity;
+		Vector2 _velocity;
 
 		[SerializeField]
 		TraversibleRoute _currentRoute;
@@ -40,43 +51,41 @@ namespace Route
 			}
 		}
 
-		public float AbsoluteDistance
-		{
-			get
-			{
-				return _absoluteDistance;
-			}
-		}
-
-		public float AbsoluteDistanceLastFrame
-		{
-			get
-			{
-				return _absoluteDistanceLastFrame;
-			}
-		}
-
 		public override Traveller UpdateTraveller()
 		{
-			CurrentRoute.CheckPoints(this);
-
 			return this;
 		}
 
 		void Update()
 		{
-			_absoluteDistanceLastFrame = _absoluteDistance;
+			float time = Time.deltaTime;
 
-			transform.position = _currentRoute.LinearTraversable.AdvanceAlongLine(currentPointIndex, distanceFromIndex + naturalVelocity * Time.deltaTime, out currentPointIndex, out distanceFromIndex, out _absoluteDistance);
+			distanceFromIndex += _velocity.x * time;
 
-			transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex), Vector3.up), 5f * Time.deltaTime);
+			CurrentRoute.CheckCollision(this, new Ray(_position, _velocity), _velocity.magnitude * time);
 
-			CurrentRoute.CheckPoints(this);
+			UpdatePosition();
 		}
 
 		public override void UpdatePosition()
 		{
+			float absoluteDistance;
+			float progress;
 
+			//distanceFromIndex += _velocity.x * Time.deltaTime;
+
+			//Get Position
+			transform.position = _currentRoute.LinearTraversable.AdvanceAlongLine(ref currentPointIndex, ref distanceFromIndex, out absoluteDistance, out progress);
+
+			_position.x = absoluteDistance;
+
+			//Get Rotation
+			Vector3 lerpedDirection = Vector3.Lerp(
+				_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex),
+				_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex + 1),
+				progress
+				);
+			transform.rotation = Quaternion.LookRotation(lerpedDirection, Vector3.up);
 		}
 
 
@@ -84,7 +93,7 @@ namespace Route
 		{
 			Assign(newRoute, null, null);
 		}
-
+		//TODO
 		public void Assign(TraversibleRoute newRoute, RouteBranch branch = null, Traveller oldTraveller = null)
 		{
 			_currentRoute = newRoute;
@@ -92,7 +101,6 @@ namespace Route
 			{
 				currentPointIndex = 0;
 				distanceFromIndex = 0f;
-				_absoluteDistance = 0f;
 			}
 		}
 
@@ -105,5 +113,15 @@ namespace Route
 		{
 			throw new NotImplementedException();
 		}
+
+
+#if UNITY_EDITOR
+
+		protected override void OnDrawGizmos()
+		{
+			base.OnDrawGizmos();
+		}
+
+#endif
 	}
 }

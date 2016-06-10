@@ -4,7 +4,7 @@ namespace Shapes
 {
 	/*
 	 *
-	 *	Describes and interface that allows you to move at a fixed rate though a path
+	 *	Describes and interface that allows you to move at a fixed rate though a path defined by a set of points
 	 *
 	 */
 	public interface ILinearTraversable : IPathable
@@ -21,7 +21,19 @@ namespace Shapes
 
 		Vector3 GetRelativePoint(float distance);
 
-		Vector3 AdvanceAlongLine(int startingIndex, float newDistance, out int endIndex, out float endDistance, out float newTotalDistance);
+		int GetIndexAtPoint(float distance);
+
+		/*
+		 *	This is the big important function.
+		 *	Index refers to the index of the point we start at in the line.
+		 *	Distance is the distance from the beginning of that point along the line we travel
+		 *	in Actual Units. this may be bigger that the length of the actual pair of points,
+		 *	so in that case we return the new index and distance.
+		 *	New Total Distance refers to the total distance along the line we have travelled.
+		 *	Point Progress is the relative distance from the point we have travelled, clamped from
+		 *	0 to 1.
+		 */
+		Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress);
 
 		float AbsoluteLength
 		{

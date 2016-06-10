@@ -16,7 +16,6 @@ namespace Level
 
 		private void OnCollectCoin(Traveller traveller)
 		{
-			Debug.Log("Coin Collected!");
 			Destroy(gameObject);
 		}
 

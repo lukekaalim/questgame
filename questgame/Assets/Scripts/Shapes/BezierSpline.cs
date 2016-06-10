@@ -26,11 +26,11 @@ namespace Shapes
 		[SerializeField, HideInInspector]
 		int representationSamples = 100;
 
-	/*
-	 *	Optomization stuff
-	 *
-	 *	[SerializeField, HideInInspector]
-		List<int> representationSamplesPerCurve = new List<int>();	*/
+		/*
+		 *	Optomization stuff
+		 *
+		 *	[SerializeField, HideInInspector]
+			List<int> representationSamplesPerCurve = new List<int>();	*/
 
 		[SerializeField, HideInInspector]
 		CompoundLine _lineRepresentation = null;
@@ -200,7 +200,7 @@ namespace Shapes
 				{
 					SetControlPoint(index - 1, GetControlPoint(index - 1) + movementDelta, worldSpace, false, true);
 				}
-				if (_controlPoints.Count -1 > index)
+				if (_controlPoints.Count - 1 > index)
 				{
 					SetControlPoint(index + 1, GetControlPoint(index + 1) + movementDelta, worldSpace, false, true);
 				}
@@ -286,7 +286,7 @@ namespace Shapes
 			else if (_controlPoints.Count == 4)
 			{
 				_controlPoints.RemoveRange(0, 4);
-				_controlPointMode.RemoveRange(0,2);
+				_controlPointMode.RemoveRange(0, 2);
 			}
 			else
 			{
@@ -361,9 +361,9 @@ namespace Shapes
 			return LineRepresentation.GetRelativePoint(distance);
 		}
 
-		public Vector3 AdvanceAlongLine(int startingIndex, float newDistance, out int endIndex, out float endDistance, out float newTotalDistance)
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
 		{
-			return LineRepresentation.AdvanceAlongLine(startingIndex, newDistance, out endIndex, out endDistance, out newTotalDistance);
+			return LineRepresentation.AdvanceAlongLine(ref index, ref distance, out newTotalDistance, out pointProgress);
 		}
 
 		public Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex)
@@ -374,6 +374,11 @@ namespace Shapes
 		public Vector3 GetVelocityAtIndex(int startingIndex)
 		{
 			return LineRepresentation.GetVelocityAtIndex(startingIndex);
+		}
+
+		public int GetIndexAtPoint(float distance)
+		{
+			return LineRepresentation.GetIndexAtPoint(distance);
 		}
 
 #if UNITY_EDITOR

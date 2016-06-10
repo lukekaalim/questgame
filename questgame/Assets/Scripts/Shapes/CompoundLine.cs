@@ -87,9 +87,6 @@ namespace Shapes
 		}
 
 		//Methods
-
-
-
 		public Vector3 GetPoint(int index, bool worldPosition = true)
 		{
 			return worldPosition ? transform.TransformPoint(_points[index]) : _points[index];
@@ -192,19 +189,19 @@ namespace Shapes
 			return Vector3.Lerp(this[startingIndex], this[startingIndex + 1], distanceFromIndex / LineLengths[startingIndex]);
 		}
 
-		public Vector3 AdvanceAlongLine(int startingIndex, float newDistance, out int endIndex, out float endDistance, out float newTotalDistance)
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
 		{
-			while (startingIndex < PointCount - 2 && LineLengths[startingIndex] <= newDistance)
+			while (index < PointCount - 2 && LineLengths[index] <= distance)
 			{
-				newDistance -= LineLengths[startingIndex];
-				startingIndex++;
+				distance -= LineLengths[index];
+				index++;
 			}
 
-			endIndex = startingIndex;
-			endDistance = newDistance;
-			newTotalDistance = _lineDistance[endIndex] + newDistance;
+			newTotalDistance = _lineDistance[index] + distance;
 
-			return Vector3.Lerp(this[endIndex], this[endIndex + 1], endDistance / LineLengths[endIndex]);
+			pointProgress = distance / LineLengths[index];
+
+			return Vector3.Lerp(this[index], this[index + 1], pointProgress);
 		}
 
 		public override Vector3 GetPointOnPath(float percentage, bool worldSpace = true)
@@ -234,6 +231,26 @@ namespace Shapes
 			}
 
 			return line;
+		}
+
+		public int GetIndexAtPoint(float distance)
+		{
+			float traversed = 0;
+			int index = 0;
+			while (traversed < _totalLength)
+			{
+				float newTraversed = traversed + _lineLengths[index];
+				if (newTraversed >= distance)
+				{
+					return index;
+				}
+				else
+				{
+					traversed = newTraversed;
+					index++;
+				}
+			}
+			return -1;
 		}
 
 		public Vector3 GetVelocityAtIndex(int startingIndex)
