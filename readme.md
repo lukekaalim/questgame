@@ -21,4 +21,4 @@ This project uses Unity version 5.3.5f1 for development, and currenlty plans to 
 
 ## External Assets
 
- - [Low Poly: Full Pack][https://www.assetstore.unity3d.com/en/#!/content/52666] (not final assets)
+ - [Low Poly: Full Pack](https://www.assetstore.unity3d.com/en/#!/content/52666) (not final assets)
