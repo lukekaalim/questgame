@@ -91,17 +91,15 @@ namespace Route
 
 		public override void Assign(TraversibleRoute newRoute)
 		{
-			Assign(newRoute, null, null);
+			Assign(newRoute, null);
 		}
 		//TODO
-		public void Assign(TraversibleRoute newRoute, RouteBranch branch = null, Traveller oldTraveller = null)
+		public void Assign(TraversibleRoute newRoute, Traveller oldTraveller = null)
 		{
 			_currentRoute = newRoute;
-			if (branch == null)
-			{
-				currentPointIndex = 0;
-				distanceFromIndex = 0f;
-			}
+
+			currentPointIndex = 0;
+			distanceFromIndex = 0f;
 		}
 
 		public override void SetController(Controller newController)

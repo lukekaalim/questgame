@@ -30,14 +30,9 @@ namespace Route
 
 		public override Traveller GenerateNewTraveller()
 		{
-			return GenerateNewTraveller(null);
-		}
-
-		public Traveller GenerateNewTraveller(RouteBranch branch)
-		{
 			TraversibleRouteTraveller newTraveller = new GameObject("Traveller").AddComponent<TraversibleRouteTraveller>();
 
-			newTraveller.Assign(this, branch);
+			newTraveller.Assign(this);
 
 			return newTraveller;
 		}

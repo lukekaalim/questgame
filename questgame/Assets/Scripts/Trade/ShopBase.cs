@@ -15,13 +15,12 @@ using UnityEngine;
  *
  */
 
-public abstract class ShopBase : MonoBehaviour
-{
-	protected abstract int GetInventoryCount();
-}
-
 namespace Trade
 {
+	public abstract class ShopBase : MonoBehaviour
+	{
+		protected abstract int GetInventoryCount();
+	}
 
 	//this shop sells T to the Game
 	public abstract class ShopBase<TSellingType, YCurrencyType> : ShopBase

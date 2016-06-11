@@ -14,7 +14,7 @@ namespace Level
 			_pointInLevel.OnActivation += OnCollectCoin;
 		}
 
-		private void OnCollectCoin(Traveller traveller)
+		private void OnCollectCoin(Traveller traveller, Vector2 collisionPoint)
 		{
 			Destroy(gameObject);
 		}

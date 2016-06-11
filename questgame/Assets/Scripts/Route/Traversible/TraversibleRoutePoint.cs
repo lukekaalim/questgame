@@ -6,13 +6,25 @@ namespace Route
 	[ExecuteInEditMode]
 	public class TraversibleRoutePoint : RoutePoint
 	{
+		[Flags]
+		public enum CollisionDirections
+		{
+			Left = 1,
+			Right = 2,
+			Top = 4,
+			Bottom = 8
+		}
+
 		[SerializeField]
 		TraversibleRoute _parent;
 
 		[SerializeField, HideInInspector]
 		Bounds _collisionBounds;
 
-		public Vector3 Extents
+		[SerializeField]
+		CollisionDirections _activeDirections;
+
+		public Vector2 Extents
 		{
 			get
 			{
@@ -24,19 +36,14 @@ namespace Route
 			}
 		}
 
-		[SerializeField, HideInInspector]
-		Vector2 _position;
-
-		//Readonly copy of the vector
 		public Vector2 Position
 		{
 			get
 			{
-				return _position;
+				return _collisionBounds.center;
 			}
 			set
 			{
-				_position = value;
 				_collisionBounds.center = value;
 			}
 		}
@@ -56,7 +63,7 @@ namespace Route
 
 		protected Vector3 GetDebugPosition(float modifier = 0)
 		{
-			return _parent.LinearTraversable.GetPointAlongDistance(_position.x + modifier) + new Vector3(0,Position.y);
+			return _parent.LinearTraversable.GetPointAlongDistance(Position.x + modifier) + new Vector3(0,Position.y);
 		}
 
 		//Assign
@@ -76,13 +83,13 @@ namespace Route
 
 			_parent.Points.Add(this);
 
-			_position = new Vector2();
-			_collisionBounds.center = _position;
+			Position = new Vector2();
+			_collisionBounds.center = Position;
 		}
 
 		public void Assign(RouteBase newRoute, Vector2 position)
 		{
-			_position = position;
+			Position = position;
 			_collisionBounds.center = position;
 			Assign(newRoute);
 		}
@@ -97,7 +104,8 @@ namespace Route
 			float collisionDistance;
 			if (_collisionBounds.IntersectRay(travellerMovement, out collisionDistance) && collisionDistance <= distance)
 			{
-				ActivatePoint(travellerToTest);
+				Vector2 collisionPoint = travellerMovement.origin + (travellerMovement.direction * collisionDistance);
+				ActivatePoint(travellerToTest, collisionPoint);
 				return true;
 			}
 			return false;
@@ -134,7 +142,7 @@ namespace Route
 			Vector3 position = GetDebugPosition();
 			Matrix4x4 originalMatrix = Gizmos.matrix;
 
-			Vector3 velocity = _parent.LinearTraversable.GetVelocityAtIndex(_parent.LinearTraversable.GetIndexAtPoint(_position.x));
+			Vector3 velocity = _parent.LinearTraversable.GetVelocityAtIndex(_parent.LinearTraversable.GetIndexAtPoint(Position.x));
 			Gizmos.matrix = Matrix4x4.TRS(position, Quaternion.LookRotation(velocity, Vector3.up), Vector3.one);
 
 			Gizmos.color = new Color(0.8f, 0.6f, 0, 0.5f);
