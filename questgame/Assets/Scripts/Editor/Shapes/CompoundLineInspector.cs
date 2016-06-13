@@ -93,7 +93,7 @@ namespace Shapes
 					Handles.Label(Vector3.Lerp(line.GetPoint(i), line.GetPoint(i+1), 0.5f), line.LineLengths[i].ToString(), style);
 				}
 
-				float size = (HandleUtility.GetHandleSize(line.GetPoint(i)) / 12) + 0.5f;
+				float size = (HandleUtility.GetHandleSize(line.GetPoint(i)) * 0.25f);
 
 				if (Handles.Button(line.GetPoint(i), Quaternion.identity, size, size, Handles.SphereCap))
 				{

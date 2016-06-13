@@ -61,6 +61,7 @@ namespace Route
 			float time = Time.deltaTime;
 
 			distanceFromIndex += _velocity.x * time;
+			_position.y += _velocity.y * time;
 
 			CurrentRoute.CheckCollision(this, new Ray(_position, _velocity), _velocity.magnitude * time);
 
@@ -75,16 +76,25 @@ namespace Route
 			//distanceFromIndex += _velocity.x * Time.deltaTime;
 
 			//Get Position
-			transform.position = _currentRoute.LinearTraversable.AdvanceAlongLine(ref currentPointIndex, ref distanceFromIndex, out absoluteDistance, out progress);
+			transform.position = _currentRoute.LinearTraversable.AdvanceAlongLine(ref currentPointIndex, ref distanceFromIndex, out absoluteDistance, out progress) + new Vector3(0,_position.y);
 
 			_position.x = absoluteDistance;
 
 			//Get Rotation
-			Vector3 lerpedDirection = Vector3.Lerp(
-				_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex),
-				_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex + 1),
-				progress
-				);
+			Vector3 lerpedDirection;
+			if (currentPointIndex < _currentRoute.LinearTraversable.PointCount - 2)
+			{
+				lerpedDirection = Vector3.Lerp(
+					_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex),
+					_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex + 1),
+					progress
+					);
+			}
+			else
+			{
+				lerpedDirection = _currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex);
+			}
+
 			transform.rotation = Quaternion.LookRotation(lerpedDirection, Vector3.up);
 		}
 

@@ -12,7 +12,7 @@ namespace Route
 			get;
 		}
 
-		protected abstract Vector3 GetDebugPosition();
+		protected abstract Vector3 GetWorldSpacePosition();
 
 		public abstract bool TestTraveller(Traveller travellerToTest, Ray travellerMovement, float distance);
 
@@ -25,15 +25,17 @@ namespace Route
 			OnActivation.Invoke(travellerThatActivated, collisionPoint);
 		}
 
-		void OnEnable()
+		protected void OnEnable()
 		{
 			if (ParentRoute != null && !ParentRoute.Points.Contains(this))
 			{
 				ParentRoute.Points.Add(this);
 			}
+
+			transform.position = GetWorldSpacePosition();
 		}
 
-		void OnDisable()
+		protected void OnDisable()
 		{
 			if (ParentRoute != null && ParentRoute.Points.Contains(this))
 			{
@@ -45,8 +47,9 @@ namespace Route
 		protected virtual void OnDrawGizmos()
 		{
 			float size = UnityEditor.HandleUtility.GetHandleSize(transform.position) * 0.2f;
+
 			Gizmos.color = new Color(1, 0.75f, 0, 0.5f);
-			transform.position = GetDebugPosition();
+			transform.position = GetWorldSpacePosition();
 			Gizmos.DrawSphere(transform.position, size);
 		}
 #endif

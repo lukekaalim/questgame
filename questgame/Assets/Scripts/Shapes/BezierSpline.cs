@@ -381,6 +381,14 @@ namespace Shapes
 			return LineRepresentation.GetIndexAtPoint(distance);
 		}
 
+		public int PointCount
+		{
+			get
+			{
+				return LineRepresentation.PointCount;
+			}
+		}
+
 #if UNITY_EDITOR
 
 		void OnDrawGizmos()

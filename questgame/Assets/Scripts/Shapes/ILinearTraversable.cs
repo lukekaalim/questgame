@@ -39,5 +39,10 @@ namespace Shapes
 		{
 			get;
 		}
+
+		int PointCount
+		{
+			get;
+		}
 	}
 }

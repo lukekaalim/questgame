@@ -203,7 +203,8 @@ namespace Shapes
 
 
 			Handles.color = bezier.GetColor() * new Color(1, 1, 1, 0.5f);
-			Handles.SphereCap(0, bezier.GetPointOnPath(selectionPercentage / 100), Quaternion.identity, 1.5f);
+			Vector3 selectedPosition = bezier.GetPointOnPath(selectionPercentage / 100);
+			Handles.SphereCap(0, selectedPosition, Quaternion.identity, HandleUtility.GetHandleSize(selectedPosition) * 0.6f);
 
 			Vector3 cameraPosition = currentCamera.transform.position;
 
@@ -211,7 +212,7 @@ namespace Shapes
 			{
 				Vector3 position = bezier.GetControlPoint(i, true);
 
-				float size = (HandleUtility.GetHandleSize(position) / 6) + 0.5f;
+				float size = (HandleUtility.GetHandleSize(position) / 6);
 
 				Color handleColor = Color.grey;
 

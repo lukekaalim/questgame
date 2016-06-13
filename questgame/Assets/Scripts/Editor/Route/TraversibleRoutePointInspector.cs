@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 
 namespace Route
 {
@@ -11,11 +12,12 @@ namespace Route
 
 			TraversibleRoutePoint point = target as TraversibleRoutePoint;
 
-			point.Position = EditorGUILayout.Vector2Field("Position", point.Position);
-			point.Extents = EditorGUILayout.Vector2Field("Extends", point.Extents);
+			Vector2 pointCenter = EditorGUILayout.Vector2Field("Position", point.CollisionBounds.center);
+			Vector2 pointExtents = EditorGUILayout.Vector2Field("Extends", point.CollisionBounds.extents);
 
-			if (UnityEngine.GUI.changed)
+			if (GUI.changed)
 			{
+				point.CollisionBounds = new Bounds(pointCenter, pointExtents * 2);
 				SceneView.RepaintAll();
 			}
 		}
