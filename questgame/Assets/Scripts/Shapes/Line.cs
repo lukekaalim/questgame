@@ -17,6 +17,11 @@ namespace Shapes
 			set;
 		}
 
+		public abstract Color DisplayColor
+		{
+			get;
+		}
+
 		public abstract Vector3 GetPointOnPath(float percentage, bool worldSpace = true);
 
 

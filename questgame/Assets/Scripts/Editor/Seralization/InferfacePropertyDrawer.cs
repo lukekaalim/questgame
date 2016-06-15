@@ -96,9 +96,9 @@ namespace Serialization
 	}
 
 	[CustomPropertyDrawer(typeof(SILinearTraversible), true)]
-	class SILinearTraversibleDrawer : InferfacePropertyDrawer<Shapes.ILinearTraversable>
+	class SILinearTraversibleDrawer : InferfacePropertyDrawer<Shapes.IPointLine>
 	{
-		protected override SerializableInterface<Shapes.ILinearTraversable> CreateInstance()
+		protected override SerializableInterface<Shapes.IPointLine> CreateInstance()
 		{
 			return ScriptableObject.CreateInstance<SILinearTraversible>();
 		}

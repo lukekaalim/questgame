@@ -3,9 +3,9 @@ using UnityEngine;
 
 using Controllers;
 
-namespace Route
+namespace Route.Traversible
 {
-	public class TraversibleRouteTraveller : Traveller<TraversibleRoute>
+	public class TraversibleTraveller : Traveller<TraversibleRoute>
 	{
 		[SerializeField]
 		int currentPointIndex;

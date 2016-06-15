@@ -7,14 +7,19 @@ namespace Level
 	public class Coin : MonoBehaviour
 	{
 		[SerializeField]
-		RoutePoint _pointInLevel = null;
+		RouteCollider _pointInLevel;
 
-		void Awake()
+		void OnEnable()
 		{
-			_pointInLevel.OnActivation += OnCollectCoin;
+			_pointInLevel.OnEnter += OnCollectCoin;
 		}
 
-		private void OnCollectCoin(Traveller traveller, Vector2 collisionPoint)
+		void OnDisable()
+		{
+			_pointInLevel.OnEnter -= OnCollectCoin;
+		}
+
+		private void OnCollectCoin(Traveller traveller)
 		{
 			Destroy(gameObject);
 		}
@@ -30,11 +35,11 @@ namespace Level
 
 			if (UnityEditor.Selection.activeGameObject != null)
 			{
-				TraversibleRoute traversibleRoute = UnityEditor.Selection.activeGameObject.GetComponent<TraversibleRoute>();
+				Route.Traversible.TraversibleRoute traversibleRoute = UnityEditor.Selection.activeGameObject.GetComponent<Route.Traversible.TraversibleRoute>();
 				if (traversibleRoute != null)
 				{
-					TraversibleRoutePoint point = gameObject.AddComponent<TraversibleRoutePoint>();
-					point.Assign(traversibleRoute);
+					Route.Traversible.TraversibleCollider point = gameObject.AddComponent<Route.Traversible.TraversibleCollider>();
+					point.Assign(traversibleRoute, new Vector2(0,0));
 					newCoin._pointInLevel = point;
 				}
 			}

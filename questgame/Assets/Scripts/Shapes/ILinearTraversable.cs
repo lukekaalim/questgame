@@ -7,21 +7,26 @@ namespace Shapes
 	 *	Describes and interface that allows you to move at a fixed rate though a path defined by a set of points
 	 *
 	 */
-	public interface ILinearTraversable : IPathable
+	public interface IPointLine : IPathable
 	{
+		//Get the first worldspace position in this line
 		Vector3 GetStartPosition();
-
+		//Get the last worldspace position in this line
 		Vector3 GetEndPosition();
+
 
 		Vector3 GetPointAlongDistance(float distance);
 
 		Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex);
 
+		//Gets the direction and velocity of the line at this point.
 		Vector3 GetVelocityAtIndex(int startingIndex);
 
-		Vector3 GetRelativePoint(float distance);
+		//Get a point where the distance is a 0 - 1 clamped number representing progress through the PointLine
+		Vector3 GetRelativePoint(float progress);
 
-		int GetIndexAtPoint(float distance);
+		//gets the leftmost index from an arbitrary distance
+		int GetLeftMostIndex(float distance);
 
 		/*
 		 *	This is the big important function.
@@ -34,6 +39,10 @@ namespace Shapes
 		 *	0 to 1.
 		 */
 		Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress);
+
+		Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance);
+
+		Vector3 AdvanceAlongLine(ref int index, ref float distance);
 
 		float AbsoluteLength
 		{

@@ -1,17 +1,17 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Route
+namespace Route.Traversible
 {
-	[CustomEditor(typeof(TraversibleRoutePoint), true)]
-	public class TraversibleRoutePointInspector : Editor
+	[CustomEditor(typeof(TraversiblePoint), true)]
+	public class TraversiblePointInspector : Editor
 	{
 		public override void OnInspectorGUI()
 		{
 			DrawDefaultInspector();
 
-			TraversibleRoutePoint point = target as TraversibleRoutePoint;
-
+			TraversiblePoint point = target as TraversiblePoint;
+			/*
 			Vector2 pointCenter = EditorGUILayout.Vector2Field("Position", point.CollisionBounds.center);
 			Vector2 pointExtents = EditorGUILayout.Vector2Field("Extends", point.CollisionBounds.extents);
 
@@ -20,6 +20,7 @@ namespace Route
 				point.CollisionBounds = new Bounds(pointCenter, pointExtents * 2);
 				SceneView.RepaintAll();
 			}
+			*/
 		}
 	}
 }

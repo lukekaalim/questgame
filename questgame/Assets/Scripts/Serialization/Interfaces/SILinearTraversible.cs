@@ -3,5 +3,5 @@
 namespace Serialization
 {
 	[System.Serializable]
-	public class SILinearTraversible : SerializableInterface<ILinearTraversable> { }
+	public class SILinearTraversible : SerializableInterface<IPointLine> { }
 }

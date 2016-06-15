@@ -3,12 +3,16 @@ using UnityEngine;
 
 using Shapes;
 using Serialization;
+using System;
 
-namespace Route
+namespace Route.Traversible
 {
 	[ExecuteInEditMode]
 	public class TraversibleRoute : RouteBase
 	{
+		[SerializeField]
+		HashSet<TraversibleCollider> _colliders;
+
 		[SerializeField]
 		SILinearTraversible _linearTraversable;
 
@@ -20,7 +24,7 @@ namespace Route
 			}
 		}
 
-		public ILinearTraversable LinearTraversable
+		public IPointLine LinearTraversable
 		{
 			get
 			{
@@ -28,9 +32,27 @@ namespace Route
 			}
 		}
 
+		protected override void ModifyPoints()
+		{
+			foreach (PointToBeProcessed pointModification in pointQueue)
+			{
+				TraversibleCollider collider = pointModification._point as TraversibleCollider;
+
+				if (pointModification._isAdding)
+				{
+					_colliders.Add(collider);
+				}
+				else
+				{
+					_colliders.Remove(collider);
+				}
+			}
+			pointQueue.Clear();
+		}
+
 		public override Traveller GenerateNewTraveller()
 		{
-			TraversibleRouteTraveller newTraveller = new GameObject("Traveller").AddComponent<TraversibleRouteTraveller>();
+			TraversibleTraveller newTraveller = new GameObject("Traveller").AddComponent<TraversibleTraveller>();
 
 			newTraveller.Assign(this);
 
@@ -39,7 +61,7 @@ namespace Route
 
 		public void CheckCollision(Traveller travellerToCheck, Ray travellerMovement, float distance)
 		{
-			foreach (RoutePoint point in _points)
+			foreach (TraversibleCollider point in _colliders)
 			{
 				point.TestTraveller(travellerToCheck, travellerMovement, distance);
 			}
@@ -48,7 +70,7 @@ namespace Route
 
 		public override RoutePoint GenerateNewPoint()
 		{
-			TraversibleRoutePoint point = new GameObject("Traveller").AddComponent<TraversibleRoutePoint>();
+			TraversiblePoint point = new GameObject("Traveller").AddComponent<TraversiblePoint>();
 			point.Assign(this);
 			return point;
 		}

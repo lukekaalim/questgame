@@ -3,45 +3,34 @@ using UnityEngine;
 
 namespace Route
 {
+	//A Route Point represents a physical point on a route.
 	public abstract class RoutePoint : MonoBehaviour
 	{
-		public event Action<Traveller, Vector2> OnActivation;
-
-		public abstract RouteBase ParentRoute
+		public abstract RouteBase ParentRouteAsRouteBase
 		{
 			get;
 		}
 
-		protected abstract Vector3 GetWorldSpacePosition();
+		public abstract Vector3 GetWorldSpacePosition();
+	}
 
-		public abstract bool TestTraveller(Traveller travellerToTest, Ray travellerMovement, float distance);
-
-		//Assign is called right after you create a route point, so it can be added to
-		//the appropriate route for collision checking and positioning
-		public abstract void Assign(RouteBase newRoute);
-
-		protected void ActivatePoint(Traveller travellerThatActivated, Vector2 collisionPoint)
+	public abstract class RoutePoint<T> : RoutePoint where T : RouteBase
+	{
+		public override RouteBase ParentRouteAsRouteBase
 		{
-			OnActivation.Invoke(travellerThatActivated, collisionPoint);
-		}
-
-		protected void OnEnable()
-		{
-			if (ParentRoute != null && !ParentRoute.Points.Contains(this))
+			get
 			{
-				ParentRoute.Points.Add(this);
-			}
-
-			transform.position = GetWorldSpacePosition();
-		}
-
-		protected void OnDisable()
-		{
-			if (ParentRoute != null && ParentRoute.Points.Contains(this))
-			{
-				ParentRoute.QueuePointForRemoval(this);
+				return ParentRoute as RouteBase;
 			}
 		}
+
+		public abstract T ParentRoute
+		{
+			get;
+		}
+
+		//Assign is called right after you create a route point, so it can properly identify it's parent
+		public abstract void Assign(T newRoute);
 
 #if UNITY_EDITOR
 		protected virtual void OnDrawGizmos()

@@ -8,10 +8,9 @@ namespace Level
 	public class Branch : MonoBehaviour
 	{
 		[SerializeField]
-		public RoutePoint startingPoint;
+		public RoutePoint _startingPoint;
 		[SerializeField]
-		public RoutePoint endingPoint;
-
+		public RoutePoint _endingPoint;
 
 
 #if UNITY_EDITOR
@@ -29,14 +28,14 @@ namespace Level
 				if (selectedRoute != null)
 				{
 					RoutePoint newPoint = selectedRoute.GenerateNewPoint();
-					newBranch.startingPoint = newPoint;
+					newBranch._startingPoint = newPoint;
 				}
 				else
 				{
 					RoutePoint selectedPoint = UnityEditor.Selection.activeGameObject.GetComponent<RoutePoint>();
 					if (selectedPoint != null)
 					{
-						newBranch.startingPoint = selectedPoint;
+						newBranch._startingPoint = selectedPoint;
 					}
 				}
 			}

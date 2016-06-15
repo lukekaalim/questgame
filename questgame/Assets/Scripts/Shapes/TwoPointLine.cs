@@ -4,10 +4,19 @@ using UnityEngine;
 namespace Shapes
 {
 	//A simple line made of two points.
-	class TwoPointLine : Line
+	public class TwoPointLine : Line, IPointLine
 	{
 		[SerializeField]
-		Vector3 P0, P1;
+		Color _displayColor = Color.white;
+
+		[SerializeField, HideInInspector]
+		Vector3 P0 = new Vector3();
+
+		[SerializeField, HideInInspector]
+		Vector3 P1 = new Vector3();
+
+		[SerializeField, HideInInspector]
+		float _length;
 
 		public override int PointCount
 		{
@@ -17,7 +26,28 @@ namespace Shapes
 			}
 		}
 
-		public override Vector3 this[int index, bool global]
+		public override Color DisplayColor
+		{
+			get
+			{
+				return _displayColor;
+			}
+		}
+
+		float IPointLine.AbsoluteLength
+		{
+			get
+			{
+				return _length;
+			}
+		}
+
+		public void UpdateLength()
+		{
+			_length = Vector3.Distance(P0, P1);
+		}
+
+		public override Vector3 this[int index, bool global = true]
 		{
 			get
 			{
@@ -34,12 +64,14 @@ namespace Shapes
 				{
 					SetLocalPosition(index, value);
 				}
+				UpdateLength();
 			}
 		}
 
 		public TwoPointLine()
 		{
-			P0 = P1 = new Vector3();
+			P0 = new Vector3();
+			P1 = new Vector3();
 		}
 
 		public Vector3 GetLocalPosition(int index)
@@ -64,6 +96,7 @@ namespace Shapes
 			{
 				P1 = newPosition;
 			}
+			UpdateLength();
 		}
 
 		public Vector3 GetWorldPosition(int index)
@@ -88,11 +121,67 @@ namespace Shapes
 			{
 				P1 = transform.InverseTransformPoint(newPosition);
 			}
+			UpdateLength();
 		}
 
 		public override Vector3 GetPointOnPath(float percentage, bool worldSpace = true)
 		{
 			return Vector3.Lerp(this[0, worldSpace], this[1, worldSpace], percentage);
+		}
+
+		Vector3 IPointLine.GetStartPosition()
+		{
+			return P0;
+		}
+
+		Vector3 IPointLine.GetEndPosition()
+		{
+			return P1;
+		}
+
+		Vector3 IPointLine.GetPointAlongDistance(float distance)
+		{
+			return Vector3.Lerp(P0, P1, distance / _length);
+		}
+
+		Vector3 IPointLine.GetPointAlongDistance(int startingIndex, float distanceFromIndex)
+		{
+			return Vector3.Lerp(P0, P1, distanceFromIndex / _length);
+		}
+
+		Vector3 IPointLine.GetVelocityAtIndex(int startingIndex)
+		{
+			return P1 - P0;
+		}
+
+		Vector3 IPointLine.GetRelativePoint(float distance)
+		{
+			return Vector3.Lerp(P0, P1, distance / _length);
+		}
+
+		int IPointLine.GetLeftMostIndex(float distance)
+		{
+			return 0;
+		}
+
+		Vector3 IPointLine.AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
+		{
+			index = 0;
+			pointProgress = distance / _length;
+			newTotalDistance = distance;
+			return Vector3.Lerp(P0, P1, pointProgress);
+		}
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance)
+		{
+			index = 0;
+			newTotalDistance = distance;
+			return Vector3.Lerp(P0, P1, distance / _length);
+		}
+
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance)
+		{
+			index = 0;
+			return Vector3.Lerp(P0, P1, distance / _length);
 		}
 
 #if UNITY_EDITOR
@@ -111,7 +200,15 @@ namespace Shapes
 			UnityEditor.Undo.RegisterCreatedObjectUndo(gameObject, "Create " + gameObject.name);
 		}
 
+		void OnDrawGizmos()
+		{
+			Gizmos.color = _displayColor;
 
+			Gizmos.DrawLine(this[0], this[1]);
+
+			Gizmos.DrawSphere(this[0], UnityEditor.HandleUtility.GetHandleSize(this[0]) * 0.3f);
+			Gizmos.DrawSphere(this[1], UnityEditor.HandleUtility.GetHandleSize(this[1]) * 0.3f);
+		}
 #endif
 	}
 }

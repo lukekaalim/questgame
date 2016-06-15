@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Shapes
 {
 	//A continuous line composed of multiple points that passes through each linenearly
-	public class CompoundLine : Line, ILinearTraversable
+	public class CompoundLine : Line, IPointLine
 	{
 		[SerializeField, HideInInspector]
 		protected List<Vector3> _points = new List<Vector3>();
@@ -18,9 +18,14 @@ namespace Shapes
 		[SerializeField, HideInInspector]
 		protected float _totalLength;
 
+		[SerializeField]
+		Color _diplayColor = new Color();
+
+		//The length of each individual line
 		[SerializeField, HideInInspector]
 		protected List<float> _lineLengths = new List<float>();
 
+		//The total length of all the lines so far for each index
 		[SerializeField, HideInInspector]
 		protected List<float> _lineDistance = new List<float>();
 
@@ -41,6 +46,8 @@ namespace Shapes
 				return TotalLength;
 			}
 		}
+
+
 		public List<float> LineLengths
 		{
 			get
@@ -70,6 +77,14 @@ namespace Shapes
 			get
 			{
 				return _points.Count;
+			}
+		}
+
+		public override Color DisplayColor
+		{
+			get
+			{
+				return _diplayColor;
 			}
 		}
 
@@ -189,12 +204,30 @@ namespace Shapes
 			return Vector3.Lerp(this[startingIndex], this[startingIndex + 1], distanceFromIndex / LineLengths[startingIndex]);
 		}
 
+		//Important Function!!!
 		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
 		{
-			while (index < PointCount - 2 && LineLengths[index] <= distance)
+			//If distance is a positive number
+			if (distance > 0)
 			{
-				distance -= LineLengths[index];
-				index++;
+				//While you haven't reached the end of the array
+				//and you're distance is still greater than the length of the line.
+				while (index < PointCount - 2 && LineLengths[index] <= distance)
+				{
+					//Subtract the distance
+					distance -= LineLengths[index];
+					//And start again from the next line
+					index++;
+				}
+			}
+			//if Distance is a negative number
+			else if(distance < 0)
+			{
+				while (index > 0 && LineLengths[index - 1] > -distance)
+				{
+					distance += LineLengths[index - 1];
+					index--;
+				}
 			}
 
 			newTotalDistance = _lineDistance[index] + distance;
@@ -202,6 +235,50 @@ namespace Shapes
 			pointProgress = distance / LineLengths[index];
 
 			return Vector3.Lerp(this[index], this[index + 1], pointProgress);
+		}
+
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance)
+		{
+			if (distance > 0)
+			{
+				while (index < PointCount - 2 && LineLengths[index] <= distance)
+				{
+					distance -= LineLengths[index];
+					index++;
+				}
+			}
+			else if (distance < 0)
+			{
+				while (index > 0 && LineLengths[index - 1] > -distance)
+				{
+					distance += LineLengths[index - 1];
+					index--;
+				}
+			}
+
+			newTotalDistance = _lineDistance[index] + distance;
+			return Vector3.Lerp(this[index], this[index + 1], distance / LineLengths[index]);
+		}
+
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance)
+		{
+			if (distance > 0)
+			{
+				while (index < PointCount - 2 && LineLengths[index] <= distance)
+				{
+					distance -= LineLengths[index];
+					index++;
+				}
+			}
+			else if (distance < 0)
+			{
+				while (index > 0 && LineLengths[index - 1] > -distance)
+				{
+					distance += LineLengths[index - 1];
+					index--;
+				}
+			}
+			return Vector3.Lerp(this[index], this[index + 1], distance / LineLengths[index]);
 		}
 
 		public override Vector3 GetPointOnPath(float percentage, bool worldSpace = true)
@@ -233,7 +310,7 @@ namespace Shapes
 			return line;
 		}
 
-		public int GetIndexAtPoint(float distance)
+		public int GetLeftMostIndex(float distance)
 		{
 			float traversed = 0;
 			int index = 0;

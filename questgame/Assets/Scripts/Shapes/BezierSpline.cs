@@ -5,7 +5,7 @@ using System;
 
 namespace Shapes
 {
-	public class BezierSpline : MonoBehaviour, IPathable, ILinearTraversable
+	public class BezierSpline : MonoBehaviour, IPathable, IPointLine
 	{
 		public enum ControlMode
 		{
@@ -366,6 +366,16 @@ namespace Shapes
 			return LineRepresentation.AdvanceAlongLine(ref index, ref distance, out newTotalDistance, out pointProgress);
 		}
 
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance)
+		{
+			return LineRepresentation.AdvanceAlongLine(ref index, ref distance, out newTotalDistance);
+		}
+
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance)
+		{
+			return LineRepresentation.AdvanceAlongLine(ref index, ref distance);
+		}
+
 		public Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex)
 		{
 			return LineRepresentation.GetPointAlongDistance(startingIndex, distanceFromIndex);
@@ -376,9 +386,9 @@ namespace Shapes
 			return LineRepresentation.GetVelocityAtIndex(startingIndex);
 		}
 
-		public int GetIndexAtPoint(float distance)
+		public int GetLeftMostIndex(float distance)
 		{
-			return LineRepresentation.GetIndexAtPoint(distance);
+			return LineRepresentation.GetLeftMostIndex(distance);
 		}
 
 		public int PointCount
