@@ -3,16 +3,37 @@ using UnityEngine;
 
 namespace Route.Traversible
 {
+	[RequireComponent(typeof(TraversiblePoint))]
 	public class TraversibleCollider : RouteCollider<TraversibleRoute>
 	{
 		[SerializeField]
 		Bounds _collisionBounds;
 
-		public override void Assign(TraversibleRoute newRoute, RoutePoint<TraversibleRoute> newPosition)
+		[SerializeField]
+		protected TraversiblePoint _position;
+
+		public override RoutePoint<TraversibleRoute> Position
 		{
-			_parentRoute = newRoute;
-			_position = newPosition;
+			get
+			{
+				return _position;
+			}
+			set
+			{
+				_position = value as TraversiblePoint;
+			}
+		}
+
+		public override void Assign(RoutePoint<TraversibleRoute> newPosition)
+		{
+			_parentRoute = newPosition.ParentRoute;
+			_position = newPosition as TraversiblePoint;
 			_parentRoute.QueueColliderForAddition(this);
+		}
+
+		protected override void PointMoved()
+		{
+			_collisionBounds = new Bounds(_position.Position, _collisionBounds.size);
 		}
 
 		public void Assign(TraversibleRoute newRoute, Vector2 position)
@@ -21,7 +42,7 @@ namespace Route.Traversible
 			point.Assign(newRoute, position);
 
 			_collisionBounds.center = position;
-			Assign(newRoute, point);
+			Assign(point);
 		}
 
 		public override bool TestCollider(RouteCollider<TraversibleRoute> collider)
@@ -39,8 +60,7 @@ namespace Route.Traversible
 			float collisionDistance;
 			if (_collisionBounds.IntersectRay(travellerMovement, out collisionDistance) && collisionDistance <= distance)
 			{
-				Vector2 collisionPoint = travellerMovement.origin + (travellerMovement.direction * collisionDistance);
-
+				//Vector2 collisionPoint = travellerMovement.origin + (travellerMovement.direction * collisionDistance);
 				if (_currentlyCollidingTravellers.Contains(traveller))
 				{
 					TriggerOnCollide(traveller);
@@ -52,6 +72,14 @@ namespace Route.Traversible
 				}
 
 				return true;
+			}
+			else
+			{
+				if (_currentlyCollidingTravellers.Contains(traveller))
+				{
+					_currentlyCollidingTravellers.Remove(traveller);
+					TriggerOnExit(traveller);
+				}
 			}
 			return false;
 		}

@@ -11,6 +11,10 @@ namespace Level
 
 		void OnEnable()
 		{
+			if (_pointInLevel == null)
+			{
+				_pointInLevel = GetComponent<RouteCollider>();
+			}
 			_pointInLevel.OnEnter += OnCollectCoin;
 		}
 
@@ -21,6 +25,7 @@ namespace Level
 
 		private void OnCollectCoin(Traveller traveller)
 		{
+			Debug.LogWarning("Total and unequiviocal sucess",this);
 			Destroy(gameObject);
 		}
 

@@ -6,12 +6,24 @@ namespace Route
 	//A Route Point represents a physical point on a route.
 	public abstract class RoutePoint : MonoBehaviour
 	{
+		public event Action OnPointMove;
+
 		public abstract RouteBase ParentRouteAsRouteBase
 		{
 			get;
 		}
 
 		public abstract Vector3 GetWorldSpacePosition();
+
+		public abstract void UpdatePosition();
+
+		public void OnPointMoveInvoke()
+		{
+			if (OnPointMove != null)
+			{
+				OnPointMove.Invoke();
+			}
+		}
 	}
 
 	public abstract class RoutePoint<T> : RoutePoint where T : RouteBase
@@ -35,11 +47,14 @@ namespace Route
 #if UNITY_EDITOR
 		protected virtual void OnDrawGizmos()
 		{
-			float size = UnityEditor.HandleUtility.GetHandleSize(transform.position) * 0.2f;
+			if (ParentRoute != null)
+			{
+				float size = UnityEditor.HandleUtility.GetHandleSize(transform.position) * 0.2f;
 
-			Gizmos.color = new Color(1, 0.75f, 0, 0.5f);
-			transform.position = GetWorldSpacePosition();
-			Gizmos.DrawSphere(transform.position, size);
+				Gizmos.color = new Color(1, 0.75f, 0, 0.5f);
+				transform.position = GetWorldSpacePosition();
+				Gizmos.DrawSphere(transform.position, size);
+			}
 		}
 #endif
 	}

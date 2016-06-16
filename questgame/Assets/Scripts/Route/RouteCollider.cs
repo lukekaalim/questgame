@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Route
 {
+	[ExecuteInEditMode]
 	public class RouteCollider : MonoBehaviour
 	{
 		public event Action<Traveller> OnEnter;
@@ -31,11 +32,16 @@ namespace Route
 
 	public abstract class RouteCollider<T> : RouteCollider where T : RouteBase
 	{
+		[SerializeField]
 		protected T _parentRoute;
 
 		protected HashSet<Traveller> _currentlyCollidingTravellers = new HashSet<Traveller>();
 
-		protected RoutePoint<T> _position;
+		public abstract RoutePoint<T> Position
+		{
+			get;
+			set;
+		}
 
 		//Collision Testing Functions
 
@@ -43,28 +49,41 @@ namespace Route
 
 		public abstract bool TestCollider(RouteCollider<T> collider);
 
-		public virtual void Assign(T newRoute, RoutePoint<T> newPosition)
-		{
-			_parentRoute = newRoute;
-			_position = newPosition;
-			_parentRoute.QueueColliderForAddition(this);
-		}
+		public abstract void Assign(RoutePoint<T> newPosition);
+
+		protected abstract void PointMoved();
 
 		protected void OnEnable()
 		{
+			_parentRoute = Position.ParentRoute;
+
 			if (_parentRoute != null)
 			{
 				_parentRoute.QueueColliderForAddition(this);
 			}
 
-			transform.position = _position.GetWorldSpacePosition();
+			if (Position == null)
+			{
+				Position = GetComponent<RoutePoint<T>>();
+			}
+			if (Position != null)
+			{
+				Position.OnPointMove += PointMoved;
+			}
+
+			transform.position = Position.GetWorldSpacePosition();
 		}
+
 
 		protected void OnDisable()
 		{
 			if (_parentRoute != null)
 			{
 				_parentRoute.QueueColliderForRemoval(this);
+			}
+			if (Position != null)
+			{
+				Position.OnPointMove -= PointMoved;
 			}
 		}
 

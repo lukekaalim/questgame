@@ -228,6 +228,15 @@ namespace Shapes
 					distance += LineLengths[index - 1];
 					index--;
 				}
+				if (index > 0)
+				{
+					index--;
+					distance = LineLengths[index] - distance;
+				}
+				else
+				{
+					index = 0;
+				}
 			}
 
 			newTotalDistance = _lineDistance[index] + distance;
@@ -249,10 +258,19 @@ namespace Shapes
 			}
 			else if (distance < 0)
 			{
-				while (index > 0 && LineLengths[index - 1] > -distance)
+				while (index > 0 && LineLengths[index - 1] < -distance)
 				{
 					distance += LineLengths[index - 1];
 					index--;
+				}
+				if (index > 0)
+				{
+					index--;
+					distance = LineLengths[index] - distance;
+				}
+				else
+				{
+					index = 0;
 				}
 			}
 
@@ -276,6 +294,15 @@ namespace Shapes
 				{
 					distance += LineLengths[index - 1];
 					index--;
+				}
+				if (index > 0)
+				{
+					index--;
+					distance = LineLengths[index] - distance;
+				}
+				else
+				{
+					index = 0;
 				}
 			}
 			return Vector3.Lerp(this[index], this[index + 1], distance / LineLengths[index]);

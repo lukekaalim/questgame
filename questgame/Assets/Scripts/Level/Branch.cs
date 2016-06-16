@@ -11,6 +11,18 @@ namespace Level
 		public RoutePoint _startingPoint;
 		[SerializeField]
 		public RoutePoint _endingPoint;
+		[SerializeField]
+		public RouteCollider _collider;
+
+		void OnEnable()
+		{
+			_collider.OnCollide += OnCollision;
+		}
+
+		void OnCollision(Traveller travellerThatHit)
+		{
+
+		}
 
 
 #if UNITY_EDITOR

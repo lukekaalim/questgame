@@ -63,7 +63,7 @@ namespace Route.Traversible
 			distanceFromIndex += _velocity.x * time;
 			_position.y += _velocity.y * time;
 
-			CurrentRoute.CheckCollision(this, new Ray(_position, _velocity), _velocity.magnitude * time);
+			CurrentRoute.CheckTravellerCollision(this, new Ray(_position, _velocity), _velocity.magnitude * time);
 
 			UpdatePosition();
 		}

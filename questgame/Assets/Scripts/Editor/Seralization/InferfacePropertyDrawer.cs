@@ -95,12 +95,12 @@ namespace Serialization
 		}
 	}
 
-	[CustomPropertyDrawer(typeof(SILinearTraversible), true)]
-	class SILinearTraversibleDrawer : InferfacePropertyDrawer<Shapes.IPointLine>
+	[CustomPropertyDrawer(typeof(SIPointLine), true)]
+	class SIPointLineDrawer : InferfacePropertyDrawer<Shapes.IPointLine>
 	{
 		protected override SerializableInterface<Shapes.IPointLine> CreateInstance()
 		{
-			return ScriptableObject.CreateInstance<SILinearTraversible>();
+			return ScriptableObject.CreateInstance<SIPointLine>();
 		}
 	}
 }

@@ -11,10 +11,10 @@ namespace Route.Traversible
 	public class TraversibleRoute : RouteBase
 	{
 		[SerializeField]
-		HashSet<TraversibleCollider> _colliders;
+		HashSet<TraversibleCollider> _colliders = new HashSet<TraversibleCollider>();
 
 		[SerializeField]
-		SILinearTraversible _linearTraversable;
+		SIPointLine _linearTraversable;
 
 		public override float Length
 		{
@@ -59,12 +59,14 @@ namespace Route.Traversible
 			return newTraveller;
 		}
 
-		public void CheckCollision(Traveller travellerToCheck, Ray travellerMovement, float distance)
+		public void CheckTravellerCollision(Traveller travellerToCheck, Ray travellerMovement, float distance)
 		{
-			foreach (TraversibleCollider point in _colliders)
+			canAddToQueue = false;
+			foreach (TraversibleCollider collider in _colliders)
 			{
-				point.TestTraveller(travellerToCheck, travellerMovement, distance);
+				collider.TestTraveller(travellerToCheck, travellerMovement, distance);
 			}
+			canAddToQueue = true;
 			ModifyPoints();
 		}
 
@@ -79,7 +81,7 @@ namespace Route.Traversible
 		{
 			if (_linearTraversable == null)
 			{
-				_linearTraversable = ScriptableObject.CreateInstance<SILinearTraversible>();
+				_linearTraversable = ScriptableObject.CreateInstance<SIPointLine>();
 			}
 		}
 

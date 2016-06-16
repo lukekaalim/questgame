@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Route.Traversible
 {
+	/*
 	[CustomEditor(typeof(TraversiblePoint), true)]
 	public class TraversiblePointInspector : Editor
 	{
@@ -20,7 +21,8 @@ namespace Route.Traversible
 				point.CollisionBounds = new Bounds(pointCenter, pointExtents * 2);
 				SceneView.RepaintAll();
 			}
-			*/
+
 		}
 	}
+*/
 }

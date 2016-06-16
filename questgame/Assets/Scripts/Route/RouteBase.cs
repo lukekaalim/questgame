@@ -19,19 +19,24 @@ namespace Route
 
 		public abstract RoutePoint GenerateNewPoint();
 
-		public void ExecuteQueueImmediatly()
-		{
-			ModifyPoints();
-		}
+		protected bool canAddToQueue = true;
 
 		public virtual void QueueColliderForRemoval(RouteCollider point)
 		{
 			pointQueue.Add(new PointToBeProcessed(point, false));
+			if (canAddToQueue)
+			{
+				ModifyPoints();
+			}
 		}
 
 		public virtual void QueueColliderForAddition(RouteCollider point)
 		{
 			pointQueue.Add(new PointToBeProcessed(point, true));
+			if (canAddToQueue)
+			{
+				ModifyPoints();
+			}
 		}
 
 		protected abstract void ModifyPoints();

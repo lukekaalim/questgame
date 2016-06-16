@@ -25,9 +25,31 @@ namespace Route.Traversible
 			}
 		}
 
+		public Vector2 Position
+		{
+			get
+			{
+				return _position;
+			}
+		}
+
+		public override void UpdatePosition()
+		{
+			float oldPosition = _position.x;
+			_parent.LinearTraversable.AdvanceAlongLine(ref _leftIndex, ref _distanceFromIndex, out _position.x);
+			if (_position.x != oldPosition)
+			{
+				OnPointMoveInvoke();
+			}
+		}
+
 		public override Vector3 GetWorldSpacePosition()
 		{
-			return _parent.LinearTraversable.GetPointAlongDistance(_leftIndex, _distanceFromIndex);
+			if (ParentRoute == null)
+			{
+				return Vector3.zero;
+			}
+			return _parent.LinearTraversable.GetPointAlongDistance(_leftIndex,_distanceFromIndex) + new Vector3(0,_position.y,0);
 		}
 
 		//Assign
