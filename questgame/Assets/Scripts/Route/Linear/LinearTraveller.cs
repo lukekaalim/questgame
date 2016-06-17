@@ -3,9 +3,9 @@ using UnityEngine;
 
 using Controllers;
 
-namespace Route.Traversible
+namespace Route.Linear
 {
-	public class TraversibleTraveller : Traveller<TraversibleRoute>
+	public class LinearTraveller : Traveller<LinearRoute>
 	{
 		[SerializeField]
 		int currentPointIndex;
@@ -31,11 +31,10 @@ namespace Route.Traversible
 		Vector2 _velocity;
 
 		[SerializeField]
-		TraversibleRoute _currentRoute;
+		LinearRoute _currentRoute;
 
 		//properties
-
-		public override TraversibleRoute CurrentRoute
+		public override LinearRoute CurrentRoute
 		{
 			get
 			{
@@ -56,7 +55,7 @@ namespace Route.Traversible
 			return this;
 		}
 
-		void Update()
+		void FixedUpdate()
 		{
 			float time = Time.deltaTime;
 
@@ -99,17 +98,28 @@ namespace Route.Traversible
 		}
 
 
-		public override void Assign(TraversibleRoute newRoute)
+		public override void Assign(LinearRoute newRoute)
 		{
 			Assign(newRoute, null);
 		}
 		//TODO
-		public void Assign(TraversibleRoute newRoute, Traveller oldTraveller = null)
+		public void Assign(LinearRoute newRoute, Traveller oldTraveller = null)
 		{
 			_currentRoute = newRoute;
 
 			currentPointIndex = 0;
 			distanceFromIndex = 0f;
+		}
+
+		public void Assign(LinearRoute newRoute, Vector2 startingPosition)
+		{
+			_currentRoute = newRoute;
+
+			currentPointIndex = 0;
+			distanceFromIndex = startingPosition.x;
+			_position.y = startingPosition.y;
+
+			UpdatePosition();
 		}
 
 		public override void SetController(Controller newController)

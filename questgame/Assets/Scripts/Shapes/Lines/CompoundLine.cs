@@ -201,7 +201,9 @@ namespace Shapes
 
 		public Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex)
 		{
-			return Vector3.Lerp(this[startingIndex], this[startingIndex + 1], distanceFromIndex / LineLengths[startingIndex]);
+			int index = startingIndex;
+			float distance = distanceFromIndex;
+			return AdvanceAlongLine(ref index, ref distance);
 		}
 
 		//Important Function!!!
@@ -223,7 +225,7 @@ namespace Shapes
 			//if Distance is a negative number
 			else if(distance < 0)
 			{
-				while (index > 0 && LineLengths[index - 1] > -distance)
+				while (index > 0 && LineLengths[index - 1] < -distance)
 				{
 					distance += LineLengths[index - 1];
 					index--;
@@ -231,7 +233,7 @@ namespace Shapes
 				if (index > 0)
 				{
 					index--;
-					distance = LineLengths[index] - distance;
+					distance = LineLengths[index] + distance;
 				}
 				else
 				{
@@ -266,7 +268,7 @@ namespace Shapes
 				if (index > 0)
 				{
 					index--;
-					distance = LineLengths[index] - distance;
+					distance = LineLengths[index] + distance;
 				}
 				else
 				{
@@ -290,15 +292,18 @@ namespace Shapes
 			}
 			else if (distance < 0)
 			{
-				while (index > 0 && LineLengths[index - 1] > -distance)
+				while (index > 0 && distance < 0 && LineLengths[index - 1] < -distance)
 				{
+					Debug.Log(distance);
+					Debug.Log(LineLengths[index - 1]);
+
 					distance += LineLengths[index - 1];
 					index--;
 				}
 				if (index > 0)
 				{
 					index--;
-					distance = LineLengths[index] - distance;
+					distance = LineLengths[index] + distance;
 				}
 				else
 				{
@@ -321,6 +326,21 @@ namespace Shapes
 			}
 
 			return Vector3.Lerp(this[index, worldSpace], this[index + 1, worldSpace], offset);
+		}
+
+		public List<Vector3> GetPointSample(float startPosition, float endPosition)
+		{
+			List<Vector3> samples = new List<Vector3>();
+			int index = 0;
+			samples.Add(AdvanceAlongLine(ref index, ref startPosition));
+			while (_lineDistance[index + 1] < endPosition && index < PointCount - 3)
+			{
+				index++;
+				samples.Add(this[index]);
+			}
+			samples.Add(GetPointAlongDistance(endPosition));
+
+			return samples;
 		}
 
 		public static CompoundLine CreateCompoundLineFromPath(IPathable path, int segments)

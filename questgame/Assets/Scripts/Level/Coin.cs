@@ -25,7 +25,6 @@ namespace Level
 
 		private void OnCollectCoin(Traveller traveller)
 		{
-			Debug.LogWarning("Total and unequiviocal sucess",this);
 			Destroy(gameObject);
 		}
 
@@ -40,10 +39,10 @@ namespace Level
 
 			if (UnityEditor.Selection.activeGameObject != null)
 			{
-				Route.Traversible.TraversibleRoute traversibleRoute = UnityEditor.Selection.activeGameObject.GetComponent<Route.Traversible.TraversibleRoute>();
+				Route.Linear.LinearRoute traversibleRoute = UnityEditor.Selection.activeGameObject.GetComponent<Route.Linear.LinearRoute>();
 				if (traversibleRoute != null)
 				{
-					Route.Traversible.TraversibleCollider point = gameObject.AddComponent<Route.Traversible.TraversibleCollider>();
+					Route.Linear.LinearCollider point = gameObject.AddComponent<Route.Linear.LinearCollider>();
 					point.Assign(traversibleRoute, new Vector2(0,0));
 					newCoin._pointInLevel = point;
 				}

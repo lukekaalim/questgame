@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Shapes
 {
@@ -43,6 +44,8 @@ namespace Shapes
 		Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance);
 
 		Vector3 AdvanceAlongLine(ref int index, ref float distance);
+
+		List<Vector3> GetPointSample(float startPoint, float endPoint);
 
 		float AbsoluteLength
 		{

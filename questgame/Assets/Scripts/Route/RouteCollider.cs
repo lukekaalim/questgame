@@ -9,31 +9,43 @@ namespace Route
 	public class RouteCollider : MonoBehaviour
 	{
 		public event Action<Traveller> OnEnter;
-
 		public event Action<Traveller> OnCollide;
-
 		public event Action<Traveller> OnExit;
 
 		protected void TriggerOnEnter(Traveller travellerThatActivated)
 		{
-			OnEnter.Invoke(travellerThatActivated);
+			if (OnEnter != null)
+			{
+				OnEnter.Invoke(travellerThatActivated);
+			}
 		}
 
 		protected void TriggerOnCollide(Traveller travellerThatActivated)
 		{
-			OnEnter.Invoke(travellerThatActivated);
+			if (OnCollide != null)
+			{
+				OnCollide.Invoke(travellerThatActivated);
+			}
 		}
 
 		protected void TriggerOnExit(Traveller travellerThatActivated)
 		{
-			OnEnter.Invoke(travellerThatActivated);
+			if (OnExit != null)
+			{
+				OnExit.Invoke(travellerThatActivated);
+			}
 		}
 	}
 
 	public abstract class RouteCollider<T> : RouteCollider where T : RouteBase
 	{
-		[SerializeField]
-		protected T _parentRoute;
+		protected T ParentRoute
+		{
+			get
+			{
+				return Position.ParentRoute;
+			}
+		}
 
 		protected HashSet<Traveller> _currentlyCollidingTravellers = new HashSet<Traveller>();
 
@@ -55,13 +67,6 @@ namespace Route
 
 		protected void OnEnable()
 		{
-			_parentRoute = Position.ParentRoute;
-
-			if (_parentRoute != null)
-			{
-				_parentRoute.QueueColliderForAddition(this);
-			}
-
 			if (Position == null)
 			{
 				Position = GetComponent<RoutePoint<T>>();
@@ -71,15 +76,20 @@ namespace Route
 				Position.OnPointMove += PointMoved;
 			}
 
+			if (ParentRoute != null)
+			{
+				ParentRoute.QueueColliderForAddition(this);
+			}
+
 			transform.position = Position.GetWorldSpacePosition();
 		}
 
 
 		protected void OnDisable()
 		{
-			if (_parentRoute != null)
+			if (ParentRoute != null)
 			{
-				_parentRoute.QueueColliderForRemoval(this);
+				ParentRoute.QueueColliderForRemoval(this);
 			}
 			if (Position != null)
 			{
@@ -91,5 +101,31 @@ namespace Route
 		{
 			return _currentlyCollidingTravellers.Contains(traveller);
 		}
+
+		/*
+		protected void TriggerOnDetailedEnter(Traveller travellerThatActivated, RoutePoint<T> collisionPoint)
+		{
+			if (OnDetailedEnter != null)
+			{
+				OnDetailedEnter.Invoke(travellerThatActivated, collisionPoint);
+			}
+		}
+
+		protected void TriggerOnDetailedCollide(Traveller travellerThatActivated, RoutePoint<T> collisionPoint)
+		{
+			if (OnDetailedCollide != null)
+			{
+				OnDetailedCollide.Invoke(travellerThatActivated, collisionPoint);
+			}
+		}
+
+		protected void TriggerOnDetailedExit(Traveller travellerThatActivated)
+		{
+			if (OnDetailedExit != null)
+			{
+				OnDetailedExit.Invoke(travellerThatActivated);
+			}
+		}
+		*/
 	}
 }

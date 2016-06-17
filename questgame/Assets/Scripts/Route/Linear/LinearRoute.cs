@@ -5,13 +5,13 @@ using Shapes;
 using Serialization;
 using System;
 
-namespace Route.Traversible
+namespace Route.Linear
 {
 	[ExecuteInEditMode]
-	public class TraversibleRoute : RouteBase
+	public class LinearRoute : RouteBase
 	{
 		[SerializeField]
-		HashSet<TraversibleCollider> _colliders = new HashSet<TraversibleCollider>();
+		HashSet<LinearCollider> _colliders = new HashSet<LinearCollider>();
 
 		[SerializeField]
 		SIPointLine _linearTraversable;
@@ -30,13 +30,17 @@ namespace Route.Traversible
 			{
 				return _linearTraversable.Value;
 			}
+			set
+			{
+				_linearTraversable.Value = value;
+			}
 		}
 
 		protected override void ModifyPoints()
 		{
 			foreach (PointToBeProcessed pointModification in pointQueue)
 			{
-				TraversibleCollider collider = pointModification._point as TraversibleCollider;
+				LinearCollider collider = pointModification._point as LinearCollider;
 
 				if (pointModification._isAdding)
 				{
@@ -52,17 +56,17 @@ namespace Route.Traversible
 
 		public override Traveller GenerateNewTraveller()
 		{
-			TraversibleTraveller newTraveller = new GameObject("Traveller").AddComponent<TraversibleTraveller>();
+			LinearTraveller newTraveller = new GameObject("Traveller").AddComponent<LinearTraveller>();
 
 			newTraveller.Assign(this);
 
 			return newTraveller;
 		}
 
-		public void CheckTravellerCollision(Traveller travellerToCheck, Ray travellerMovement, float distance)
+		public void CheckTravellerCollision(LinearTraveller travellerToCheck, Ray travellerMovement, float distance)
 		{
 			canAddToQueue = false;
-			foreach (TraversibleCollider collider in _colliders)
+			foreach (LinearCollider collider in _colliders)
 			{
 				collider.TestTraveller(travellerToCheck, travellerMovement, distance);
 			}
@@ -72,7 +76,7 @@ namespace Route.Traversible
 
 		public override RoutePoint GenerateNewPoint()
 		{
-			TraversiblePoint point = new GameObject("Traveller").AddComponent<TraversiblePoint>();
+			LinearPoint point = new GameObject("Traveller").AddComponent<LinearPoint>();
 			point.Assign(this);
 			return point;
 		}
@@ -91,7 +95,7 @@ namespace Route.Traversible
 		{
 			// Create a custom game object
 			GameObject gameObject = new GameObject("Traversible Route");
-			gameObject.AddComponent<TraversibleRoute>();
+			gameObject.AddComponent<LinearRoute>();
 
 			// Ensure it gets reparented if this was a context click (otherwise does nothing)
 			UnityEditor.GameObjectUtility.SetParentAndAlign(gameObject, menuCommand.context as GameObject);

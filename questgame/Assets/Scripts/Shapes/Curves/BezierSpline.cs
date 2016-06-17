@@ -391,6 +391,11 @@ namespace Shapes
 			return LineRepresentation.GetLeftMostIndex(distance);
 		}
 
+		public List<Vector3> GetPointSample(float startPoint, float endPoint)
+		{
+			return LineRepresentation.GetPointSample(startPoint, endPoint);
+		}
+
 		public int PointCount
 		{
 			get

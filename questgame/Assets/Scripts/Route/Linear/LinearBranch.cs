@@ -1,32 +1,67 @@
 ﻿using System;
 using UnityEngine;
 
-using Route;
+using Shapes;
 
-namespace Level
+namespace Route.Linear
 {
-	public class Branch : MonoBehaviour
+	[ExecuteInEditMode]
+	public class LinearBranch : MonoBehaviour
 	{
 		[SerializeField]
-		public RoutePoint _startingPoint;
+		LinearCollider _collider;
+
 		[SerializeField]
-		public RoutePoint _endingPoint;
-		[SerializeField]
-		public RouteCollider _collider;
+		LinearPoint _endPoint;
+
+		public bool IsValidBranch
+		{
+			get
+			{
+				return _collider != null && _endPoint != null;
+			}
+		}
 
 		void OnEnable()
 		{
-			_collider.OnCollide += OnCollision;
+			if (IsValidBranch)
+			{
+				_collider.OnDetailedCollide += OnBranchEnter;
+			}
 		}
 
-		void OnCollision(Traveller travellerThatHit)
+		void CreateBranch()
 		{
 
 		}
+
+		void OnDisable()
+		{
+			_collider.OnDetailedCollide -= OnBranchEnter;
+		}
+
+		void OnBranchEnter(Traveller travellerThatEntered, Vector2 collisionPoint)
+		{
+			//float distanceThroughCollider = collisionPoint.x - (_collider.ColliderBounds.extents.x + _collider.ColliderBounds.center.x);
+
+			//LinearTraveller traveleler = travellerThatEntered as LinearTraveller;
+
+			CreateBranch();
+
+			//traveleler.Assign(transportRoute, new Vector2(distanceThroughCollider, collisionPoint.y));
+		}
+
 
 
 #if UNITY_EDITOR
 
+
+		void OnGizmos()
+		{
+
+		}
+
+		/*
 		[UnityEditor.MenuItem("Level/Branch")]
 		static void CreateNewBranch(UnityEditor.MenuCommand menuCommand)
 		{
@@ -57,7 +92,8 @@ namespace Level
 			// Register the creation in the undo system
 			UnityEditor.Undo.RegisterCreatedObjectUndo(gameObject, "Create " + gameObject.name);
 		}
-
+		*/
 #endif
+
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shapes
@@ -139,7 +139,7 @@ namespace Shapes
 			return P1;
 		}
 
-		Vector3 IPointLine.GetPointAlongDistance(float distance)
+		public Vector3 GetPointAlongDistance(float distance)
 		{
 			return Vector3.Lerp(P0, P1, distance / _length);
 		}
@@ -182,6 +182,14 @@ namespace Shapes
 		{
 			index = 0;
 			return Vector3.Lerp(P0, P1, distance / _length);
+		}
+
+		public List<Vector3> GetPointSample(float startPoint, float endPoint)
+		{
+			List<Vector3> samples = new List<Vector3>();
+			samples.Add(GetPointAlongDistance(startPoint));
+			samples.Add(GetPointAlongDistance(endPoint));
+			return samples;
 		}
 
 #if UNITY_EDITOR

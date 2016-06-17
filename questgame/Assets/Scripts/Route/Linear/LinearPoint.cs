@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Route.Traversible
+namespace Route.Linear
 {
-	public class TraversiblePoint : RoutePoint<TraversibleRoute>
+	public class LinearPoint : RoutePoint<LinearRoute>
 	{
 		[SerializeField]
 		int _leftIndex = 0;
@@ -15,9 +15,9 @@ namespace Route.Traversible
 		Vector2 _position;
 
 		[SerializeField]
-		TraversibleRoute _parent;
+		LinearRoute _parent;
 
-		public override TraversibleRoute ParentRoute
+		public override LinearRoute ParentRoute
 		{
 			get
 			{
@@ -52,13 +52,22 @@ namespace Route.Traversible
 			return _parent.LinearTraversable.GetPointAlongDistance(_leftIndex,_distanceFromIndex) + new Vector3(0,_position.y,0);
 		}
 
+		public Vector3 GetWorldSpacePosition(float offset)
+		{
+			if (ParentRoute == null)
+			{
+				return Vector3.zero;
+			}
+			return _parent.LinearTraversable.GetPointAlongDistance(_leftIndex, _distanceFromIndex + offset) + new Vector3(0, _position.y, 0);
+		}
+
 		//Assign
-		public override void Assign(TraversibleRoute newRoute)
+		public override void Assign(LinearRoute newRoute)
 		{
 			_parent = newRoute;
 		}
 
-		public void Assign(TraversibleRoute newRoute, Vector2 position)
+		public void Assign(LinearRoute newRoute, Vector2 position)
 		{
 			Assign(newRoute);
 			_position = position;
@@ -74,9 +83,9 @@ namespace Route.Traversible
 			// Create a custom game object
 			GameObject gameObject = new GameObject("Route Point");
 
-			TraversibleRoute traversibleRoute = UnityEditor.Selection.activeGameObject.GetComponent<TraversibleRoute>();
+			LinearRoute traversibleRoute = UnityEditor.Selection.activeGameObject.GetComponent<LinearRoute>();
 
-			TraversiblePoint point = gameObject.AddComponent<TraversiblePoint>();
+			LinearPoint point = gameObject.AddComponent<LinearPoint>();
 			point.Assign(traversibleRoute);
 
 			// Ensure it gets reparented if this was a context click (otherwise does nothing)
@@ -88,7 +97,7 @@ namespace Route.Traversible
 		[UnityEditor.MenuItem("Routing/Create Traversible Route Point", true)]
 		static bool CheckIfSelectionValidTargetForNewRoutePoint(UnityEditor.MenuCommand menuCommand)
 		{
-			return UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponent<TraversibleRoute>() != null;
+			return UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponent<LinearRoute>() != null;
 		}
 #endif
 	}

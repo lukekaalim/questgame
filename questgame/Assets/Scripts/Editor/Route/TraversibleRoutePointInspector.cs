@@ -1,17 +1,17 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Route.Traversible
+namespace Route.Linear
 {
 	/*
-	[CustomEditor(typeof(TraversiblePoint), true)]
+	[CustomEditor(typeof(LinearPoint), true)]
 	public class TraversiblePointInspector : Editor
 	{
 		public override void OnInspectorGUI()
 		{
 			DrawDefaultInspector();
 
-			TraversiblePoint point = target as TraversiblePoint;
+			LinearPoint point = target as LinearPoint;
 			/*
 			Vector2 pointCenter = EditorGUILayout.Vector2Field("Position", point.CollisionBounds.center);
 			Vector2 pointExtents = EditorGUILayout.Vector2Field("Extends", point.CollisionBounds.extents);
