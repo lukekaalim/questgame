@@ -333,7 +333,7 @@ namespace Shapes
 			List<Vector3> samples = new List<Vector3>();
 			int index = 0;
 			samples.Add(AdvanceAlongLine(ref index, ref startPosition));
-			while (_lineDistance[index + 1] < endPosition && index < PointCount - 3)
+			while (index < PointCount - 3 && _lineDistance[index + 1] < endPosition)
 			{
 				index++;
 				samples.Add(this[index]);
@@ -379,6 +379,10 @@ namespace Shapes
 
 		public Vector3 GetVelocityAtIndex(int startingIndex)
 		{
+			if (startingIndex == PointCount - 1)
+			{
+				return this[startingIndex] - this[startingIndex - 1];
+			}
 			return this[startingIndex + 1] - this[startingIndex];
 		}
 

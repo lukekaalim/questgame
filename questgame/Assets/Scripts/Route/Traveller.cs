@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using Controllers;
+using Utility;
 
 namespace Route
 {
@@ -18,6 +19,8 @@ namespace Route
 	{
 		protected Controller _activeController;
 
+		protected Traveller _nextTraveller;
+
 		public abstract bool IsAssigned
 		{
 			get;
@@ -32,9 +35,25 @@ namespace Route
 
 		public abstract void SetController(Controller newController);
 
-		public abstract void SetNextTraveller(Traveller nextTraveller);
+		public abstract void UnAssign(Traveller nextTraveller);
+
+		public abstract Vector3 GetWorldSpacePosition();
 
 		public abstract void UpdatePosition();
+
+		public virtual Traveller GoToPoint(RoutePoint startPoint)
+		{
+			if (startPoint.ParentRouteAsRouteBase.GetType() == typeof(Linear.LinearRoute))
+			{
+				Linear.LinearPoint point = startPoint as Linear.LinearPoint;
+				Linear.LinearTraveller traveller = gameObject.AddOrGetComponent<Linear.LinearTraveller>();
+
+				traveller.Assign(point.ParentRoute, point);
+
+				return traveller;
+			}
+			return null;
+		}
 
 
 #if UNITY_EDITOR
@@ -67,5 +86,6 @@ namespace Route
 		}
 
 		public abstract void Assign (T newRoute);
+		public abstract void Assign (T newRoute, RoutePoint<T> position);
 	}
 }

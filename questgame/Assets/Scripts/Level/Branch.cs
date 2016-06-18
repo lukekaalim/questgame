@@ -2,17 +2,19 @@
 using UnityEngine;
 
 using Shapes;
+using Utility;
 
 namespace Route.Linear
 {
-	[ExecuteInEditMode]
-	public class LinearBranch : MonoBehaviour
+	public class Branch : MonoBehaviour
 	{
+		//The start point
 		[SerializeField]
-		LinearCollider _collider;
+		RouteCollider _collider;
 
+		//The end point
 		[SerializeField]
-		LinearPoint _endPoint;
+		RoutePoint _endPoint;
 
 		public bool IsValidBranch
 		{
@@ -26,27 +28,58 @@ namespace Route.Linear
 		{
 			if (IsValidBranch)
 			{
-				_collider.OnDetailedCollide += OnBranchEnter;
+				_collider.OnCollide += OnBranchEnter;
 			}
 		}
 
-		void CreateBranch()
+		protected void SetBranch(Vector3 startPoint, Traveller traveller)
 		{
+			GameObject branchObject = new GameObject(name + "  temp route");
+			branchObject.transform.SetParent(_collider.ParentRouteAsGeneric.transform, true);
 
+			TwoPointLineExtended line = branchObject.AddComponent<TwoPointLineExtended>();
+
+			line[0] = startPoint;
+			line[1] = _endPoint.GetWorldSpacePosition();
+
+			line.SetVelocity(traveller.transform.forward, _endPoint.GetVelocity());
+
+			LinearRoute route = branchObject.AddComponent<LinearRoute>();
+			route.LinearTraversable = line;
+
+			LinearTraveller newTraveller = traveller.AddOrGetComponent<LinearTraveller>();
+
+			traveller.UnAssign(newTraveller);
+
+			GameObject colliderObject = new GameObject(name + " endCollider");
+			colliderObject.transform.SetParent(branchObject.transform, true);
+
+			LinearCollider endCollider = colliderObject.AddComponent<LinearCollider>();
+			endCollider.Assign(route, new Vector2(line.AbsoluteLength, 0));
+			endCollider.ColliderBounds = new Bounds(endCollider.ColliderBounds.center, new Vector2(0f, 0f));
+
+			endCollider.OnDetailedEnter += OnBranchExit;
+
+			newTraveller.Assign(route, new Vector2(0,0));
+		}
+
+		protected void OnBranchExit(LinearTraveller travellerThatIsExiting, Vector2 collisionPoint)
+		{
+			_endPoint.ParentRouteAsRouteBase.GenerateNewTraveller(travellerThatIsExiting, _endPoint);
 		}
 
 		void OnDisable()
 		{
-			_collider.OnDetailedCollide -= OnBranchEnter;
+			_collider.OnCollide -= OnBranchEnter;
 		}
 
-		void OnBranchEnter(Traveller travellerThatEntered, Vector2 collisionPoint)
+		protected void OnBranchEnter(Traveller travellerThatEntered)
 		{
 			//float distanceThroughCollider = collisionPoint.x - (_collider.ColliderBounds.extents.x + _collider.ColliderBounds.center.x);
 
 			//LinearTraveller traveleler = travellerThatEntered as LinearTraveller;
 
-			CreateBranch();
+			SetBranch(travellerThatEntered.GetWorldSpacePosition(), travellerThatEntered);
 
 			//traveleler.Assign(transportRoute, new Vector2(distanceThroughCollider, collisionPoint.y));
 		}

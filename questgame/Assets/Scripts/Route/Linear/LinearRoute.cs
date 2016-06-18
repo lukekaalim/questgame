@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 using Shapes;
 using Serialization;
-using System;
+using Utility;
 
 namespace Route.Linear
 {
@@ -59,6 +60,19 @@ namespace Route.Linear
 			LinearTraveller newTraveller = new GameObject("Traveller").AddComponent<LinearTraveller>();
 
 			newTraveller.Assign(this);
+
+			return newTraveller;
+		}
+
+		public override Traveller GenerateNewTraveller(Traveller oldTraveller, RoutePoint position)
+		{
+			LinearPoint point = position as LinearPoint;
+
+			LinearTraveller newTraveller = oldTraveller.gameObject.AddOrGetComponent<LinearTraveller>();
+
+			oldTraveller.UnAssign(newTraveller);
+
+			newTraveller.Assign(point.ParentRoute, point);
 
 			return newTraveller;
 		}

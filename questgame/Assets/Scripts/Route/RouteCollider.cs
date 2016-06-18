@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Route
 {
 	[ExecuteInEditMode]
-	public class RouteCollider : MonoBehaviour
+	public abstract class RouteCollider : MonoBehaviour
 	{
 		public event Action<Traveller> OnEnter;
 		public event Action<Traveller> OnCollide;
@@ -35,10 +35,23 @@ namespace Route
 				OnExit.Invoke(travellerThatActivated);
 			}
 		}
+
+		public abstract RouteBase ParentRouteAsGeneric
+		{
+			get;
+		}
 	}
 
 	public abstract class RouteCollider<T> : RouteCollider where T : RouteBase
 	{
+		public override RouteBase ParentRouteAsGeneric
+		{
+			get
+			{
+				return ParentRoute;
+			}
+		}
+
 		protected T ParentRoute
 		{
 			get

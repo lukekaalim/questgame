@@ -22,6 +22,10 @@ namespace Route.Linear
 			{
 				return _collisionBounds;
 			}
+			set
+			{
+				_collisionBounds = value;
+			}
 		}
 
 		public override RoutePoint<LinearRoute> Position

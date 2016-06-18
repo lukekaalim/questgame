@@ -14,6 +14,7 @@ namespace Route
 		}
 
 		public abstract Vector3 GetWorldSpacePosition();
+		public abstract Vector3 GetVelocity();
 
 		public abstract void UpdatePosition();
 

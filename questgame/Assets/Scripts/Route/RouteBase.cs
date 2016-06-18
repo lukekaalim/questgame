@@ -17,6 +17,8 @@ namespace Route
 
 		public abstract Traveller GenerateNewTraveller();
 
+		public abstract Traveller GenerateNewTraveller(Traveller oldTraveller, RoutePoint position);
+
 		public abstract RoutePoint GenerateNewPoint();
 
 		protected bool canAddToQueue = true;

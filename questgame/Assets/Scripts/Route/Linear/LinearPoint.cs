@@ -12,6 +12,9 @@ namespace Route.Linear
 		float _distanceFromIndex = 0;
 
 		[SerializeField]
+		float progress = 0;
+
+		[SerializeField]
 		Vector2 _position;
 
 		[SerializeField]
@@ -36,7 +39,7 @@ namespace Route.Linear
 		public override void UpdatePosition()
 		{
 			float oldPosition = _position.x;
-			_parent.LinearTraversable.AdvanceAlongLine(ref _leftIndex, ref _distanceFromIndex, out _position.x);
+			_parent.LinearTraversable.AdvanceAlongLine(ref _leftIndex, ref _distanceFromIndex, out _position.x, out progress);
 			if (_position.x != oldPosition)
 			{
 				OnPointMoveInvoke();
@@ -59,6 +62,14 @@ namespace Route.Linear
 				return Vector3.zero;
 			}
 			return _parent.LinearTraversable.GetPointAlongDistance(_leftIndex, _distanceFromIndex + offset) + new Vector3(0, _position.y, 0);
+		}
+
+		public override Vector3 GetVelocity()
+		{
+			return Vector3.Lerp(
+				_parent.LinearTraversable.GetVelocityAtIndex(_leftIndex),
+				_parent.LinearTraversable.GetVelocityAtIndex(_leftIndex + 1),
+				progress);
 		}
 
 		//Assign

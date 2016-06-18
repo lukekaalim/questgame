@@ -25,8 +25,6 @@ namespace Route.Linear
 			}
 		}
 
-		Traveller _nextTraveller;
-
 		[SerializeField]
 		Vector2 _velocity;
 
@@ -81,7 +79,7 @@ namespace Route.Linear
 
 			//Get Rotation
 			Vector3 lerpedDirection;
-			if (currentPointIndex < _currentRoute.LinearTraversable.PointCount - 2)
+			if (currentPointIndex < _currentRoute.LinearTraversable.PointCount)
 			{
 				lerpedDirection = Vector3.Lerp(
 					_currentRoute.LinearTraversable.GetVelocityAtIndex(currentPointIndex),
@@ -102,14 +100,6 @@ namespace Route.Linear
 		{
 			Assign(newRoute, null);
 		}
-		//TODO
-		public void Assign(LinearRoute newRoute, Traveller oldTraveller = null)
-		{
-			_currentRoute = newRoute;
-
-			currentPointIndex = 0;
-			distanceFromIndex = 0f;
-		}
 
 		public void Assign(LinearRoute newRoute, Vector2 startingPosition)
 		{
@@ -119,15 +109,32 @@ namespace Route.Linear
 			distanceFromIndex = startingPosition.x;
 			_position.y = startingPosition.y;
 
+			_nextTraveller = this;
+			enabled = true;
+
 			UpdatePosition();
 		}
 
-		public override void SetController(Controller newController)
+		public override void Assign(LinearRoute newRoute, RoutePoint<LinearRoute> position)
 		{
-			throw new NotImplementedException();
+			LinearPoint point = position as LinearPoint;
+
+			Assign(newRoute, point.Position);
 		}
 
-		public override void SetNextTraveller(Traveller nextTraveller)
+		public override void UnAssign(Traveller nextTraveller)
+		{
+			_currentRoute = null;
+			_nextTraveller = nextTraveller;
+			enabled = false;
+		}
+
+		public override Vector3 GetWorldSpacePosition()
+		{
+			return transform.position;
+		}
+
+		public override void SetController(Controller newController)
 		{
 			throw new NotImplementedException();
 		}

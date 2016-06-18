@@ -10,10 +10,10 @@ namespace Shapes
 		Color _displayColor = Color.white;
 
 		[SerializeField, HideInInspector]
-		Vector3 P0 = new Vector3();
+		protected Vector3 P0 = new Vector3();
 
 		[SerializeField, HideInInspector]
-		Vector3 P1 = new Vector3();
+		protected Vector3 P1 = new Vector3();
 
 		[SerializeField, HideInInspector]
 		float _length;
@@ -34,7 +34,7 @@ namespace Shapes
 			}
 		}
 
-		float IPointLine.AbsoluteLength
+		public float AbsoluteLength
 		{
 			get
 			{
@@ -129,12 +129,12 @@ namespace Shapes
 			return Vector3.Lerp(this[0, worldSpace], this[1, worldSpace], percentage);
 		}
 
-		Vector3 IPointLine.GetStartPosition()
+		public Vector3 GetStartPosition()
 		{
 			return P0;
 		}
 
-		Vector3 IPointLine.GetEndPosition()
+		public Vector3 GetEndPosition()
 		{
 			return P1;
 		}
@@ -144,27 +144,27 @@ namespace Shapes
 			return Vector3.Lerp(P0, P1, distance / _length);
 		}
 
-		Vector3 IPointLine.GetPointAlongDistance(int startingIndex, float distanceFromIndex)
+		public Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex)
 		{
 			return Vector3.Lerp(P0, P1, distanceFromIndex / _length);
 		}
 
-		Vector3 IPointLine.GetVelocityAtIndex(int startingIndex)
+		public virtual Vector3 GetVelocityAtIndex(int startingIndex)
 		{
 			return P1 - P0;
 		}
 
-		Vector3 IPointLine.GetRelativePoint(float distance)
+		public Vector3 GetRelativePoint(float distance)
 		{
 			return Vector3.Lerp(P0, P1, distance / _length);
 		}
 
-		int IPointLine.GetLeftMostIndex(float distance)
+		public int GetLeftMostIndex(float distance)
 		{
 			return 0;
 		}
 
-		Vector3 IPointLine.AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
+		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
 		{
 			index = 0;
 			pointProgress = distance / _length;
@@ -208,7 +208,7 @@ namespace Shapes
 			UnityEditor.Undo.RegisterCreatedObjectUndo(gameObject, "Create " + gameObject.name);
 		}
 
-		void OnDrawGizmos()
+		protected virtual void OnDrawGizmos()
 		{
 			Gizmos.color = _displayColor;
 
