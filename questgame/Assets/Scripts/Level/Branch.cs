@@ -65,6 +65,7 @@ namespace Route.Linear
 
 		protected void OnBranchExit(LinearTraveller travellerThatIsExiting, Vector2 collisionPoint)
 		{
+			Destroy(travellerThatIsExiting.CurrentRoute.gameObject);
 			_endPoint.ParentRouteAsRouteBase.GenerateNewTraveller(travellerThatIsExiting, _endPoint);
 		}
 
@@ -89,9 +90,13 @@ namespace Route.Linear
 #if UNITY_EDITOR
 
 
-		void OnGizmos()
+		protected virtual void OnDrawGizmos()
 		{
-
+			if (IsValidBranch)
+			{
+				Gizmos.color = Color.blue;
+				Gizmos.DrawLine(_collider.RoutePointAsGeneric.GetWorldSpacePosition(), _endPoint.GetWorldSpacePosition());
+			}
 		}
 
 		/*

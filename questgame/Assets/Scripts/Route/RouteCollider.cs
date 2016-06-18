@@ -12,6 +12,16 @@ namespace Route
 		public event Action<Traveller> OnCollide;
 		public event Action<Traveller> OnExit;
 
+		public abstract RouteBase ParentRouteAsGeneric
+		{
+			get;
+		}
+
+		public abstract RoutePoint RoutePointAsGeneric
+		{
+			get;
+		}
+
 		protected void TriggerOnEnter(Traveller travellerThatActivated)
 		{
 			if (OnEnter != null)
@@ -35,11 +45,6 @@ namespace Route
 				OnExit.Invoke(travellerThatActivated);
 			}
 		}
-
-		public abstract RouteBase ParentRouteAsGeneric
-		{
-			get;
-		}
 	}
 
 	public abstract class RouteCollider<T> : RouteCollider where T : RouteBase
@@ -49,6 +54,14 @@ namespace Route
 			get
 			{
 				return ParentRoute;
+			}
+		}
+
+		public override RoutePoint RoutePointAsGeneric
+		{
+			get
+			{
+				return Position;
 			}
 		}
 
