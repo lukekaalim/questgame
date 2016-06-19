@@ -45,6 +45,7 @@ Lightmap-0_comp_light
 Character
 =$/Assets/Scripts/Controllers
 Controller
+IControllable
 =$/Assets/Scripts/Displays
 ShopDisplay
 =$/Assets/Scripts/Editor/DictionaryInspectors
@@ -98,6 +99,7 @@ SerializableInterface
 +/Dictionaries
 SerializableDictionaryStringInt
 =$/Assets/Scripts/Serialization/Interfaces
+SIControllable
 SICurrencyContainer
 SIHasCurrency
 SIPathable

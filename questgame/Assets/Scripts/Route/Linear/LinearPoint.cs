@@ -38,12 +38,8 @@ namespace Route.Linear
 
 		public override void UpdatePosition()
 		{
-			float oldPosition = _position.x;
 			_parent.LinearTraversable.AdvanceAlongLine(ref _leftIndex, ref _distanceFromIndex, out _position.x, out _progress);
-			if (_position.x != oldPosition)
-			{
-				OnPointMoveInvoke();
-			}
+			OnPointMoveInvoke();
 		}
 
 		public override Vector3 GetWorldSpacePosition()

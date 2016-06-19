@@ -17,7 +17,6 @@ namespace Route.Linear
 			_leftIndex = 0;
 
 			_distanceFromIndex = _parent.LinearTraversable.AbsoluteLength;
-			_position = new Vector2();
 
 			_parent.LinearTraversable.AdvanceAlongLine(ref _leftIndex, ref _distanceFromIndex, out _position.x, out _progress);
 			OnPointMoveInvoke();

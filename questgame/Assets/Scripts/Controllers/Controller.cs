@@ -10,25 +10,23 @@ using Serialization;
 
 namespace Controllers
 {
+	[Flags]
 	public enum Intention
 	{
 		None = 0,
-		MoveLeft = 1,
-		MoveRight = 2,
-		MoveUp = 3,
-		MoveDown = 4,
-		Tap = 5,
-		Shake = 6,
-		Hold = 7
+		MoveLeft = 1 << 0,
+		MoveRight = 1 << 1,
+		MoveUp = 1 << 2,
+		MoveDown = 1 << 3,
+		Tap = 1 << 4,
+		Shake = 1 << 5,
+		Hold = 1 << 6,
 	}
 
 	public class Controller : MonoBehaviour
 	{
 		[SerializeField]
-		Traveller _controlledTraveller;
-
-		[SerializeField]
-		List<float> _intentionWeights;
+		SIControllable _controlled;
 
 		[SerializeField]
 		Character _character;
@@ -36,18 +34,8 @@ namespace Controllers
 		[SerializeField]
 		float _speed;
 
-		public ReadOnlyCollection<float> IntentionWeights
-		{
-			get
-			{
-				return _intentionWeights.AsReadOnly();
-			}
-		}
-
-		public float GetIntentionWeight(Intention intent)
-		{
-			return _intentionWeights[(int)intent];
-		}
+		int touchesLastFrame = 0;
+		Intention _intentForThisFrame = Intention.None;
 
 		public float Speed
 		{
@@ -57,25 +45,47 @@ namespace Controllers
 			}
 		}
 
-		public void ConsumeIntention(Intention intentionToConsume)
+		void OnEnable()
 		{
-			_intentionWeights[(int)intentionToConsume] = 0;
+			if (_controlled.Value != null)
+			{
+				_controlled.Value.SetController(this);
+			}
 		}
 
-		void Awake()
+		void OnDisable()
 		{
-			_controlledTraveller.SetController(this);
-			_intentionWeights = new List<float>(new float[Enum.GetNames(typeof(Intention)).Length]);
+			if (_controlled.Value != null)
+			{
+				_controlled.Value.SetController(null);
+			}
 		}
 
 		void Update()
 		{
-			_controlledTraveller = _controlledTraveller.UpdateTraveller();
-
-			if(Input.touchCount > 0)
+			if (_controlled != null)
 			{
-				_intentionWeights[(int)Intention.Tap] = 3;
+				ProcessInput();
 			}
+		}
+
+		protected virtual void ProcessInput()
+		{
+			_intentForThisFrame = Intention.None;
+
+			if (touchesLastFrame < Input.touchCount)
+			{
+				_intentForThisFrame = _intentForThisFrame | Intention.Tap;
+			}
+
+			_controlled.Value = _controlled.Value.ApplyInput(_intentForThisFrame);
+
+			touchesLastFrame = Input.touchCount;
+		}
+
+		public void ConsumeIntention(Intention intentionToConsume)
+		{
+			_intentForThisFrame = _intentForThisFrame & ~intentionToConsume;
 		}
 	}
 }

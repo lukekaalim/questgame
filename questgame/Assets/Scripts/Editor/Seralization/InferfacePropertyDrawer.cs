@@ -103,4 +103,13 @@ namespace Serialization
 			return ScriptableObject.CreateInstance<SIPointLine>();
 		}
 	}
+
+	[CustomPropertyDrawer(typeof(SIControllable), true)]
+	class SIControllableDrawer : InferfacePropertyDrawer<Controllers.IControllable>
+	{
+		protected override SerializableInterface<Controllers.IControllable> CreateInstance()
+		{
+			return ScriptableObject.CreateInstance<SIControllable>();
+		}
+	}
 }

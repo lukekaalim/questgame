@@ -57,4 +57,41 @@ namespace Shapes
 			get;
 		}
 	}
+
+	public static class IPointLineTools
+	{
+#if UNITY_EDITOR
+
+		[UnityEditor.MenuItem("GameObject/Shapes/Visualization/Make Line Renderer")]
+		public static void MakeLineRendererFromPointLine()
+		{
+			GameObject lineGameObject = UnityEditor.Selection.activeGameObject;
+			IPointLine line = lineGameObject.GetComponent<IPointLine>();
+
+			GameObject newLineRendererGameObject = new GameObject(lineGameObject.name + " visualization");
+			LineRenderer renderer = newLineRendererGameObject.AddComponent<LineRenderer>();
+
+			newLineRendererGameObject.transform.SetParent(lineGameObject.transform, true);
+
+			renderer.useWorldSpace = true;
+			renderer.SetVertexCount(line.PointCount);
+
+			for (int i = 0; i < line.PointCount; i++)
+			{
+				renderer.SetPositions(line.GetPointSample(0, line.AbsoluteLength).ToArray());
+			}
+		}
+
+		[UnityEditor.MenuItem("GameObject/Shapes/Visualization/Make Line Renderer", true)]
+		public static bool MakeLineRendererFromPointLineValidate()
+		{
+			if (UnityEditor.Selection.activeGameObject != null)
+			{
+				IPointLine line = UnityEditor.Selection.activeGameObject.GetComponent<IPointLine>();
+				return line != null;
+			}
+			return false;
+		}
+#endif
+	}
 }

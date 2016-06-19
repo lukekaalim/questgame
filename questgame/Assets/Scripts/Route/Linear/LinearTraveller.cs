@@ -48,14 +48,19 @@ namespace Route.Linear
 			}
 		}
 
-		public override Traveller UpdateTraveller()
+		public override IControllable ApplyInput(Intention controllerIntent)
 		{
 			return _nextTraveller;
 		}
 
+		protected virtual void OnEnable()
+		{
+			_nextTraveller = this;
+		}
+
 		public virtual void FixedUpdate()
 		{
-			float time = Time.deltaTime;
+			float time = Time.fixedDeltaTime;
 
 			distanceFromIndex += _velocity.x * time;
 			_position.y += _velocity.y * time;

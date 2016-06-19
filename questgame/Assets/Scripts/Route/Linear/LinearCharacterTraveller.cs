@@ -23,27 +23,35 @@ namespace Route.Linear
 		float _gravity;
 
 		[SerializeField]
+		protected float jumpVelocity;
+
+		[SerializeField]
 		Vector3 pointOnRoute = Vector3.zero;
 
-		public override Traveller UpdateTraveller()
+		public override IControllable ApplyInput(Intention controllerIntent)
 		{
 			if (_activeController != null)
 			{
-				if (_isOnGround && _activeController.GetIntentionWeight(Intention.Tap) > 0)
+				if (_isOnGround && (controllerIntent & Intention.Tap) == Intention.Tap)
 				{
 					_activeController.ConsumeIntention(Intention.Tap);
-					_velocity.y += 3;
+
+					_velocity.y += jumpVelocity;
 				}
 			}
-			return _nextTraveller;
+
+			return _nextTraveller as IControllable;
 		}
 
+		//Time for movement calculations
 		public override void FixedUpdate()
 		{
-			float time = Time.deltaTime;
+			float time = Time.fixedDeltaTime;
 
+			//Apply x velocity
 			distanceFromIndex += _velocity.x * time;
 
+			//If we were on the ground last frame, stay there
 			if (_isOnGround)
 			{
 				_worldSpaceHeight = _floorHeight;
@@ -86,6 +94,11 @@ namespace Route.Linear
 
 			_floorHeight = newWorldSpacePosition.y;
 
+			if (_worldSpaceHeight < _floorHeight)
+			{
+				_worldSpaceHeight = _floorHeight;
+			}
+
 			_position.y = _worldSpaceHeight - _floorHeight;
 
 			newWorldSpacePosition.y = _worldSpaceHeight;
@@ -93,11 +106,6 @@ namespace Route.Linear
 			if(_isOnGround)
 			{
 				_worldSpaceHeight = _floorHeight;
-				_position.y = 0;
-			}
-
-			if (_position.y < 0)
-			{
 				_position.y = 0;
 			}
 

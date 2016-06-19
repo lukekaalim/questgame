@@ -15,8 +15,9 @@ namespace Route
 	 *		the travellers intent.
 	 *
 	 */
-	public abstract class Traveller : MonoBehaviour
+	public abstract class Traveller : MonoBehaviour, IControllable
 	{
+		[SerializeField]
 		protected Controller _activeController;
 
 		protected Traveller _nextTraveller;
@@ -31,7 +32,7 @@ namespace Route
 			get;
 		}
 
-		public abstract Traveller UpdateTraveller();
+		public abstract IControllable ApplyInput(Intention controllerIntent);
 
 		public abstract void UnAssign(Traveller nextTraveller);
 
