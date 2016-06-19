@@ -6,19 +6,19 @@ namespace Route.Linear
 	public class LinearPoint : RoutePoint<LinearRoute>
 	{
 		[SerializeField]
-		int _leftIndex = 0;
+		protected int _leftIndex = 0;
 
 		[SerializeField]
-		float _distanceFromIndex = 0;
+		protected float _distanceFromIndex = 0;
 
 		[SerializeField]
-		float progress = 0;
+		protected float _progress = 0;
 
 		[SerializeField]
-		Vector2 _position;
+		protected Vector2 _position;
 
 		[SerializeField]
-		LinearRoute _parent;
+		protected LinearRoute _parent;
 
 		public override LinearRoute ParentRoute
 		{
@@ -39,7 +39,7 @@ namespace Route.Linear
 		public override void UpdatePosition()
 		{
 			float oldPosition = _position.x;
-			_parent.LinearTraversable.AdvanceAlongLine(ref _leftIndex, ref _distanceFromIndex, out _position.x, out progress);
+			_parent.LinearTraversable.AdvanceAlongLine(ref _leftIndex, ref _distanceFromIndex, out _position.x, out _progress);
 			if (_position.x != oldPosition)
 			{
 				OnPointMoveInvoke();
@@ -69,7 +69,7 @@ namespace Route.Linear
 			return Vector3.Lerp(
 				_parent.LinearTraversable.GetVelocityAtIndex(_leftIndex),
 				_parent.LinearTraversable.GetVelocityAtIndex(_leftIndex + 1),
-				progress);
+				_progress);
 		}
 
 		//Assign

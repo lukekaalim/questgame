@@ -3,8 +3,10 @@ using UnityEngine;
 
 using Shapes;
 using Utility;
+using Route;
+using Route.Linear;
 
-namespace Route.Linear
+namespace Level
 {
 	public class Branch : MonoBehaviour
 	{
@@ -54,18 +56,18 @@ namespace Route.Linear
 			GameObject colliderObject = new GameObject(name + " endCollider");
 			colliderObject.transform.SetParent(branchObject.transform, true);
 
-			LinearCollider endCollider = colliderObject.AddComponent<LinearCollider>();
-			endCollider.Assign(route, new Vector2(line.AbsoluteLength, 0));
-			endCollider.ColliderBounds = new Bounds(endCollider.ColliderBounds.center, new Vector2(0f, 0f));
+			LinearLimitCollider endCollider = colliderObject.AddComponent<LinearLimitCollider>();
+			endCollider.Assign(route, new Vector2(line.AbsoluteLength, 0), true);
 
-			endCollider.OnDetailedEnter += OnBranchExit;
+			endCollider.OnEnter += OnBranchExit;
 
 			newTraveller.Assign(route, new Vector2(0,0));
+			newTraveller.FixedUpdate();
 		}
 
-		protected void OnBranchExit(LinearTraveller travellerThatIsExiting, Vector2 collisionPoint)
+		protected void OnBranchExit(Traveller travellerThatIsExiting)
 		{
-			Destroy(travellerThatIsExiting.CurrentRoute.gameObject);
+			Destroy(travellerThatIsExiting.CurrentGenericRoute.gameObject);
 			_endPoint.ParentRouteAsRouteBase.GenerateNewTraveller(travellerThatIsExiting, _endPoint);
 		}
 

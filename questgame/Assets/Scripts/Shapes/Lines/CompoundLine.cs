@@ -122,7 +122,7 @@ namespace Shapes
 				if (newTraversed >= distance)
 				{
 					float offset = distance - traversed;
-					Vector3 result =  Vector3.Lerp(_points[index], _points[index + 1], offset / Vector3.Distance(_points[index], _points[index + 1]));
+					Vector3 result =  Vector3.LerpUnclamped(_points[index], _points[index + 1], offset / Vector3.Distance(_points[index], _points[index + 1]));
 					return worldSpace ? transform.TransformPoint(result) : result;
 				}
 				else
@@ -245,7 +245,7 @@ namespace Shapes
 
 			pointProgress = distance / LineLengths[index];
 
-			return Vector3.Lerp(this[index], this[index + 1], pointProgress);
+			return Vector3.LerpUnclamped(this[index], this[index + 1], pointProgress);
 		}
 
 		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance)
@@ -277,7 +277,7 @@ namespace Shapes
 			}
 
 			newTotalDistance = _lineDistance[index] + distance;
-			return Vector3.Lerp(this[index], this[index + 1], distance / LineLengths[index]);
+			return Vector3.LerpUnclamped(this[index], this[index + 1], distance / LineLengths[index]);
 		}
 
 		public Vector3 AdvanceAlongLine(ref int index, ref float distance)
@@ -310,7 +310,7 @@ namespace Shapes
 					index = 0;
 				}
 			}
-			return Vector3.Lerp(this[index], this[index + 1], distance / LineLengths[index]);
+			return Vector3.LerpUnclamped(this[index], this[index + 1], distance / LineLengths[index]);
 		}
 
 		public override Vector3 GetPointOnPath(float percentage, bool worldSpace = true)

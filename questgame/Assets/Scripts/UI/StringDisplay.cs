@@ -9,7 +9,7 @@ namespace DisplayBinding
 		[SerializeField, HideInInspector]
 		Text textDisplay;
 
-		void Awake()
+		void OnEnable()
 		{
 			textDisplay = GetComponent<Text>();
 		}

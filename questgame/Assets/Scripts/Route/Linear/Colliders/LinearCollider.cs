@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Route.Linear
 {
-	[RequireComponent(typeof(LinearPoint))]
 	public class LinearCollider : RouteCollider<LinearRoute>
 	{
 		public event Action<LinearTraveller, Vector2> OnDetailedEnter;

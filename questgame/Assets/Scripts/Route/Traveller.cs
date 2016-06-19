@@ -33,8 +33,6 @@ namespace Route
 
 		public abstract Traveller UpdateTraveller();
 
-		public abstract void SetController(Controller newController);
-
 		public abstract void UnAssign(Traveller nextTraveller);
 
 		public abstract Vector3 GetWorldSpacePosition();
@@ -53,6 +51,11 @@ namespace Route
 				return traveller;
 			}
 			return null;
+		}
+
+		public virtual void SetController(Controller newController)
+		{
+			_activeController = newController;
 		}
 
 

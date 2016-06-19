@@ -11,14 +11,14 @@ namespace DisplayBinding
 		{
 			DisplayBase display = target as DisplayBase;
 
-			if (GUILayout.Button("Refresh"))
+			DrawDefaultInspector();
+
+			if (GUI.changed)
 			{
 				display.Refresh();
 				Repaint();
 				SceneView.RepaintAll();
 			}
-
-			DrawDefaultInspector();
 		}
 	}
 }

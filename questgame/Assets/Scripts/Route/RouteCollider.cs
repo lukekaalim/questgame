@@ -100,14 +100,14 @@ namespace Route
 			if (Position != null)
 			{
 				Position.OnPointMove += PointMoved;
-			}
 
-			if (ParentRoute != null)
-			{
-				ParentRoute.QueueColliderForAddition(this);
-			}
+				if (ParentRoute != null)
+				{
+					ParentRoute.QueueColliderForAddition(this);
+				}
 
-			transform.position = Position.GetWorldSpacePosition();
+				transform.position = Position.GetWorldSpacePosition();
+			}
 		}
 
 

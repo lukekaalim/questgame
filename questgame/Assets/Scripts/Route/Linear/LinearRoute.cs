@@ -12,7 +12,10 @@ namespace Route.Linear
 	public class LinearRoute : RouteBase
 	{
 		[SerializeField]
-		HashSet<LinearCollider> _colliders = new HashSet<LinearCollider>();
+		HashSet<LinearCollider> _boundsColliders = new HashSet<LinearCollider>();
+
+		[SerializeField]
+		HashSet<LinearLimitCollider> _limitsColliders = new HashSet<LinearLimitCollider>();
 
 		[SerializeField]
 		SIPointLine _linearTraversable;
@@ -41,15 +44,32 @@ namespace Route.Linear
 		{
 			foreach (PointToBeProcessed pointModification in pointQueue)
 			{
-				LinearCollider collider = pointModification._point as LinearCollider;
+				LinearCollider bounds = pointModification._point as LinearCollider;
 
-				if (pointModification._isAdding)
+				if (bounds != null)
 				{
-					_colliders.Add(collider);
+					if (pointModification._isAdding)
+					{
+						_boundsColliders.Add(bounds);
+					}
+					else
+					{
+						_boundsColliders.Remove(bounds);
+					}
+					continue;
 				}
-				else
+
+				LinearLimitCollider limit = pointModification._point as LinearLimitCollider;
+				if (limit != null)
 				{
-					_colliders.Remove(collider);
+					if (limit != null && pointModification._isAdding)
+					{
+						_limitsColliders.Add(limit);
+					}
+					else
+					{
+						_limitsColliders.Remove(limit);
+					}
 				}
 			}
 			pointQueue.Clear();
@@ -80,9 +100,13 @@ namespace Route.Linear
 		public void CheckTravellerCollision(LinearTraveller travellerToCheck, Ray travellerMovement, float distance)
 		{
 			canAddToQueue = false;
-			foreach (LinearCollider collider in _colliders)
+			foreach (LinearCollider collider in _boundsColliders)
 			{
 				collider.TestTraveller(travellerToCheck, travellerMovement, distance);
+			}
+			foreach (LinearLimitCollider limit in _limitsColliders)
+			{
+				limit.TestTraveller(travellerToCheck);
 			}
 			canAddToQueue = true;
 			ModifyPoints();

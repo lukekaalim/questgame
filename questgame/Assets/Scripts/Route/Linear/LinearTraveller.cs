@@ -8,13 +8,13 @@ namespace Route.Linear
 	public class LinearTraveller : Traveller<LinearRoute>
 	{
 		[SerializeField]
-		int currentPointIndex;
+		protected int currentPointIndex = 0;
 
 		[SerializeField]
-		float distanceFromIndex;
+		protected float distanceFromIndex = 0;
 
 		[SerializeField]
-		Vector2 _position;
+		protected Vector2 _position = Vector3.zero;
 
 		//Readonly copy of the vector
 		public Vector2 Position
@@ -26,10 +26,10 @@ namespace Route.Linear
 		}
 
 		[SerializeField]
-		Vector2 _velocity;
+		protected Vector2 _velocity = Vector3.zero;
 
 		[SerializeField]
-		LinearRoute _currentRoute;
+		protected LinearRoute _currentRoute;
 
 		//properties
 		public override LinearRoute CurrentRoute
@@ -50,10 +50,10 @@ namespace Route.Linear
 
 		public override Traveller UpdateTraveller()
 		{
-			return this;
+			return _nextTraveller;
 		}
 
-		void FixedUpdate()
+		public virtual void FixedUpdate()
 		{
 			float time = Time.deltaTime;
 
@@ -132,11 +132,6 @@ namespace Route.Linear
 		public override Vector3 GetWorldSpacePosition()
 		{
 			return transform.position;
-		}
-
-		public override void SetController(Controller newController)
-		{
-			throw new NotImplementedException();
 		}
 
 
