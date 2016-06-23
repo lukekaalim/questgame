@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 428626}
   - 20: {fileID: 2050358}
+  - 114: {fileID: 11467108}
   m_Layer: 5
   m_Name: User Interface Camera
   m_TagString: Untagged
@@ -59,7 +60,7 @@ GameObject:
   - 224: {fileID: 22459406}
   - 222: {fileID: 22247522}
   - 114: {fileID: 11417078}
-  - 114: {fileID: 11416118}
+  - 114: {fileID: 11455554}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -142,19 +143,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11416118
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 195238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f21edf07d6c6cb04880752bc30163ced, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentValue: QuestGame 0.0.5a - Internal Developent Build
-  textDisplay: {fileID: 11417078}
 --- !u!114 &11417078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -187,7 +175,43 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: QuestGame 0.0.5a - Internal Developent Build
+  m_Text: QuestGame - 0.0.8b [acad184/dev]  -  Internal Development Build
+--- !u!114 &11455554
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 195238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90f23195544b8a548af789c8718a5757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentValue: {fileID: 11467108}
+  textToDisplayTo: {fileID: 11417078}
+--- !u!114 &11467108
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 163108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb309334da8b7d640ad6153acdc5969f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _versionInfoFile: {fileID: 4900000, guid: f6f150378482d294096661df73dc1db5, type: 3}
+  currentVersionInfo:
+    ProductTitle: QuestGame
+    Commit: acad184
+    Branch: dev
+    MinorVersion: 0
+    MajorVersion: 0
+    HotFixVersion: 8
+    VersionTag: b
+    BuildInfo: Internal Development Build
+  _displays:
+  - {fileID: 11455554}
 --- !u!222 &22226048
 CanvasRenderer:
   m_ObjectHideFlags: 1
