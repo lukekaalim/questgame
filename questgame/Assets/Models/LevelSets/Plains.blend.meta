@@ -1,0 +1,138 @@
+fileFormatVersion: 2
+guid: fd003983880c58946a60ba9d38145c2b
+timeCreated: 1466750321
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Cube
+    100004: Rock_1
+    100006: Tree_1
+    100008: Rock_2
+    100010: Rock_3
+    100012: Cylinder
+    100014: Full_Tree_1
+    100016: Rock_4
+    100018: Stump_1
+    100020: Full_Tree_2
+    100022: Full_Tree_3
+    100024: Full_Tree_4
+    400000: //RootNode
+    400002: Cube
+    400004: Rock_1
+    400006: Tree_1
+    400008: Rock_2
+    400010: Rock_3
+    400012: Cylinder
+    400014: Full_Tree_1
+    400016: Rock_4
+    400018: Stump_1
+    400020: Full_Tree_2
+    400022: Full_Tree_3
+    400024: Full_Tree_4
+    2300000: //RootNode
+    2300002: Cube
+    2300004: Rock_1
+    2300006: Tree_1
+    2300008: Rock_2
+    2300010: Rock_3
+    2300012: Cylinder
+    2300014: Full_Tree_1
+    2300016: Rock_4
+    2300018: Stump_1
+    2300020: Full_Tree_2
+    2300022: Full_Tree_3
+    2300024: Full_Tree_4
+    3300000: //RootNode
+    3300002: Cube
+    3300004: Rock_1
+    3300006: Tree_1
+    3300008: Rock_2
+    3300010: Rock_3
+    3300012: Cylinder
+    3300014: Full_Tree_1
+    3300016: Rock_4
+    3300018: Stump_1
+    3300020: Full_Tree_2
+    3300022: Full_Tree_3
+    3300024: Full_Tree_4
+    4300000: Plane
+    4300002: Tree_1
+    4300004: Cube
+    4300006: Rock_1
+    4300008: Rock_3
+    4300010: Rock_2
+    4300012: Cylinder
+    4300014: Stump_1
+    4300016: Rock_4
+    4300018: Full_Tree_1
+    4300020: Full_Tree_2
+    4300022: Full_Tree_3
+    4300024: Full_Tree_4
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
