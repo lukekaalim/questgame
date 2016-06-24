@@ -10,6 +10,7 @@ GameObject:
   - 224: {fileID: 22435050}
   - 222: {fileID: 22226048}
   - 114: {fileID: 11408212}
+  - 114: {fileID: 11491520}
   m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
@@ -60,7 +61,6 @@ GameObject:
   - 224: {fileID: 22459406}
   - 222: {fileID: 22247522}
   - 114: {fileID: 11417078}
-  - 114: {fileID: 11455554}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -90,7 +90,7 @@ Camera:
   m_GameObject: {fileID: 163108}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -103,11 +103,11 @@ Camera:
   field of view: 150.2
   orthographic: 0
   orthographic size: 5
-  m_Depth: 1
+  m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 32
-  m_RenderingPath: 0
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.61764705, b: 0.61764705, a: 1}
+  m_Color: {r: 0, g: 0.61960787, b: 0.61960787, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -175,20 +175,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: QuestGame - 0.0.8b [acad184/dev]  -  Internal Development Build
---- !u!114 &11455554
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 195238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90f23195544b8a548af789c8718a5757, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentValue: {fileID: 11467108}
-  textToDisplayTo: {fileID: 11417078}
+  m_Text: QuestGame - 0.1.0a [eef94/develop]  -  Internal Development Build
 --- !u!114 &11467108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -203,15 +190,30 @@ MonoBehaviour:
   _versionInfoFile: {fileID: 4900000, guid: f6f150378482d294096661df73dc1db5, type: 3}
   currentVersionInfo:
     ProductTitle: QuestGame
-    Commit: acad184
-    Branch: dev
-    MinorVersion: 0
+    Commit: eef94
+    Branch: develop
+    MinorVersion: 1
     MajorVersion: 0
-    HotFixVersion: 8
-    VersionTag: b
+    PatchVersion: 0
+    VersionTag: a
     BuildInfo: Internal Development Build
+    StampColor: {r: 0, g: 0.61960787, b: 0.61960787, a: 1}
   _displays:
-  - {fileID: 11455554}
+  - {fileID: 11491520}
+--- !u!114 &11491520
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90f23195544b8a548af789c8718a5757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentValue: {fileID: 11467108}
+  textToDisplayTo: {fileID: 11417078}
+  stampToColor: {fileID: 11408212}
 --- !u!222 &22226048
 CanvasRenderer:
   m_ObjectHideFlags: 1

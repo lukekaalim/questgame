@@ -80,6 +80,15 @@ ModelImporter:
     100144: Platform
     100146: Red_Flag
     100148: GreenFlag
+    100150: Blue_House
+    100152: BlueStall
+    100154: Fountain
+    100156: GreenHouse
+    100158: GreenStall
+    100160: RedHouse
+    100162: RedStall
+    100164: Water_Bottom
+    100166: Water_Top
     400000: //RootNode
     400002: WallBase_Long_
     400004: WallBase_Short_
@@ -155,6 +164,15 @@ ModelImporter:
     400144: Platform
     400146: Red_Flag
     400148: GreenFlag
+    400150: Blue_House
+    400152: BlueStall
+    400154: Fountain
+    400156: GreenHouse
+    400158: GreenStall
+    400160: RedHouse
+    400162: RedStall
+    400164: Water_Bottom
+    400166: Water_Top
     2300000: //RootNode
     2300002: WallBase_Long_
     2300004: WallBase_Short_
@@ -230,6 +248,15 @@ ModelImporter:
     2300144: Platform
     2300146: Red_Flag
     2300148: GreenFlag
+    2300150: Blue_House
+    2300152: BlueStall
+    2300154: Fountain
+    2300156: GreenHouse
+    2300158: GreenStall
+    2300160: RedHouse
+    2300162: RedStall
+    2300164: Water_Bottom
+    2300166: Water_Top
     3300000: //RootNode
     3300002: WallBase_Long_
     3300004: WallBase_Short_
@@ -305,6 +332,15 @@ ModelImporter:
     3300144: Platform
     3300146: Red_Flag
     3300148: GreenFlag
+    3300150: Blue_House
+    3300152: BlueStall
+    3300154: Fountain
+    3300156: GreenHouse
+    3300158: GreenStall
+    3300160: RedHouse
+    3300162: RedStall
+    3300164: Water_Bottom
+    3300166: Water_Top
     4300000: Cube
     4300002: WallBase_Long_
     4300004: WallBase_Short_
@@ -379,12 +415,21 @@ ModelImporter:
     4300142: Light_005
     4300144: LongWallPiece_001
     4300146: GreenFlag
+    4300148: Fountain
+    4300150: Water_Bottom
+    4300152: Water_Top
+    4300154: BlueStall
+    4300156: GreenStall
+    4300158: RedStall
+    4300160: GreenHouse
+    4300162: Blue_House
+    4300164: RedHouse
     7400000: Default Take
     9500000: //RootNode
   materials:
     importMaterials: 1
-    materialName: 0
-    materialSearch: 2
+    materialName: 1
+    materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
