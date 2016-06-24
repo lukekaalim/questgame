@@ -1,6 +1,6 @@
 # Quest (title work in progress)
 
-Quest is a multiplatform infinte runner being developed by [Luke Kaalim][luke] using the unity platoform.
+Quest is a multiplatform infinte runner being developed by [Luke Kaalim](mailto://luke@kaal.im) using the unity platoform.
 
 ### Targets
 
@@ -18,6 +18,7 @@ This project uses Unity version 5.3.5f1 for development, and currenlty plans to 
  - Paint.NET
  - Visual Studio Community 2015
  - Bitbucket
+ - Unity3D
 
 ## External Assets
 
