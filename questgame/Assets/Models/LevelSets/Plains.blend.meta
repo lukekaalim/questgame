@@ -18,6 +18,11 @@ ModelImporter:
     100020: Full_Tree_2
     100022: Full_Tree_3
     100024: Full_Tree_4
+    100026: Bridge
+    100028: Felled_Log_1
+    100030: Grid
+    100032: HalfHill
+    100034: Plateau
     400000: //RootNode
     400002: Cube
     400004: Rock_1
@@ -31,6 +36,11 @@ ModelImporter:
     400020: Full_Tree_2
     400022: Full_Tree_3
     400024: Full_Tree_4
+    400026: Bridge
+    400028: Felled_Log_1
+    400030: Grid
+    400032: HalfHill
+    400034: Plateau
     2300000: //RootNode
     2300002: Cube
     2300004: Rock_1
@@ -44,6 +54,11 @@ ModelImporter:
     2300020: Full_Tree_2
     2300022: Full_Tree_3
     2300024: Full_Tree_4
+    2300026: Bridge
+    2300028: Felled_Log_1
+    2300030: Grid
+    2300032: HalfHill
+    2300034: Plateau
     3300000: //RootNode
     3300002: Cube
     3300004: Rock_1
@@ -57,6 +72,11 @@ ModelImporter:
     3300020: Full_Tree_2
     3300022: Full_Tree_3
     3300024: Full_Tree_4
+    3300026: Bridge
+    3300028: Felled_Log_1
+    3300030: Grid
+    3300032: HalfHill
+    3300034: Plateau
     4300000: Plane
     4300002: Tree_1
     4300004: Cube
@@ -70,6 +90,11 @@ ModelImporter:
     4300020: Full_Tree_2
     4300022: Full_Tree_3
     4300024: Full_Tree_4
+    4300026: Bridge
+    4300028: Felled_Log_1
+    4300030: Grid
+    4300032: HalfHill
+    4300034: Plateau
     7400000: Default Take
     9500000: //RootNode
   materials:
