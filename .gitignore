@@ -2,10 +2,10 @@ questgame/[Ll]ibrary/
 questgame/[Tt]emp/
 questgame/[Oo]bj/
 questgame/[Aa]ssets/[Tt]hemes
-[Bb]uild/
-[Bb]uilds/
-[Mm]edia/
-[Oo]ffline/
+/[Bb]uild/
+/[Bb]uilds/
+/[Mm]edia/
+/[Oo]ffline/
 
 questgame/Assets/AssetStoreTools*
 

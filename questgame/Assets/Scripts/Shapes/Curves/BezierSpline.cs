@@ -26,6 +26,8 @@ namespace Shapes
 		[SerializeField, HideInInspector]
 		int representationSamples = 100;
 
+		public event Action<CompoundLine> OnLineResample;
+
 		/*
 		 *	Optomization stuff
 		 *
@@ -224,6 +226,10 @@ namespace Shapes
 			_lineRepresentation.transform.SetParent(transform, true);
 
 			lineRepresentationNeedsUpdating = false;
+			if (OnLineResample != null)
+			{
+				OnLineResample.Invoke(_lineRepresentation);
+			}
 		}
 
 		//Add a new set of control points that define a new curve
