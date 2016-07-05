@@ -406,6 +406,13 @@ namespace Shapes
 			return GetPointOnPath(distance, true);
 		}
 
+		public override Vector3 GetVelocity(float percentage, bool worldSpace = true)
+		{
+			int index = GetLeftMostIndex(percentage);
+			return worldSpace ? transform.TransformDirection(GetVelocityAtIndex(index)) : GetVelocityAtIndex(index);
+		}
+
+
 
 #if UNITY_EDITOR
 		[UnityEditor.MenuItem("GameObject/Shapes/Lines/Compound", false, 10)]

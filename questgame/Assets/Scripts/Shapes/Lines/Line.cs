@@ -24,6 +24,8 @@ namespace Shapes
 
 		public abstract Vector3 GetPointOnPath(float percentage, bool worldSpace = true);
 
+		public abstract Vector3 GetVelocity(float percentage, bool worldSpace = true);
+
 
 #if UNITY_EDITOR
 		void OnDrawGizmos()

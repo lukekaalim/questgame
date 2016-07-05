@@ -10,7 +10,7 @@ namespace Shapes
 		{
 			ExtrudableMesh extrudable = target as ExtrudableMesh;
 			DrawDefaultInspector();
-			if(extrudable.IsValidForGeneration && GUI.changed)
+			if(extrudable.IsValidForGeneration && (GUI.changed || GUILayout.Button("refresh")))
 			{
 				extrudable.GenerateMesh();
 			}

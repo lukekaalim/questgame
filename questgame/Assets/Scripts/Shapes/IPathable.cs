@@ -6,5 +6,7 @@ namespace Shapes
 	public interface IPathable
 	{
 		Vector3 GetPointOnPath(float percentage, bool worldSpace = true);
+
+		Vector3 GetVelocity(float percentage, bool worldSpace = true);
 	}
 }

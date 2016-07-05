@@ -43,6 +43,11 @@ namespace Shapes
 			return GetPoint(percentage, worldSpace);
 		}
 
+		public Vector3 GetVelocity(float percentage, bool worldSpace = true)
+		{
+			return worldSpace ? transform.TransformDirection(Bezier.GetVelocity(_controlPoints, percentage)) : Bezier.GetVelocity(_controlPoints, percentage);
+		}
+
 #if UNITY_EDITOR
 
 		void OnDrawGizmos()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shapes
@@ -152,6 +153,11 @@ namespace Shapes
 		public virtual Vector3 GetVelocityAtIndex(int startingIndex)
 		{
 			return P1 - P0;
+		}
+
+		public override Vector3 GetVelocity(float percentage, bool worldSpace = true)
+		{
+			return this[1, worldSpace] - this[0, worldSpace];
 		}
 
 		public Vector3 GetRelativePoint(float distance)

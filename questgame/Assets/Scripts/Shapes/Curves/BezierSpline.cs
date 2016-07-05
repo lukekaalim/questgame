@@ -345,6 +345,11 @@ namespace Shapes
 			return worldSpace ? transform.TransformPoint(pointPosition) : pointPosition;
 		}
 
+		public Vector3 GetVelocity(float percentage, bool worldSpace = true)
+		{
+			return GetVelocityOnPath(percentage, worldSpace);
+		}
+
 		//Interface Stuff
 
 		public Vector3 GetStartPosition()

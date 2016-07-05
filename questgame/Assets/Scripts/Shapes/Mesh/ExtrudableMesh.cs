@@ -2,6 +2,8 @@
 
 using System.Collections.Generic;
 
+using Serialization;
+
 namespace Shapes
 {
 	[RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
@@ -14,13 +16,10 @@ namespace Shapes
 		MeshFilter _filter;
 
 		[SerializeField]
-		BezierSpline _spline;
+		SIPointLine _spline;
 
 		[SerializeField]
-		int splitAmount;
-
-		[SerializeField]
-		List<Vector3> positionOffsets;
+		int sampleCount;
 
 		[SerializeField]
 		Color jointColors;
@@ -38,25 +37,29 @@ namespace Shapes
 			List<Brush.ExtrudableVertex> vertexList = new List<Brush.ExtrudableVertex>();
 			List<Brush.ExtrudableTriangle> triangleList = new List<Brush.ExtrudableTriangle>();
 
-			if (splitAmount > 0)
+			if (sampleCount > 0)
 			{
+				float progress = 1 / (float)sampleCount;
+
 				List<int> firstSlice;
-				List<int> previousSlice = _brush.FirstSlice(1 / (float)splitAmount, ref vertexList, ref triangleList, out firstSlice);
+				List<int> previousSlice = _brush.FirstSlice(progress, ref vertexList, ref triangleList, out firstSlice);
 
-				TransformVertices(ref vertexList, firstSlice, positionOffsets[0]);
-				TransformVertices(ref vertexList, previousSlice, positionOffsets[1]);
+				TransformVertices(ref vertexList, firstSlice, _spline.Value.GetPointOnPath(0), Quaternion.LookRotation(_spline.Value.GetVelocity(0)));
+				TransformVertices(ref vertexList, previousSlice, _spline.Value.GetPointOnPath(progress), Quaternion.LookRotation(_spline.Value.GetVelocity(progress)));
 
-				for (int i = 1; i < splitAmount; i++)
+				for (int i = 1; i < sampleCount; i++)
 				{
-					previousSlice = _brush.AddSlice(previousSlice, (1 + i) / (float)splitAmount, ref vertexList, ref triangleList);
-					TransformVertices(ref vertexList, previousSlice, positionOffsets[i + 1]);
+					progress = (1 + i) / (float)sampleCount;
+					previousSlice = _brush.AddSlice(previousSlice, progress, ref vertexList, ref triangleList);
+					TransformVertices(ref vertexList, previousSlice, _spline.Value.GetPointOnPath(progress), Quaternion.LookRotation(_spline.Value.GetVelocity(progress)));
 				}
 			}
 
 			_filter.sharedMesh = Brush.CreateMeshFromList(vertexList, triangleList);
+			_filter.sharedMesh.name = name + " [Extruded Mesh]";
 		}
 
-		public void TransformVertices(ref List<Brush.ExtrudableVertex> vertexList, List<int> vertexIndex, Vector3 position)
+		public void TransformVertices(ref List<Brush.ExtrudableVertex> vertexList, List<int> vertexIndex, Vector3 position, Quaternion direction)
 		{
 			List<Vector3> points = new List<Vector3>();
 			for(int i = 0; i < vertexIndex.Count; i++)
@@ -65,15 +68,16 @@ namespace Shapes
 			}
 
 			Vector3 center = GetCenter(points);
-			Debug.Log(center);
 
 			for(int i = 0; i < points.Count; i++)
 			{
 				Brush.ExtrudableVertex oldVertex = vertexList[vertexIndex[i]];
 
-				Vector3 newPosition = oldVertex.Position - center + position;
+				Vector3 centeredPosition = oldVertex.Position - center;
 
-				Brush.ExtrudableVertex newVertex = new Brush.ExtrudableVertex(oldVertex.UV, newPosition, oldVertex.Color);
+				Matrix4x4 matrix = Matrix4x4.TRS(position, direction, Vector3.one);
+
+				Brush.ExtrudableVertex newVertex = new Brush.ExtrudableVertex(oldVertex.UV, matrix.MultiplyPoint(centeredPosition), oldVertex.Color);
 
 				vertexList[vertexIndex[i]] = newVertex;
 			}
