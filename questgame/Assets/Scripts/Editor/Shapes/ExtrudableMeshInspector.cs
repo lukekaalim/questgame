@@ -12,6 +12,7 @@ namespace Shapes
 			DrawDefaultInspector();
 			if(extrudable.IsValidForGeneration && (GUI.changed || GUILayout.Button("refresh")))
 			{
+				extrudable.Brush.RecalculateBrush();
 				extrudable.GenerateMesh();
 			}
 		}

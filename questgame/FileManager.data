@@ -1,46 +1,105 @@
 [Files]
-(data)
-=$
-FileManager
 (csproj)
+=$
+Assembly-CSharp-Editor
+Assembly-CSharp
 questgame.CSharp
 questgame.CSharp.Editor
+(data)
+FileManager
 (sln)
 questgame
-(dll)
+(json)
 +/Assets
+versionInfo
+(dll)
 ZiosThemes
-+/Extensions/UnityVS/Editor
++/Editor
+ZiosThemesEditor
+=$/Assets/Extensions/UnityVS/Editor
 SyntaxTree.VisualStudio.Unity.Bridge
 SyntaxTree.VisualStudio.Unity.Messaging
+(asset)
+=$/Assets/Brushes
+Cave Brush
+Cylinder Brush
+Plane Brush
+Ramp Brush
+River Brush
+Road Brush
+Triangle Brush
+=$/Assets/Scenes/Testing/CastleTest
+LightingData
+=$/Assets/Scenes/Testing/RouteTesting
+LightingData
+=$/Assets/Scenes/Testing/TestArea
+LightingData
 (mat)
 =$/Assets/Materials
+VertexColors
+=$/Assets/Models/LevelSets/Materials
+castle_transparent
+Castle__castle_png
+plains
+Plains__plains_png
+unnamed
+=$/Assets/Models/Spline Brushes/Materials
+plains
+unnamed
+=$/Assets/Models/Test/Materials
+cash
+Castle
+Castle__castle_png
 ramped_grey
 ramped_white
 static_grey
-=$/Assets/Models/Test/Materials
-cash
+static_white
+=$/Assets/Shaders/UnityVC
+Standard
+StandardFade
+StandardSpecular
+StandardSpecularFade
+=$/Assets/Textures/Skyboxes
+Skybox
 (blend)
+=$/Assets/Models/LevelSets
+Castle
+Plains
+=$/Assets/Models/Spline Brushes
+Standard Brushes
 =$/Assets/Models/Test
 Coin
 (physicMaterial)
 =$/Assets/Physics
 Amazingly Bouncy
 (prefab)
+=$/Assets/Prefabs/Area
+Castle Grounds
 =$/Assets/Prefabs/Debug
 User Interface Camera
 (unity)
 =$/Assets/Scenes/Testing
+CastleTest
 ControllerTesting
 RouteTesting
 ShaderTesting
+Spline Brush Testing
 SplineTesting
-(asset)
-+/RouteTesting
-LightingData
+TestArea
+=$/Assets/Shaders/UnityVC
+ExampleScene
 (exr)
+=$/Assets/Scenes/Testing/RouteTesting
 Lightmap-0_comp_light
+=$/Assets/Scenes/Testing/TestArea
+ReflectionProbe-0
 (cs)
+=$/Assets/Scripts/Attributes
+ReadOnlyAttribute
+=$/Assets/Scripts/Build
+VersionInfoContainer
+=$/Assets/Scripts/Camera
+CameraTracker
 =$/Assets/Scripts/Character
 Character
 =$/Assets/Scripts/Controllers
@@ -48,6 +107,11 @@ Controller
 IControllable
 =$/Assets/Scripts/Displays
 ShopDisplay
+VersionDisplay
+=$/Assets/Scripts/Editor/Attributes
+ReadOnlyPropertyDrawer
+=$/Assets/Scripts/Editor/Build
+VersioningWindow
 =$/Assets/Scripts/Editor/DictionaryInspectors
 SerializableDictionaryEditor
 SerializableDictionaryStringIntEditor
@@ -59,7 +123,10 @@ TraversibleRoutePointInspector
 InferfacePropertyDrawer
 =$/Assets/Scripts/Editor/Shapes
 BezierInspector
+BrushInspector
 CompoundLineInspector
+ExtrudableBrushWindow
+ExtrudableMeshInspector
 LineInspector
 SplineInspector
 TwoPointLineInspector
@@ -116,6 +183,9 @@ CompoundLine
 Line
 TwoPointLine
 TwoPointLineExtended
+=$/Assets/Scripts/Shapes/Mesh
+Brush
+ExtrudableMesh
 =$/Assets/Scripts/Test
 ColliderShouter
 CompoundLineWalker
@@ -147,19 +217,37 @@ ShopTabManager
 StringDisplay
 =$/Assets/Scripts/Utility
 MonobehaviourExtensions
+=$/Assets/Shaders/UnityVC/Editor
+StandardShaderVCGUI
 (shader)
 =$/Assets/Shaders
 Luke-Ramp(Lightmap)
 Luke-Ramp(Lightmap, CombinedChannels)
 Luke-Ramp
+Luke-vertex
++/UnityVC
+StandardSpecularVC
+StandardVC
 (png)
+tiles_diff
+tiles_norm
+tiles_spec
 =$/Assets/Textures
 basic_ramp
+basic_ramp_no_yellow
 just_grey
 just_white
 SurfaceShaderToonRampItself
-+/Icons
++/Castle
+castle
+=$/Assets/Textures/Icons
 logo_1
+=$/Assets/Textures/Plains
+plains
+=$/Assets/Textures/Skyboxes
+down
+side
+top
 =$/Assets/Textures/Testing
 cash
 ExtremeRamp
@@ -279,9 +367,15 @@ WaitSpin10
 WaitSpin11
 _Help
 _Popup
+(cginc)
+=$/Assets/Shaders/UnityVC
+UnityVC
+(FBX)
+VertexColorDebugSphere
+VertexColorDebugSphereAlpha
 (pdn)
-=$/Assets/Textures/Icons/Source
-logo_1
+=$/Assets/Textures/Castle
+castle
 (guiskin)
 =$/Assets/Themes/@Default
 @Default
@@ -424,11 +518,14 @@ Elegance
 Forestry
 Grayson
 Lavender
+Leather
 Nightfall
 Patriot
+Recon
 Rusty
 Slate
 Solarized
+TheColorsDuke
 (guiContent)
 =$/Assets/Themes/Simplicity
 UnityEditor.AppStatusBar.s_StatusWheel
@@ -454,7 +551,10 @@ Sans-Chubgothic1
 
 
 
+
 +/Assets
+
+
 
 +/Extensions
 
@@ -465,6 +565,14 @@ Sans-Chubgothic1
 
 +/Models
 
++/LevelSets
+
+=$/Assets/Models
+
++/Spline Brushes
+
+=$/Assets/Models
+
 +/Test
 
 =$/Assets
@@ -472,11 +580,14 @@ Sans-Chubgothic1
 
 +/Prefabs
 
+
 =$/Assets
 
 +/Scenes
 
 +/Testing
+
+
 
 =$/Assets
 
@@ -485,7 +596,12 @@ Sans-Chubgothic1
 
 
 
+
+
+
 +/Editor
+
+
 
 
 
@@ -512,6 +628,7 @@ Sans-Chubgothic1
 +/Shapes
 
 
+
 =$/Assets/Scripts
 
 
@@ -522,10 +639,18 @@ Sans-Chubgothic1
 
 =$/Assets
 
++/Shaders
+
++/UnityVC
+
+=$/Assets
 
 +/Textures
 
-+/Icons
+
+
+
++/Skyboxes
 
 =$/Assets/Textures
 

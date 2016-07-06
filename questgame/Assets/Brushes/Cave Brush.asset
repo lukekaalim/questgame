@@ -1,0 +1,241 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ed6fe9b0cbe4f4faf022077db6a835, type: 3}
+  m_Name: Cave Brush
+  m_EditorClassIdentifier: 
+  _extrudingTriangles:
+  - Point0: 0
+    Point1: 1
+    Point2: 2
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 3
+    Point1: 0
+    Point2: 1
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 4
+    Point1: 6
+    Point2: 5
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 4
+    Point1: 7
+    Point2: 5
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 8
+    Point1: 10
+    Point2: 9
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 8
+    Point1: 11
+    Point2: 9
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 12
+    Point1: 14
+    Point2: 13
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 12
+    Point1: 15
+    Point2: 13
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 16
+    Point1: 18
+    Point2: 17
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 16
+    Point1: 19
+    Point2: 17
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 21
+    Point1: 20
+    Point2: 22
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 23
+    Point1: 21
+    Point2: 20
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 25
+    Point1: 26
+    Point2: 24
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 25
+    Point1: 27
+    Point2: 24
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 29
+    Point1: 30
+    Point2: 28
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 29
+    Point1: 31
+    Point2: 28
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 33
+    Point1: 34
+    Point2: 32
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 33
+    Point1: 35
+    Point2: 32
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  - Point0: 37
+    Point1: 38
+    Point2: 36
+    _isExtrudable: 1
+    _isSingleStartingVertex: 0
+  - Point0: 37
+    Point1: 39
+    Point2: 36
+    _isExtrudable: 1
+    _isSingleStartingVertex: 1
+  brushVertices:
+  - Position: {x: -3.207676, y: 2.33944, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.768028}
+  - Position: {x: 0, y: 2.239347, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.688654}
+  - Position: {x: -3.207676, y: 2.33944, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.768028}
+  - Position: {x: 0, y: 2.239347, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.688654}
+  - Position: {x: -3.207676, y: 2.33944, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.768028}
+  - Position: {x: -4.736338, y: 3.076055, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.784799}
+  - Position: {x: -4.736338, y: 3.076055, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.784799}
+  - Position: {x: -3.207676, y: 2.33944, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.768028}
+  - Position: {x: -4.736338, y: 3.076055, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.784799}
+  - Position: {x: -5.743897, y: 6.887704, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.823764}
+  - Position: {x: -5.743897, y: 6.887704, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.823764}
+  - Position: {x: -4.736338, y: 3.076055, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.784799}
+  - Position: {x: -5.743897, y: 6.887704, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.813573}
+  - Position: {x: -5.029404, y: 10.082205, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.82818}
+  - Position: {x: -5.029404, y: 10.082205, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.82818}
+  - Position: {x: -5.743897, y: 6.887704, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.813573}
+  - Position: {x: -5.029404, y: 10.082205, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.82818}
+  - Position: {x: 0, y: 11.906222, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.852052}
+  - Position: {x: 0, y: 11.906222, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.852052}
+  - Position: {x: -5.029404, y: 10.082205, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.82818}
+  - Position: {x: 0, y: 2.239347, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.688654}
+  - Position: {x: 3.207676, y: 2.33944, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.768028}
+  - Position: {x: 3.207676, y: 2.33944, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.768028}
+  - Position: {x: 0, y: 2.239347, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.688654}
+  - Position: {x: 4.736338, y: 3.076055, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.784799}
+  - Position: {x: 3.207676, y: 2.33944, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.768028}
+  - Position: {x: 4.736338, y: 3.076055, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.784799}
+  - Position: {x: 3.207676, y: 2.33944, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.768028}
+  - Position: {x: 5.743897, y: 6.887704, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.823764}
+  - Position: {x: 4.736338, y: 3.076055, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.784799}
+  - Position: {x: 5.743897, y: 6.887704, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.134995, y: 0.823764}
+  - Position: {x: 4.736338, y: 3.076055, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.125551, y: 0.784799}
+  - Position: {x: 5.029404, y: 10.082205, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.82818}
+  - Position: {x: 5.743897, y: 6.887704, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.813573}
+  - Position: {x: 5.029404, y: 10.082205, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.82818}
+  - Position: {x: 5.743897, y: 6.887704, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.813573}
+  - Position: {x: 0, y: 11.906222, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.852052}
+  - Position: {x: 5.029404, y: 10.082205, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.82818}
+  - Position: {x: 0, y: 11.906222, z: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.137008, y: 0.852052}
+  - Position: {x: 5.029404, y: 10.082205, z: -1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    UV: {x: 0.124681, y: 0.82818}
+  _startingTriangles: []
+  _endingTriangles: []
+  originalMesh: {fileID: 4300012, guid: 90205991d7a3773418075a217717fed3, type: 3}
+  startingColor: {r: 0, g: 0, b: 0, a: 0}
+  endingColor: {r: 0, g: 0, b: 0, a: 0}
+  ovverideVertexColors: 0

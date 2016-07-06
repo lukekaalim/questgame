@@ -6,7 +6,7 @@ using Serialization;
 
 namespace Shapes
 {
-	[RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
+	[RequireComponent(typeof(MeshRenderer), typeof(MeshFilter)), ExecuteInEditMode]
 	public class ExtrudableMesh : MonoBehaviour
 	{
 		[SerializeField]
@@ -16,7 +16,7 @@ namespace Shapes
 		MeshFilter _filter;
 
 		[SerializeField]
-		SIPointLine _spline;
+		BezierSpline _spline;
 
 		[SerializeField]
 		int sampleCount;
@@ -32,6 +32,32 @@ namespace Shapes
 			}
 		}
 
+		void OnEnable()
+		{
+			if(_spline != null)
+				_spline.OnLineResample += Resample;
+		}
+
+		void OnDisable()
+		{
+			if (_spline != null)
+				_spline.OnLineResample -= Resample;
+		}
+
+		private void Resample(CompoundLine line)
+		{
+			if(IsValidForGeneration)
+				GenerateMesh();
+		}
+
+		public Brush Brush
+		{
+			get
+			{
+				return _brush;
+			}
+		}
+
 		public void GenerateMesh()
 		{
 			List<Brush.ExtrudableVertex> vertexList = new List<Brush.ExtrudableVertex>();
@@ -44,18 +70,19 @@ namespace Shapes
 				List<int> firstSlice;
 				List<int> previousSlice = _brush.FirstSlice(progress, ref vertexList, ref triangleList, out firstSlice);
 
-				TransformVertices(ref vertexList, firstSlice, _spline.Value.GetPointOnPath(0), Quaternion.LookRotation(_spline.Value.GetVelocity(0)));
-				TransformVertices(ref vertexList, previousSlice, _spline.Value.GetPointOnPath(progress), Quaternion.LookRotation(_spline.Value.GetVelocity(progress)));
+				TransformVertices(ref vertexList, firstSlice, _spline.GetPointOnPath(0), Quaternion.LookRotation(_spline.GetVelocity(0)));
+				TransformVertices(ref vertexList, previousSlice, _spline.GetPointOnPath(progress), Quaternion.LookRotation(_spline.GetVelocity(progress)));
 
 				for (int i = 1; i < sampleCount; i++)
 				{
 					progress = (1 + i) / (float)sampleCount;
 					previousSlice = _brush.AddSlice(previousSlice, progress, ref vertexList, ref triangleList);
-					TransformVertices(ref vertexList, previousSlice, _spline.Value.GetPointOnPath(progress), Quaternion.LookRotation(_spline.Value.GetVelocity(progress)));
+					TransformVertices(ref vertexList, previousSlice, _spline.GetPointOnPath(progress), Quaternion.LookRotation(_spline.GetVelocity(progress)));
 				}
 			}
 
 			_filter.sharedMesh = Brush.CreateMeshFromList(vertexList, triangleList);
+			_filter.sharedMesh.RecalculateNormals();
 			_filter.sharedMesh.name = name + " [Extruded Mesh]";
 		}
 

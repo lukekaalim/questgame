@@ -23,6 +23,17 @@ ModelImporter:
     100030: Grid
     100032: HalfHill
     100034: Plateau
+    100036: LilyPad
+    100038: Cave_Entrance
+    100040: Cube_001
+    100042: Post_1
+    100044: Post_2
+    100046: Three_Way_Cave_Junction
+    100048: Crate
+    100050: Rock_5
+    100052: Post_3
+    100054: Pebbles
+    100056: Rocky_Floor
     400000: //RootNode
     400002: Cube
     400004: Rock_1
@@ -41,6 +52,17 @@ ModelImporter:
     400030: Grid
     400032: HalfHill
     400034: Plateau
+    400036: LilyPad
+    400038: Cave_Entrance
+    400040: Cube_001
+    400042: Post_1
+    400044: Post_2
+    400046: Three_Way_Cave_Junction
+    400048: Crate
+    400050: Rock_5
+    400052: Post_3
+    400054: Pebbles
+    400056: Rocky_Floor
     2300000: //RootNode
     2300002: Cube
     2300004: Rock_1
@@ -59,6 +81,17 @@ ModelImporter:
     2300030: Grid
     2300032: HalfHill
     2300034: Plateau
+    2300036: LilyPad
+    2300038: Cave_Entrance
+    2300040: Cube_001
+    2300042: Post_1
+    2300044: Post_2
+    2300046: Three_Way_Cave_Junction
+    2300048: Crate
+    2300050: Rock_5
+    2300052: Post_3
+    2300054: Pebbles
+    2300056: Rocky_Floor
     3300000: //RootNode
     3300002: Cube
     3300004: Rock_1
@@ -77,6 +110,17 @@ ModelImporter:
     3300030: Grid
     3300032: HalfHill
     3300034: Plateau
+    3300036: LilyPad
+    3300038: Cave_Entrance
+    3300040: Cube_001
+    3300042: Post_1
+    3300044: Post_2
+    3300046: Three_Way_Cave_Junction
+    3300048: Crate
+    3300050: Rock_5
+    3300052: Post_3
+    3300054: Pebbles
+    3300056: Rocky_Floor
     4300000: Plane
     4300002: Tree_1
     4300004: Cube
@@ -95,6 +139,17 @@ ModelImporter:
     4300030: Grid
     4300032: HalfHill
     4300034: Plateau
+    4300036: LilyPad
+    4300038: Cave_Entrance
+    4300040: Cube_001
+    4300042: Three_Way_Cave_Junction
+    4300044: Post_2
+    4300046: Post_1
+    4300048: Crate
+    4300050: Rock_5
+    4300052: Post_3
+    4300054: Pebbles
+    4300056: Rocky_Floor
     7400000: Default Take
     9500000: //RootNode
   materials:

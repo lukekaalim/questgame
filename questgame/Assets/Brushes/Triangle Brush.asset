@@ -22,13 +22,14 @@ MonoBehaviour:
     Color: {r: 1, g: 0, b: 0, a: 1}
     UV: {x: 0, y: 0}
   - Position: {x: 1, y: 0, z: -1}
-    Color: {r: 0, g: 0.006896496, b: 1, a: 0}
+    Color: {r: 0, g: 0.006896496, b: 1, a: 1}
     UV: {x: 0, y: 0}
   - Position: {x: -1, y: 0, z: -1}
-    Color: {r: 0, g: 0.006896496, b: 1, a: 0}
+    Color: {r: 0, g: 0.006896496, b: 1, a: 1}
     UV: {x: 0, y: 0}
   _startingTriangles: []
   _endingTriangles: []
-  originalMesh: {fileID: 4300006, guid: c086b838757787e42b5329f1af25695d, type: 3}
+  originalMesh: {fileID: 4300006, guid: 90205991d7a3773418075a217717fed3, type: 3}
   startingColor: {r: 1, g: 0, b: 0, a: 1}
-  endingColor: {r: 0, g: 0.006896496, b: 1, a: 0}
+  endingColor: {r: 0, g: 0.006896496, b: 1, a: 1}
+  ovverideVertexColors: 1

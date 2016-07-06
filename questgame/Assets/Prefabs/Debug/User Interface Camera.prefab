@@ -175,7 +175,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: QuestGame - 0.4.0a [5bffd/develop]  -  Internal Development Build
+  m_Text: QuestGame - 0.9.0a [00e7c/develop]  -  Internal Development Build
 --- !u!114 &11467108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -190,9 +190,9 @@ MonoBehaviour:
   _versionInfoFile: {fileID: 4900000, guid: f6f150378482d294096661df73dc1db5, type: 3}
   currentVersionInfo:
     ProductTitle: QuestGame
-    Commit: 5bffd
+    Commit: 00e7c
     Branch: develop
-    MinorVersion: 4
+    MinorVersion: 9
     MajorVersion: 0
     PatchVersion: 0
     VersionTag: a

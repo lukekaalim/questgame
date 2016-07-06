@@ -13,30 +13,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _extrudingTriangles:
   - Point0: 0
-    Point1: 2
-    Point2: 3
+    Point1: 1
+    Point2: 2
     _isExtrudable: 1
     _isSingleStartingVertex: 1
   - Point0: 0
-    Point1: 1
-    Point2: 3
+    Point1: 3
+    Point2: 2
     _isExtrudable: 1
     _isSingleStartingVertex: 0
   brushVertices:
   - Position: {x: 1, y: 0, z: 1}
-    Color: {r: 1, g: 0, b: 0, a: 1}
-    UV: {x: 0, y: 0}
-  - Position: {x: -1, y: 0, z: 1}
-    Color: {r: 1, g: 0, b: 0, a: 1}
+    Color: {r: 0.015686275, g: 0.043137256, b: 1, a: 1}
     UV: {x: 0, y: 0}
   - Position: {x: 1, y: 0, z: -1}
-    Color: {r: 0.20000005, g: 1, b: 0, a: 1}
+    Color: {r: 1, g: 0.03529412, b: 0.011764706, a: 1}
     UV: {x: 0, y: 0}
   - Position: {x: -1, y: 0, z: -1}
-    Color: {r: 0.20000005, g: 1, b: 0, a: 1}
+    Color: {r: 1, g: 0.023529412, b: 0, a: 1}
+    UV: {x: 0, y: 0}
+  - Position: {x: -1, y: 0, z: 1}
+    Color: {r: 0, g: 0.02745098, b: 1, a: 1}
     UV: {x: 0, y: 0}
   _startingTriangles: []
   _endingTriangles: []
-  originalMesh: {fileID: 4300002, guid: c086b838757787e42b5329f1af25695d, type: 3}
+  originalMesh: {fileID: 4300008, guid: 90205991d7a3773418075a217717fed3, type: 3}
   startingColor: {r: 1, g: 0, b: 0, a: 1}
   endingColor: {r: 0.20000005, g: 1, b: 0, a: 1}
+  ovverideVertexColors: 0

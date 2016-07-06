@@ -30,6 +30,9 @@ namespace Shapes
 		[SerializeField]
 		Color endingColor;
 
+		[SerializeField]
+		bool ovverideVertexColors = false;
+
 		public delegate bool IsOnStartingHalf(Vector3 position);
 
 		public IsOnStartingHalf SortingFunction;
@@ -74,15 +77,18 @@ namespace Shapes
 
 			brushVertices = ExtrudableVertex.MakeFromList(uvCoordinates, meshPoints, meshColors);
 
-			for (int i = 0; i < brushVertices.Count; i++)
+			if (ovverideVertexColors)
 			{
-				if (SortingFunction(meshPoints[i]))
+				for (int i = 0; i < brushVertices.Count; i++)
 				{
-					meshColors[i] = startingColor;
-				}
-				else
-				{
-					meshColors[i] = endingColor;
+					if (SortingFunction(meshPoints[i]))
+					{
+						meshColors[i] = startingColor;
+					}
+					else
+					{
+						meshColors[i] = endingColor;
+					}
 				}
 			}
 
@@ -145,7 +151,7 @@ namespace Shapes
 
 					if (newVertices.Count == 2)
 					{
-						triangleList.Add(new ExtrudableTriangle( new int[] { newVerticesIndex, newVerticesIndex + 1, newVerticesIndex + 2 }));
+						triangleList.Add(new ExtrudableTriangle( new int[] { newVerticesIndex, newVerticesIndex + 2, newVerticesIndex + 1 }));
 						firstSliceVertcies.AddRange(new int[] { newVerticesIndex + 2, newVerticesIndex + 1 });
 					}
 				}
@@ -162,9 +168,9 @@ namespace Shapes
 
 					if (newVertices.Count == 2)
 					{
-						triangleList.Add(new ExtrudableTriangle(new int[] { newVerticesIndex + 1, newVerticesIndex + 0, newVerticesIndex + 3}));
+						triangleList.Add(new ExtrudableTriangle(new int[] { newVerticesIndex + 1, newVerticesIndex + 3, newVerticesIndex + 0}));
 
-						triangleList.Add(new ExtrudableTriangle(new int[] { newVerticesIndex,  newVerticesIndex + 2, newVerticesIndex + 3}));
+						triangleList.Add(new ExtrudableTriangle(new int[] { newVerticesIndex,  newVerticesIndex + 3, newVerticesIndex + 2}));
 
 						firstSliceVertcies.AddRange(new int[] { newVerticesIndex + 3, newVerticesIndex + 2 });
 					}
@@ -194,9 +200,9 @@ namespace Shapes
 				//sanity check
 				if (newVertices.Count == 2)
 				{
-					triangleList.Add(new ExtrudableTriangle(new int[] { previousSlice[previousSliceIndex] }, new int[] { currentSliceStart, currentSliceStart + 1 }));
+					triangleList.Add(new ExtrudableTriangle(new int[] { previousSlice[previousSliceIndex] }, new int[] { currentSliceStart + 1, currentSliceStart + 0 }));
 
-					triangleList.Add(new ExtrudableTriangle(new int[] { previousSlice[previousSliceIndex + 1], currentSliceStart }, new int[] { previousSlice[previousSliceIndex] }));
+					triangleList.Add(new ExtrudableTriangle(new int[] { previousSlice[previousSliceIndex + 0], currentSliceStart }, new int[] { previousSlice[previousSliceIndex + 1] }));
 
 					addedVertices.AddRange(new int[] { currentSliceStart + 1, currentSliceStart });
 
