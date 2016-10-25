@@ -1,10 +1,12 @@
 [Files]
 (csproj)
 =$
+Assembly-CSharp-Editor-firstpass
 Assembly-CSharp-Editor
 Assembly-CSharp
 questgame.CSharp
 questgame.CSharp.Editor
+questgame.CSharp.Editor.Plugins
 (data)
 FileManager
 (sln)
@@ -12,7 +14,10 @@ questgame
 (json)
 +/Assets
 versionInfo
++/Scripts/.vscode
+launch
 (dll)
+=$/Assets
 ZiosThemes
 +/Editor
 ZiosThemesEditor
@@ -40,9 +45,11 @@ VertexColors
 =$/Assets/Models/LevelSets/Materials
 castle_transparent
 Castle__castle_png
+foam-tiling
 plains
 Plains__plains_png
 unnamed
+water-tiling
 =$/Assets/Models/Spline Brushes/Materials
 plains
 unnamed
@@ -72,28 +79,9 @@ Coin
 (physicMaterial)
 =$/Assets/Physics
 Amazingly Bouncy
-(prefab)
-=$/Assets/Prefabs/Area
-Castle Grounds
-=$/Assets/Prefabs/Debug
-User Interface Camera
-(unity)
-=$/Assets/Scenes/Testing
-CastleTest
-ControllerTesting
-RouteTesting
-ShaderTesting
-Spline Brush Testing
-SplineTesting
-TestArea
-=$/Assets/Shaders/UnityVC
-ExampleScene
-(exr)
-=$/Assets/Scenes/Testing/RouteTesting
-Lightmap-0_comp_light
-=$/Assets/Scenes/Testing/TestArea
-ReflectionProbe-0
 (cs)
+=$/Assets/Plugins/Editor
+VSCode
 =$/Assets/Scripts/Attributes
 ReadOnlyAttribute
 =$/Assets/Scripts/Build
@@ -140,6 +128,7 @@ PanelInspector
 RectUtils
 =$/Assets/Scripts/Effects
 DestroyAfterTimer
+TexturePanner
 =$/Assets/Scripts/Game
 GameManager
 Session
@@ -219,6 +208,27 @@ StringDisplay
 MonobehaviourExtensions
 =$/Assets/Shaders/UnityVC/Editor
 StandardShaderVCGUI
+(prefab)
+=$/Assets/Prefabs/Area
+Castle Grounds
+=$/Assets/Prefabs/Debug
+User Interface Camera
+(unity)
+=$/Assets/Scenes/Testing
+CastleTest
+ControllerTesting
+RouteTesting
+ShaderTesting
+Spline Brush Testing
+SplineTesting
+TestArea
+=$/Assets/Shaders/UnityVC
+ExampleScene
+(exr)
+=$/Assets/Scenes/Testing/RouteTesting
+Lightmap-0_comp_light
+=$/Assets/Scenes/Testing/TestArea
+ReflectionProbe-0
 (shader)
 =$/Assets/Shaders
 Luke-Ramp(Lightmap)
@@ -243,7 +253,9 @@ castle
 =$/Assets/Textures/Icons
 logo_1
 =$/Assets/Textures/Plains
+foam-tiling
 plains
+water-tiling
 =$/Assets/Textures/Skyboxes
 down
 side
@@ -552,6 +564,7 @@ Sans-Chubgothic1
 
 
 
+
 +/Assets
 
 
@@ -578,6 +591,10 @@ Sans-Chubgothic1
 =$/Assets
 
 
++/Plugins
+
+=$/Assets
+
 +/Prefabs
 
 
@@ -592,6 +609,7 @@ Sans-Chubgothic1
 =$/Assets
 
 +/Scripts
+
 
 
 

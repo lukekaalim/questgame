@@ -34,6 +34,10 @@ ModelImporter:
     100052: Post_3
     100054: Pebbles
     100056: Rocky_Floor
+    100058: Interior_Cave_Waterfall
+    100060: Interior_Cave
+    100062: Interior_Cave_Waterfall_Foam
+    100064: Lake
     400000: //RootNode
     400002: Cube
     400004: Rock_1
@@ -63,6 +67,10 @@ ModelImporter:
     400052: Post_3
     400054: Pebbles
     400056: Rocky_Floor
+    400058: Interior_Cave_Waterfall
+    400060: Interior_Cave
+    400062: Interior_Cave_Waterfall_Foam
+    400064: Lake
     2300000: //RootNode
     2300002: Cube
     2300004: Rock_1
@@ -92,6 +100,10 @@ ModelImporter:
     2300052: Post_3
     2300054: Pebbles
     2300056: Rocky_Floor
+    2300058: Interior_Cave_Waterfall
+    2300060: Interior_Cave
+    2300062: Interior_Cave_Waterfall_Foam
+    2300064: Lake
     3300000: //RootNode
     3300002: Cube
     3300004: Rock_1
@@ -121,6 +133,10 @@ ModelImporter:
     3300052: Post_3
     3300054: Pebbles
     3300056: Rocky_Floor
+    3300058: Interior_Cave_Waterfall
+    3300060: Interior_Cave
+    3300062: Interior_Cave_Waterfall_Foam
+    3300064: Lake
     4300000: Plane
     4300002: Tree_1
     4300004: Cube
@@ -150,6 +166,10 @@ ModelImporter:
     4300052: Post_3
     4300054: Pebbles
     4300056: Rocky_Floor
+    4300058: Interior_Cave_Waterfall
+    4300060: Lake
+    4300062: Interior_Cave
+    4300064: Interior_Cave_Waterfall_Foam
     7400000: Default Take
     9500000: //RootNode
   materials:
