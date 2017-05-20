@@ -74,7 +74,7 @@ namespace Shapes
 			newLineRendererGameObject.transform.SetParent(lineGameObject.transform, true);
 
 			renderer.useWorldSpace = true;
-			renderer.SetVertexCount(line.PointCount);
+			renderer.positionCount = line.PointCount;
 
 			for (int i = 0; i < line.PointCount; i++)
 			{
