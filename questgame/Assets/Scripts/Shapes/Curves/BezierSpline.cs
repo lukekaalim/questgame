@@ -7,6 +7,34 @@ namespace Shapes
 {
 	public class BezierSpline : MonoBehaviour, IPathable, IPointLine
 	{
+		[SerializeField]
+		CompoundLine outputLine;
+
+		Vector3[] BuildLine()
+		{
+			return null;
+		}
+
+		void WriteLineToOutput(Vector3[] points)
+		{
+			// outputLine.Rebuild(points, true);
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// Old Code Below
+
 		public enum ControlMode
 		{
 			None = 0,
@@ -84,7 +112,7 @@ namespace Shapes
 				{
 					RegenerateLineRepresentation();
 				}
-				return _lineRepresentation.TotalLength;
+				return _lineRepresentation.GetTotalLength();
 			}
 		}
 
@@ -217,9 +245,9 @@ namespace Shapes
 
 		public void RegenerateLineRepresentation()
 		{
-			if (_lineRepresentation != null)
+			/*if (_lineRepresentation != null)
 			{
-				DestroyImmediate(_lineRepresentation.gameObject, false);
+				// DestroyImmediate(_lineRepresentation.gameObject, false);
 			}
 			_lineRepresentation = CompoundLine.CreateCompoundLineFromPath(this, representationSamples);
 			_lineRepresentation.gameObject.name = name + " representation line";
@@ -230,6 +258,7 @@ namespace Shapes
 			{
 				OnLineResample.Invoke(_lineRepresentation);
 			}
+			*/
 		}
 
 		//Add a new set of control points that define a new curve

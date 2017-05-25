@@ -6,197 +6,163 @@ using UnityEngine;
 
 namespace Shapes
 {
-	//A continuous line composed of multiple points that passes through each linenearly
-	public class CompoundLine : Line, IPointLine
+	// A continuous line composed of multiple points that passes through each linenearly
+	// each coninuous points comporises of a 'segment' in the compound line
+	// It has a canonical 'start' and 'end', and each point can be measured by its 'distance' from the start
+	[CreateAssetMenu(fileName = "newCompoundLine", menuName = "CompoundLine", order = 0)]
+	public class CompoundLine : ScriptableObject
 	{
-		[SerializeField, HideInInspector]
-		protected List<Vector3> _points = new List<Vector3>();
-
-		[SerializeField, HideInInspector]
-		protected bool lengthNeedsRecalculation = true;
-
-		[SerializeField, HideInInspector]
-		protected float _totalLength;
+		[SerializeField]
+		List<Vector3> points = new List<Vector3>();
 
 		[SerializeField]
-		Color _diplayColor = new Color();
+		bool invalidLineLengths = false;
 
-		//The length of each individual line
-		[SerializeField, HideInInspector]
-		protected List<float> _lineLengths = new List<float>();
+		[SerializeField]
+		float totalLength = 0;
 
-		//The total length of all the lines so far for each index
-		[SerializeField, HideInInspector]
-		protected List<float> _lineDistance = new List<float>();
+		[SerializeField]
+		Color lineColor = Color.white;
+		
+		// The length of each segment
+		// 1: distance(point[0], point[1]), 2: distance(point[1], point[2]), etc... 
+		[SerializeField]
+		protected List<float> segmentLengths = new List<float>();
 
-		//Properties
+		// Distance refers to the continuous space from this point and the beginning of the line
+		// in a Line where every point is 5 units away from the previous
+		// 1: [0], 2: [5], 3: [10], 4: [15], 5: [20]
+		[SerializeField]
+		protected List<float> pointDistance = new List<float>(); 
 
-		public bool LengthNeedsRecalculation
+		public int PointCount { get { return points.Count; } }
+		
+		public List<float> GetSegmentLengths()
 		{
-			get
-			{
-				return lengthNeedsRecalculation;
-			}
+			RecalculateLength();
+			return segmentLengths;
 		}
 
-		public float AbsoluteLength
+		public float GetTotalLength()
 		{
-			get
-			{
-				return TotalLength;
-			}
+			RecalculateLength();
+			return totalLength;
 		}
 
-
-		public List<float> LineLengths
+		public Vector3 GetPoint(int index)
 		{
-			get
-			{
-				if (lengthNeedsRecalculation)
-				{
-					RecalculateLength();
-				}
-				return _lineLengths;
-			}
+			return points[index];
 		}
 
-		public float TotalLength
+		public float GetDistancePercentage(float distance)
 		{
-			get
-			{
-				if (lengthNeedsRecalculation)
-				{
-					RecalculateLength();
-				}
-				return _totalLength;
-			}
+			return distance / GetTotalLength();
 		}
 
-		public override int PointCount
+		public void SetPoint(int index, Vector3 newPosition)
 		{
-			get
-			{
-				return _points.Count;
-			}
+			points[index] = newPosition;
+			invalidLineLengths = true;
 		}
 
-		public override Color DisplayColor
+		public void InsertPoint(Vector3 newPoint, int index)
 		{
-			get
-			{
-				return _diplayColor;
-			}
+			points.Insert(index, newPoint);
+			invalidLineLengths = true;
 		}
 
-		public override Vector3 this[int index, bool global = true]
+		public void InsertPoints(IEnumerable<Vector3> newPoints, int index)
 		{
-			get
-			{
-				return GetPoint(index, global);
-			}
-
-			set
-			{
-				SetPoint(index, value, global);
-			}
-		}
-
-		//Methods
-		public Vector3 GetPoint(int index, bool worldPosition = true)
-		{
-			return worldPosition ? transform.TransformPoint(_points[index]) : _points[index];
-		}
-
-		public float GetRelativeDistance(float distance)
-		{
-			return distance / _totalLength;
-		}
-
-		public Vector3 GetAbsolutePosition(float distance, bool worldSpace = true)
-		{
-			float traversed = 0;
-			int index = 0;
-			while (traversed < _totalLength)
-			{
-				float newTraversed = traversed + _lineLengths[index];
-				if (newTraversed >= distance)
-				{
-					float offset = distance - traversed;
-					Vector3 result =  Vector3.LerpUnclamped(_points[index], _points[index + 1], offset / Vector3.Distance(_points[index], _points[index + 1]));
-					return worldSpace ? transform.TransformPoint(result) : result;
-				}
-				else
-				{
-					traversed = newTraversed;
-					index++;
-				}
-			}
-			return worldSpace ? transform.TransformPoint(_points[_points.Count - 1]) : _points[_points.Count - 1];
-		}
-
-		public void SetPoint(int index, Vector3 newPosition, bool worldPosition = true)
-		{
-			lengthNeedsRecalculation = true;
-			_points[index] = worldPosition ? transform.InverseTransformPoint(newPosition) : newPosition;
-		}
-
-		public void AddPoint(Vector3 newPoint, bool worldPosition = true, int index = -1)
-		{
-			newPoint = worldPosition ? transform.InverseTransformPoint(newPoint) : newPoint;
-
-			if (index == -1)
-			{
-				_points.Add(newPoint);
-			}
-			else
-			{
-				_points.Insert(index, newPoint);
-			}
-
-			lengthNeedsRecalculation = true;
-		}
-
-		public void AddPoint(Vector3[] newPoints, bool worldPosition = true, int index = -1)
-		{
-			if (worldPosition)
-			{
-				for (int i = 0; i < newPoints.Length; i++)
-				{
-					newPoints[i] = transform.InverseTransformPoint(newPoints[i]);
-				}
-			}
-
-			if (index == -1)
-			{
-				_points.AddRange(newPoints);
-			}
-			else
-			{
-				_points.InsertRange(index, newPoints);
-			}
-
-			lengthNeedsRecalculation = true;
+			points.InsertRange(index, newPoints);
+			invalidLineLengths = true;
 		}
 
 		public void RemovePoint(int index)
 		{
-			_points.RemoveAt(index);
+			points.RemoveAt(index);
+			invalidLineLengths = true;
+		}
+
+		// TODO handle cases where the distance is directly on a pivot
+		static int FindFirstSegmentPoint(List<float> distances, float targetDistance)
+		{
+			// first, we want to find a distance that is longer than our target.
+			int min = 0;
+			int max = distances.Count - 1;
+			// Binary search
+			int pivot = (min + max) / 2; // put pivot in center
+			bool found = false;
+			while (!found) // while the pivot is still to the right somewhere
+			{
+				if (distances[pivot] < targetDistance)
+				{
+					min = pivot;
+					pivot = (min + max) / 2;
+				}
+				else if (distances[pivot] > targetDistance)
+				{
+					if (distances[pivot - 1] <= targetDistance)
+					{
+						found = true;
+						return pivot - 1;
+					}
+					else
+					{
+						max = pivot;
+						pivot = (min + max) / 2;
+					}
+				}
+			}
+			throw new Exception("You shouldn't be able to break out of the loop without finding an element");
+		}
+
+		public Vector3 GetPositionFromDistance(float distance)
+		{
+			float remaningDistance;
+
+			if (distance >= totalLength)
+			{
+				remaningDistance = totalLength - distance;
+				Vector3 lastPoint = points[points.Count - 1];
+				Vector3 secondLastPoint = points[points.Count - 2];
+
+				return Vector3.LerpUnclamped(lastPoint, secondLastPoint, remaningDistance);
+			}
+
+			if(distance <= 0)
+			{
+				Vector3 firstPoint = points[0];
+				Vector3 secondPoint = points[1];
+
+				return Vector3.LerpUnclamped(firstPoint, secondPoint, distance);
+			}
+
+			int firstPointIndex = FindFirstSegmentPoint(pointDistance, distance);
+			remaningDistance = distance - pointDistance[firstPointIndex];
+			float lengthOfLine = segmentLengths[firstPointIndex];
+
+			return Vector3.Lerp(points[firstPointIndex], points[firstPointIndex + 1], remaningDistance / lengthOfLine);
 		}
 
 		public void RecalculateLength()
 		{
-			_lineLengths.Clear();
-			_lineDistance.Clear();
-			_totalLength = 0;
-
-			for (int i = 0; i < _points.Count - 1; i ++)
+			if(!invalidLineLengths)
 			{
-				float length = Vector3.Distance(GetPoint(i, false), GetPoint(i + 1, false));
-				_lineLengths.Add(length);
-				_lineDistance.Add(_totalLength);
-				_totalLength += length;
+				return;
 			}
-			lengthNeedsRecalculation = false;
+
+			segmentLengths.Clear();
+			pointDistance.Clear();
+			totalLength = 0;
+
+			for (int i = 0; i < points.Count - 1; i ++)
+			{
+				float length = Vector3.Distance(points[i], points[i + 1]);
+				segmentLengths.Add(length);
+				pointDistance.Add(totalLength);
+				totalLength += length;
+			}
+			invalidLineLengths = false;
 		}
 
 		public Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex)
@@ -241,7 +207,7 @@ namespace Shapes
 				}
 			}
 
-			newTotalDistance = _lineDistance[index] + distance;
+			newTotalDistance = pointDistance[index] + distance;
 
 			pointProgress = distance / LineLengths[index];
 
@@ -276,7 +242,7 @@ namespace Shapes
 				}
 			}
 
-			newTotalDistance = _lineDistance[index] + distance;
+			newTotalDistance = pointDistance[index] + distance;
 			return Vector3.LerpUnclamped(this[index], this[index + 1], distance / LineLengths[index]);
 		}
 
@@ -313,27 +279,28 @@ namespace Shapes
 			return Vector3.LerpUnclamped(this[index], this[index + 1], distance / LineLengths[index]);
 		}
 
-		public override Vector3 GetPointOnPath(float percentage, bool worldSpace = true)
+		public Vector3 GetPointOnPath(float percentage, bool worldSpace = true)
 		{
 			percentage = Mathf.Clamp01(percentage);
-			float position = (_points.Count - 1) * percentage;
+			float position = (points.Count - 1) * percentage;
 			float offset = position % 1;
 			int index = Mathf.FloorToInt(position - offset);
 
-			if (index == _points.Count - 1)
+			if (index == points.Count - 1)
 			{
-				return this[index];
+				return points[index];
 			}
 
-			return Vector3.Lerp(this[index, worldSpace], this[index + 1, worldSpace], offset);
+			return Vector3.Lerp(points[index], points[index+1], offset);
 		}
 
+		/*
 		public List<Vector3> GetPointSample(float startPosition, float endPosition)
 		{
 			List<Vector3> samples = new List<Vector3>();
 			int index = 0;
 			samples.Add(AdvanceAlongLine(ref index, ref startPosition));
-			while (index < PointCount - 3 && _lineDistance[index + 1] < endPosition)
+			while (index < PointCount - 3 && pointDistance[index + 1] < endPosition)
 			{
 				index++;
 				samples.Add(this[index]);
@@ -342,7 +309,9 @@ namespace Shapes
 
 			return samples;
 		}
+		*/
 
+		/*
 		public static CompoundLine CreateCompoundLineFromPath(IPathable path, int segments)
 		{
 			GameObject gameObject = new GameObject("Compound Line");
@@ -355,15 +324,15 @@ namespace Shapes
 			}
 
 			return line;
-		}
+		}*/
 
 		public int GetLeftMostIndex(float distance)
 		{
 			float traversed = 0;
 			int index = 0;
-			while (traversed < _totalLength)
+			while (traversed < totalLength)
 			{
-				float newTraversed = traversed + _lineLengths[index];
+				float newTraversed = traversed + segmentLengths[index];
 				if (newTraversed >= distance)
 				{
 					return index;
@@ -377,6 +346,7 @@ namespace Shapes
 			return -1;
 		}
 
+		/*
 		public Vector3 GetVelocityAtIndex(int startingIndex)
 		{
 			if (startingIndex == PointCount - 1)
@@ -385,20 +355,16 @@ namespace Shapes
 			}
 			return this[startingIndex + 1] - this[startingIndex];
 		}
+		*/
 
 		public Vector3 GetStartPosition()
 		{
-			return _points[0];
+			return points[0];
 		}
 
 		public Vector3 GetEndPosition()
 		{
-			return _points[_points.Count - 1];
-		}
-
-		public Vector3 GetPointAlongDistance(float distance)
-		{
-			return GetAbsolutePosition(distance, true);
+			return points[points.Count - 1];
 		}
 
 		public Vector3 GetRelativePoint(float distance)
@@ -406,21 +372,42 @@ namespace Shapes
 			return GetPointOnPath(distance, true);
 		}
 
-		public override Vector3 GetVelocity(float percentage, bool worldSpace = true)
+		/*
+		public Vector3 GetVelocity(float percentage, bool worldSpace = true)
 		{
 			int index = GetLeftMostIndex(percentage);
 			return worldSpace ? transform.TransformDirection(GetVelocityAtIndex(index)) : GetVelocityAtIndex(index);
+		}
+		*/
+
+		// Internal position struct
+		public struct Position
+		{
+			int pointIndex;
+			float offset;
+
+			public Position(int pointIndex, float offset)
+			{
+				this.pointIndex = pointIndex;
+				this.offset = offset;
+			}
+
+			public bool IsOverflowing()
+			{
+				return offset >= 0f && offset <= 1f;
+			}
 		}
 
 
 
 #if UNITY_EDITOR
+		/*
 		[UnityEditor.MenuItem("GameObject/Shapes/Lines/Compound", false, 10)]
 		static void CreateCustomGameObject(UnityEditor.MenuCommand menuCommand)
 		{
 			// Create a custom game object
 			GameObject gameObject = new GameObject("Compound Line");
-			gameObject.AddComponent<CompoundLine>();
+			// gameObject.AddComponent<CompoundLine>();
 
 			// Ensure it gets reparented if this was a context click (otherwise does nothing)
 			UnityEditor.GameObjectUtility.SetParentAndAlign(gameObject, menuCommand.context as GameObject);
@@ -438,7 +425,7 @@ namespace Shapes
 				CreateCompoundLineFromPath(path, levelOfDetail);
 			}
 		}
-
+		*/
 #endif
 	}
 }
