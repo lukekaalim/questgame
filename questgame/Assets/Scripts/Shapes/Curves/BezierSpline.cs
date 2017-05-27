@@ -5,7 +5,7 @@ using System;
 
 namespace Shapes
 {
-	public class BezierSpline : MonoBehaviour, IPathable, IPointLine
+	public class BezierSpline : MonoBehaviour
 	{
 		[SerializeField]
 		CompoundLine outputLine;
@@ -377,63 +377,6 @@ namespace Shapes
 		public Vector3 GetVelocity(float percentage, bool worldSpace = true)
 		{
 			return GetVelocityOnPath(percentage, worldSpace);
-		}
-
-		//Interface Stuff
-
-		public Vector3 GetStartPosition()
-		{
-			return LineRepresentation.GetStartPosition();
-		}
-
-		public Vector3 GetEndPosition()
-		{
-			return LineRepresentation.GetEndPosition();
-		}
-
-		public Vector3 GetPointAlongDistance(float distance)
-		{
-			return LineRepresentation.GetPointAlongDistance(distance);
-		}
-
-		public Vector3 GetRelativePoint(float distance)
-		{
-			return LineRepresentation.GetRelativePoint(distance);
-		}
-
-		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
-		{
-			return LineRepresentation.AdvanceAlongLine(ref index, ref distance, out newTotalDistance, out pointProgress);
-		}
-
-		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance)
-		{
-			return LineRepresentation.AdvanceAlongLine(ref index, ref distance, out newTotalDistance);
-		}
-
-		public Vector3 AdvanceAlongLine(ref int index, ref float distance)
-		{
-			return LineRepresentation.AdvanceAlongLine(ref index, ref distance);
-		}
-
-		public Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex)
-		{
-			return LineRepresentation.GetPointAlongDistance(startingIndex, distanceFromIndex);
-		}
-
-		public Vector3 GetVelocityAtIndex(int startingIndex)
-		{
-			return LineRepresentation.GetVelocityAtIndex(startingIndex);
-		}
-
-		public int GetLeftMostIndex(float distance)
-		{
-			return LineRepresentation.GetLeftMostIndex(distance);
-		}
-
-		public List<Vector3> GetPointSample(float startPoint, float endPoint)
-		{
-			return LineRepresentation.GetPointSample(startPoint, endPoint);
 		}
 
 		public int PointCount
