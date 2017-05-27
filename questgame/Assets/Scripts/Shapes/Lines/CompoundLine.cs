@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
+using Extensions;
 
 namespace Shapes
 {
@@ -91,29 +90,27 @@ namespace Shapes
 			int max = distances.Count - 1;
 			// Binary search
 			int pivot = (min + max) / 2; // put pivot in center
-			bool found = false;
-			while (!found) // while the pivot is still to the right somewhere
+			while (min <= max) 
 			{
 				if (distances[pivot] < targetDistance)
 				{
-					min = pivot;
+					min = pivot + 1;
 					pivot = (min + max) / 2;
 				}
 				else if (distances[pivot] > targetDistance)
 				{
 					if (distances[pivot - 1] <= targetDistance)
 					{
-						found = true;
 						return pivot - 1;
 					}
 					else
 					{
-						max = pivot;
+						max = pivot - 1;
 						pivot = (min + max) / 2;
 					}
 				}
 			}
-			throw new Exception("You shouldn't be able to break out of the loop without finding an element");
+			return -1;
 		}
 
 		public Vector3 GetPositionFromDistance(float distance)
@@ -144,6 +141,21 @@ namespace Shapes
 			return Vector3.Lerp(points[firstPointIndex], points[firstPointIndex + 1], remaningDistance / lengthOfLine);
 		}
 
+		public Vector3 GetPointFromPercentage(float percentage)
+		{
+			percentage = Mathf.Clamp01(percentage);
+			float position = (points.Count - 1) * percentage;
+			float offset = position % 1;
+			int index = Mathf.FloorToInt(position - offset);
+
+			if (index == points.Count - 1)
+			{
+				return points[index];
+			}
+
+			return Vector3.Lerp(points[index], points[index + 1], offset);
+		}
+
 		public void RecalculateLength()
 		{
 			if(!invalidLineLengths)
@@ -165,133 +177,49 @@ namespace Shapes
 			invalidLineLengths = false;
 		}
 
-		public Vector3 GetPointAlongDistance(int startingIndex, float distanceFromIndex)
+		public Position ValidatePosition(Position position)
 		{
-			int index = startingIndex;
-			float distance = distanceFromIndex;
-			return AdvanceAlongLine(ref index, ref distance);
+			float lengthOfSegment = segmentLengths[position.segmentIndex];
+
+			float offset = position.offset;
+			int segmentIndex = position.segmentIndex;
+
+			Position resolvedPosition = position;
+
+			while(offset < 0f || offset > lengthOfSegment)
+			{
+				if (segmentIndex <= 0 || segmentIndex >= segmentLengths.Count - 2)
+				{
+					break;
+				}
+
+				if (offset < 0f)
+				{
+					segmentIndex--;
+					lengthOfSegment = segmentLengths[segmentIndex];
+					offset += lengthOfSegment;
+				}
+
+				if (offset > lengthOfSegment)
+				{
+					segmentIndex++;
+					lengthOfSegment = segmentLengths[segmentIndex];
+					offset -= lengthOfSegment;
+				}
+
+				resolvedPosition = new Position(segmentIndex, offset);
+			}
+			return resolvedPosition;
 		}
 
-		//Important Function!!!
-		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance, out float pointProgress)
+		public Vector3 ResolvePosition(Position position)
 		{
-			//If distance is a positive number
-			if (distance > 0)
-			{
-				//While you haven't reached the end of the array
-				//and you're distance is still greater than the length of the line.
-				while (index < PointCount - 2 && LineLengths[index] <= distance)
-				{
-					//Subtract the distance
-					distance -= LineLengths[index];
-					//And start again from the next line
-					index++;
-				}
-			}
-			//if Distance is a negative number
-			else if(distance < 0)
-			{
-				while (index > 0 && LineLengths[index - 1] < -distance)
-				{
-					distance += LineLengths[index - 1];
-					index--;
-				}
-				if (index > 0)
-				{
-					index--;
-					distance = LineLengths[index] + distance;
-				}
-				else
-				{
-					index = 0;
-				}
-			}
+			float percentage = position.offset / segmentLengths[position.segmentIndex];
 
-			newTotalDistance = pointDistance[index] + distance;
+			Vector3 firstPosition = points[position.segmentIndex];
+			Vector3 secondPosition = points[position.segmentIndex + 1];
 
-			pointProgress = distance / LineLengths[index];
-
-			return Vector3.LerpUnclamped(this[index], this[index + 1], pointProgress);
-		}
-
-		public Vector3 AdvanceAlongLine(ref int index, ref float distance, out float newTotalDistance)
-		{
-			if (distance > 0)
-			{
-				while (index < PointCount - 2 && LineLengths[index] <= distance)
-				{
-					distance -= LineLengths[index];
-					index++;
-				}
-			}
-			else if (distance < 0)
-			{
-				while (index > 0 && LineLengths[index - 1] < -distance)
-				{
-					distance += LineLengths[index - 1];
-					index--;
-				}
-				if (index > 0)
-				{
-					index--;
-					distance = LineLengths[index] + distance;
-				}
-				else
-				{
-					index = 0;
-				}
-			}
-
-			newTotalDistance = pointDistance[index] + distance;
-			return Vector3.LerpUnclamped(this[index], this[index + 1], distance / LineLengths[index]);
-		}
-
-		public Vector3 AdvanceAlongLine(ref int index, ref float distance)
-		{
-			if (distance > 0)
-			{
-				while (index < PointCount - 2 && LineLengths[index] <= distance)
-				{
-					distance -= LineLengths[index];
-					index++;
-				}
-			}
-			else if (distance < 0)
-			{
-				while (index > 0 && distance < 0 && LineLengths[index - 1] < -distance)
-				{
-					Debug.Log(distance);
-					Debug.Log(LineLengths[index - 1]);
-
-					distance += LineLengths[index - 1];
-					index--;
-				}
-				if (index > 0)
-				{
-					index--;
-					distance = LineLengths[index] + distance;
-				}
-				else
-				{
-					index = 0;
-				}
-			}
-			return Vector3.LerpUnclamped(this[index], this[index + 1], distance / LineLengths[index]);
-		}
-
-		public Vector3 GetPointOnPath(float percentage, bool worldSpace = true)
-		{
-			percentage = Mathf.Clamp01(percentage);
-			float position = (points.Count - 1) * percentage;
-			float offset = position % 1;
-			int index = Mathf.FloorToInt(position - offset);
-
-			if (index == points.Count - 1)
-			{
-				return points[index];
-			}
-
-			return Vector3.Lerp(points[index], points[index+1], offset);
+			return Vector3.LerpUnclamped(firstPosition, secondPosition, percentage);
 		}
 
 		/*
@@ -345,17 +273,21 @@ namespace Shapes
 			}
 			return -1;
 		}
-
-		/*
+		
 		public Vector3 GetVelocityAtIndex(int startingIndex)
 		{
 			if (startingIndex == PointCount - 1)
 			{
-				return this[startingIndex] - this[startingIndex - 1];
+				return points[startingIndex] - points[startingIndex - 1];
 			}
-			return this[startingIndex + 1] - this[startingIndex];
+			return points[startingIndex + 1] - points[startingIndex];
 		}
-		*/
+
+		public Vector3 GetVelocityAlongDistance(float distance)
+		{
+			int index = FindFirstSegmentPoint(pointDistance, distance);
+			return GetVelocityAtIndex(index);
+		}
 
 		public Vector3 GetStartPosition()
 		{
@@ -366,35 +298,16 @@ namespace Shapes
 		{
 			return points[points.Count - 1];
 		}
-
-		public Vector3 GetRelativePoint(float distance)
-		{
-			return GetPointOnPath(distance, true);
-		}
-
-		/*
-		public Vector3 GetVelocity(float percentage, bool worldSpace = true)
-		{
-			int index = GetLeftMostIndex(percentage);
-			return worldSpace ? transform.TransformDirection(GetVelocityAtIndex(index)) : GetVelocityAtIndex(index);
-		}
-		*/
-
-		// Internal position struct
+		
 		public struct Position
 		{
-			int pointIndex;
-			float offset;
+			public readonly int segmentIndex;
+			public readonly float offset;
 
-			public Position(int pointIndex, float offset)
+			public Position(int segmentIndex, float offset)
 			{
-				this.pointIndex = pointIndex;
+				this.segmentIndex = segmentIndex;
 				this.offset = offset;
-			}
-
-			public bool IsOverflowing()
-			{
-				return offset >= 0f && offset <= 1f;
 			}
 		}
 
