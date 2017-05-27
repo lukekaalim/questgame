@@ -4,9 +4,10 @@ using UnityEditor;
 namespace Shapes
 {
 	//The inspector that edits the points in a line.
-	[CustomEditor(typeof(CompoundLine), true)]
+	[CustomEditor(typeof(CompoundLine))]
 	public class CompoundLineInspector : Editor
 	{
+		/*
 		int selectedPoint = -1;
 
 		public override void OnInspectorGUI()
@@ -116,5 +117,6 @@ namespace Shapes
 
 
 		}
+		*/
 	}
 }
