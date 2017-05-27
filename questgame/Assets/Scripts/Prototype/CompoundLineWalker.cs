@@ -33,9 +33,7 @@ namespace Test
 		{
 			if (update)
 			{
-			//	position = Mathf.Lerp(0, 1, Mathf.Clamp(currentTime / totalTime, 0, 1));
-
-				transform.position = path.GetAbsolutePosition(position);
+				transform.position = path.GetPositionFromDistance(position);
 
 				position += speed * Time.deltaTime;
 			}
