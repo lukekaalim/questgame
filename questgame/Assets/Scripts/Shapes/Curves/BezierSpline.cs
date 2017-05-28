@@ -112,7 +112,7 @@ namespace Shapes
 				{
 					RegenerateLineRepresentation();
 				}
-				return _lineRepresentation.GetTotalLength();
+				return _lineRepresentation.TotalLength;
 			}
 		}
 
@@ -383,7 +383,7 @@ namespace Shapes
 		{
 			get
 			{
-				return LineRepresentation.PointCount;
+				return LineRepresentation.Points.Count;
 			}
 		}
 
