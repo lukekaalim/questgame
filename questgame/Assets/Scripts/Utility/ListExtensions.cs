@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Extensions
+namespace Utility
 {
 	public static class ListExtensions
 	{
@@ -13,6 +13,16 @@ namespace Extensions
 		public static bool AtEdgeIndex<T>(this List<T> list, int index)
 		{
 			return index <= 0 || index >= list.Count - 1;
+		}
+
+		public static bool IsLastIndex<T>(this List<T> list, int index)
+		{
+			return index == list.Count - 1;
+		}
+
+		public static bool IsFirstIndex<T>(this List<T> list, int index)
+		{
+			return index == 0;
 		}
 	}
 }
