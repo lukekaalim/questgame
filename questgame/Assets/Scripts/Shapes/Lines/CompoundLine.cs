@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
-using Extensions;
+using Utility;
 
 namespace Shapes
 {
@@ -43,8 +43,8 @@ namespace Shapes
 		// in a Line where every point is 5 units away from the previous
 		// 1: [0], 2: [5], 3: [10], 4: [15], 5: [20]
 		[SerializeField]
-		List<float> pointDistance = new List<float>(); 
-		
+		List<float> pointDistances = new List<float>();
+
 		public float TotalLength { get { return totalLength; } }
 
 		public List<Vector3> Points { get { return points; } set { points = value; } }
@@ -67,7 +67,7 @@ namespace Shapes
 				return Vector3.LerpUnclamped(lastPoint, secondLastPoint, remaningDistance);
 			}
 
-			if(distance <= 0)
+			if (distance <= 0)
 			{
 				Vector3 firstPoint = points[0];
 				Vector3 secondPoint = points[1];
@@ -75,8 +75,8 @@ namespace Shapes
 				return Vector3.LerpUnclamped(firstPoint, secondPoint, distance);
 			}
 
-			int firstPointIndex = FindFirstSegmentPoint(pointDistance, distance);
-			remaningDistance = distance - pointDistance[firstPointIndex];
+			int firstPointIndex = Search.Binary(pointDistances, distance, FindFirstSegmentComparer);
+			remaningDistance = distance - pointDistances[firstPointIndex];
 			float lengthOfLine = segmentLengths[firstPointIndex];
 
 			return Vector3.Lerp(points[firstPointIndex], points[firstPointIndex + 1], remaningDistance / lengthOfLine);
@@ -106,7 +106,7 @@ namespace Shapes
 
 			Position resolvedPosition = position;
 
-			while(offset < 0f || offset > lengthOfSegment)
+			while (offset < 0f || offset > lengthOfSegment)
 			{
 				if (segmentIndex <= 0 || segmentIndex >= segmentLengths.Count - 2)
 				{
@@ -141,7 +141,7 @@ namespace Shapes
 
 			return Vector3.LerpUnclamped(firstPosition, secondPosition, percentage);
 		}
-		
+
 		public Vector3 GetVelocityAtIndex(int startingIndex)
 		{
 			if (startingIndex == points.Count - 1)
@@ -153,21 +153,21 @@ namespace Shapes
 
 		public Vector3 GetVelocityAlongDistance(float distance)
 		{
-			int index = FindFirstSegmentPoint(pointDistance, distance);
+			int index = Search.Binary(pointDistances, distance, FindFirstSegmentComparer);
 			return GetVelocityAtIndex(index);
 		}
 
 		public void RecalculateLength()
 		{
 			segmentLengths.Clear();
-			pointDistance.Clear();
+			pointDistances.Clear();
 			totalLength = 0;
 
 			for (int i = 0; i < points.Count - 1; i++)
 			{
 				float length = Vector3.Distance(points[i], points[i + 1]);
 				segmentLengths.Add(length);
-				pointDistance.Add(totalLength);
+				pointDistances.Add(totalLength);
 				totalLength += length;
 			}
 		}
@@ -192,35 +192,30 @@ namespace Shapes
 			return -1;
 		}
 
-		// TODO handle cases where the distance is directly on a pivot
-		static int FindFirstSegmentPoint(List<float> distances, float targetDistance)
+		public int FindFirstSegmentComparer(List<float> list, int index, float target)
 		{
-			// first, we want to find a distance that is longer than our target.
-			int min = 0;
-			int max = distances.Count - 1;
-			// Binary search
-			int pivot = (min + max) / 2; // put pivot in center
-			while (min <= max)
+			float value = list[index];
+
+			if (value < target)
 			{
-				if (distances[pivot] < targetDistance)
+				if (list.IsLastIndex(index) || list[index + 1] > target)
 				{
-					min = pivot + 1;
-					pivot = (min + max) / 2;
+					return 0;
 				}
-				else if (distances[pivot] > targetDistance)
-				{
-					if (distances[pivot - 1] <= targetDistance)
-					{
-						return pivot - 1;
-					}
-					else
-					{
-						max = pivot - 1;
-						pivot = (min + max) / 2;
-					}
-				}
+				return -1;
 			}
-			return -1;
+			else if (value > target)
+			{
+				if (list.IsFirstIndex(index))
+				{
+					return 0;
+				}
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 
 		/*
