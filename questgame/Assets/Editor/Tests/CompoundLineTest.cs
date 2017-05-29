@@ -61,14 +61,13 @@ namespace Testing
 			points.Add(new Vector3(0, 0, 0));
 			points.Add(new Vector3(10, 0, 0));
 			points.Add(new Vector3(20, 0, 0));
-
 			line.Points = points;
+			line.RecalculateLength();
 
 			Vector3 positionAtZero = line.GetPositionFromDistance(0);
 			Assert.That(positionAtZero, Is.EqualTo(points[0]),
 				"At distance zero is not equal to the beginning of the line");
 
-			Assert.Fail();
 			return null;
 		}
 	}
