@@ -11,6 +11,7 @@ namespace Shapes
 	// It has a canonical 'start' and 'end', and each point can be measured by its 'distance' from the start
 	public class CompoundLine : ScriptableObject
 	{
+		[Serializable]
 		public struct Position
 		{
 			public readonly int segmentIndex;
@@ -21,6 +22,11 @@ namespace Shapes
 				this.segmentIndex = segmentIndex;
 				this.offset = offset;
 			}
+
+			public static Position operator +(Position position, float offset)
+			{
+				return new Position(position.segmentIndex, position.offset + offset);
+			}
 		}
 
 		[SerializeField]
@@ -28,11 +34,6 @@ namespace Shapes
 
 		[SerializeField]
 		float totalLength = 0f;
-
-#if UNITY_EDITOR
-		[SerializeField]
-		Color lineColor = Color.white;
-#endif
 
 		// The length of each segment
 		// 1: distance(point[0], point[1]), 2: distance(point[1], point[2]), etc... 
@@ -49,55 +50,30 @@ namespace Shapes
 
 		public List<Vector3> Points { get { return points; } set { points = value; } }
 
-		public float GetDistancePercentage(float distance)
+		public Position GetPosition(float distance)
 		{
-			return distance / totalLength;
-		}
-
-		public Vector3 GetPositionFromDistance(float distance)
-		{
-			float remaningDistance;
+			float offset;
+			int index;
 
 			if (distance >= totalLength)
 			{
-				remaningDistance = totalLength - distance;
-				Vector3 lastPoint = points[points.Count - 1];
-				Vector3 secondLastPoint = points[points.Count - 2];
-
-				return Vector3.LerpUnclamped(lastPoint, secondLastPoint, remaningDistance);
+				offset = totalLength - distance;
+				index = points.Count - 2;
 			}
-
-			if (distance <= 0)
+			else if (distance <= 0)
 			{
-				Vector3 firstPoint = points[0];
-				Vector3 secondPoint = points[1];
-
-				return Vector3.LerpUnclamped(firstPoint, secondPoint, distance);
+				index = 0;
+				offset = distance;
 			}
-
-			int firstPointIndex = Search.Binary(pointDistances, distance, FindFirstSegmentComparer);
-			remaningDistance = distance - pointDistances[firstPointIndex];
-			float lengthOfLine = segmentLengths[firstPointIndex];
-
-			return Vector3.Lerp(points[firstPointIndex], points[firstPointIndex + 1], remaningDistance / lengthOfLine);
+			else
+			{
+				index = Search.Binary(pointDistances, distance, FindFirstSegmentComparer);
+				offset = distance - pointDistances[index];
+			}
+			return new Position(index, offset);
 		}
 
-		public Vector3 GetPointFromPercentage(float percentage)
-		{
-			percentage = Mathf.Clamp01(percentage);
-			float position = (points.Count - 1) * percentage;
-			float offset = position % 1;
-			int index = Mathf.FloorToInt(position - offset);
-
-			if (index == points.Count - 1)
-			{
-				return points[index];
-			}
-
-			return Vector3.Lerp(points[index], points[index + 1], offset);
-		}
-
-		public Position GetValidPosition(Position position)
+		public Position UpdatePosition(Position position)
 		{
 			float lengthOfSegment = segmentLengths[position.segmentIndex];
 
@@ -132,14 +108,25 @@ namespace Shapes
 			return resolvedPosition;
 		}
 
-		public Vector3 GetResolvedPosition(Position position)
+		public Vector3 ResolvePosition(Position position)
 		{
 			float percentage = position.offset / segmentLengths[position.segmentIndex];
 
 			Vector3 firstPosition = points[position.segmentIndex];
 			Vector3 secondPosition = points[position.segmentIndex + 1];
 
-			return Vector3.LerpUnclamped(firstPosition, secondPosition, percentage);
+			if (percentage == 0)
+			{
+				return firstPosition;
+			}
+			else if (percentage == 1)
+			{
+				return secondPosition;
+			}
+			else
+			{
+				return Vector3.LerpUnclamped(firstPosition, secondPosition, percentage);
+			}
 		}
 
 		public Vector3 GetVelocityAtIndex(int startingIndex)
@@ -151,48 +138,7 @@ namespace Shapes
 			return points[startingIndex + 1] - points[startingIndex];
 		}
 
-		public Vector3 GetVelocityAlongDistance(float distance)
-		{
-			int index = Search.Binary(pointDistances, distance, FindFirstSegmentComparer);
-			return GetVelocityAtIndex(index);
-		}
-
-		public void RecalculateLength()
-		{
-			segmentLengths.Clear();
-			pointDistances.Clear();
-			totalLength = 0;
-
-			for (int i = 0; i < points.Count - 1; i++)
-			{
-				float length = Vector3.Distance(points[i], points[i + 1]);
-				segmentLengths.Add(length);
-				pointDistances.Add(totalLength);
-				totalLength += length;
-			}
-		}
-
-		int GetLeftMostIndex(float distance)
-		{
-			float traversed = 0;
-			int index = 0;
-			while (traversed < totalLength)
-			{
-				float newTraversed = traversed + segmentLengths[index];
-				if (newTraversed >= distance)
-				{
-					return index;
-				}
-				else
-				{
-					traversed = newTraversed;
-					index++;
-				}
-			}
-			return -1;
-		}
-
-		public int FindFirstSegmentComparer(List<float> list, int index, float target)
+		int FindFirstSegmentComparer(List<float> list, int index, float target)
 		{
 			float value = list[index];
 
@@ -218,6 +164,38 @@ namespace Shapes
 			}
 		}
 
+#if UNITY_EDITOR
+
+		[SerializeField]
+		Color lineColor = Color.white;
+
+		public static List<CompoundLine> enabledCompoundLines = new List<CompoundLine>();
+
+		public void RecalculateLength()
+		{
+			segmentLengths.Clear();
+			pointDistances.Clear();
+			totalLength = 0;
+
+			for (int i = 0; i < points.Count - 1; i++)
+			{
+				float length = Vector3.Distance(points[i], points[i + 1]);
+				segmentLengths.Add(length);
+				pointDistances.Add(totalLength);
+				totalLength += length;
+			}
+		}
+
+		private void OnEnable()
+		{
+			enabledCompoundLines.Add(this);
+		}
+
+		private void OnDisable()
+		{
+			enabledCompoundLines.Remove(this);
+		}
+#endif
 		/*
 		 *	Need to revist these functions later
 		 * 
