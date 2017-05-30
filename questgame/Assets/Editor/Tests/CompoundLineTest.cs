@@ -26,7 +26,7 @@ namespace Testing
 			float expectedTotalDistance = 20;
 
 			line.Points = points;
-			line.RecalculateLength();
+			line.Recalculate();
 
 			Assert.That(line.TotalLength, Is.EqualTo(expectedTotalDistance).Within(0.1f),
 				"The total length did not approximatley equal the expected length");
@@ -47,7 +47,7 @@ namespace Testing
 			float expectedTotalDistance = 20;
 
 			line.Points = points;
-			line.RecalculateLength();
+			line.Recalculate();
 
 			Assert.That(line.TotalLength, Is.EqualTo(expectedTotalDistance).Within(0.1f),
 				"The total length did not approximatley equal the expected length");
@@ -66,7 +66,7 @@ namespace Testing
 				new Vector3(20, 0, 0)
 			};
 			line.Points = points;
-			line.RecalculateLength();
+			line.Recalculate();
 
 			CompoundLine.Position linePosition = line.GetPosition(0);
 			Vector3 positionVector = line.ResolvePosition(linePosition);

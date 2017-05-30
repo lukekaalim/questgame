@@ -167,11 +167,13 @@ namespace Shapes
 #if UNITY_EDITOR
 
 		[SerializeField]
-		Color lineColor = Color.white;
+		public Color lineColor = Color.white;
 
 		public static List<CompoundLine> enabledCompoundLines = new List<CompoundLine>();
 
-		public void RecalculateLength()
+		public List<float> SegmentLengths { get { return segmentLengths; } }
+
+		public void Recalculate()
 		{
 			segmentLengths.Clear();
 			pointDistances.Clear();
@@ -188,6 +190,7 @@ namespace Shapes
 
 		private void OnEnable()
 		{
+			Recalculate();
 			enabledCompoundLines.Add(this);
 		}
 

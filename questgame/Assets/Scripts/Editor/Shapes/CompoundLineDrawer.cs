@@ -3,10 +3,45 @@ using UnityEditor;
 
 namespace Shapes
 {
-	//The inspector that edits the points in a line.
-	[CustomEditor(typeof(CompoundLine))]
-	public class CompoundLineInspector : Editor
+	[CustomPropertyDrawer(typeof(CompoundLine))]
+	[CanEditMultipleObjects]
+	public class CompoundLineDrawer : PropertyDrawer
 	{
+		public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
+		{
+			EditorGUI.BeginProperty(pos, label, prop);
+
+			Rect valuePosition = EditorGUI.PrefixLabel(pos, GUIUtility.GetControlID(FocusType.Passive), label);
+
+			CompoundLine line = prop.objectReferenceValue as CompoundLine;
+
+			if (line == null)
+			{
+				label = new GUIContent(prop.name);
+
+				if (GUI.Button(valuePosition, "Create new Line"))
+				{
+					line = ScriptableObject.CreateInstance<CompoundLine>();
+					prop.objectReferenceValue = line as Object;
+				}
+			}
+			else
+			{
+				float deleteWidth = 25f;
+				Rect deletePosition = new Rect(valuePosition);
+				deletePosition.xMin = deletePosition.xMax - deleteWidth;
+
+				valuePosition.width -= deleteWidth;
+
+				EditorGUI.ObjectField(valuePosition, prop, GUIContent.none);
+				if (GUI.Button(deletePosition, "X"))
+				{
+					Object.DestroyImmediate(line);
+				}
+			}
+
+			EditorGUI.EndProperty();
+		}
 		/*
 		int selectedPoint = -1;
 
