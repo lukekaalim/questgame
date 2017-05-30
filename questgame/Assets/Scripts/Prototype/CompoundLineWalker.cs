@@ -1,42 +1,24 @@
 ﻿using UnityEngine;
+
 using Shapes;
-using Serialization;
 
-namespace Test
+public class CompoundLineWalker : MonoBehaviour
 {
-	[ExecuteInEditMode]
-	class CompoundLineWalker : MonoBehaviour
+	[SerializeField]
+	CompoundLine line;
+
+	[SerializeField]
+	CompoundLine.Position position = new CompoundLine.Position(0, 0);
+
+	[SerializeField]
+	float speed = 1;
+
+	private void Update()
 	{
-		[SerializeField]
-		CompoundLine path = null;
+		position += speed * Time.deltaTime;
 
-		[SerializeField]
-		float position;
+		position = line.UpdatePosition(position);
 
-		[SerializeField]
-		bool update = true;
-
-		[SerializeField]
-		float speed = 0;
-
-
-		void Start()
-		{
-			position = 0;
-			if (path == null)
-			{
-				update = false;
-			}
-		}
-
-		void Update()
-		{
-			if (update)
-			{
-				transform.position = path.GetPositionFromDistance(position);
-
-				position += speed * Time.deltaTime;
-			}
-		}
+		transform.position = line.ResolvePosition(position);
 	}
 }
