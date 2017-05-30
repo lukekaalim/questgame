@@ -49,7 +49,10 @@ namespace Shapes
 					{
 						if (showDistances)
 						{
-							Handles.Label((point + line.Points[y + 1]) / 2, line.SegmentLengths[y].ToString());
+							GUIStyle style = new GUIStyle();
+							style.normal.textColor = line.lineColor;
+
+							Handles.Label((point + line.Points[y + 1]) / 2, line.SegmentLengths[y].ToString(), style);
 						}
 					}
 				}
