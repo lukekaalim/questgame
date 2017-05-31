@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+using Shapes.Renderers;
+
 namespace Shapes
 {
 	public class ShapeTray : EditorWindow
@@ -29,33 +31,7 @@ namespace Shapes
 		{
 			foreach (CompoundLine line in CompoundLine.enabledCompoundLines)
 			{
-				for (int y = 0; y < line.Points.Count; y++)
-				{
-					Vector3 point = line.Points[y];
-					Vector3 newPoint = Handles.DoPositionHandle(point, Quaternion.identity);
-
-					if (point != newPoint)
-					{
-						line.Points[y] = newPoint;
-						line.Recalculate();
-					}
-
-					using (new Handles.DrawingScope(line.lineColor))
-					{
-						Handles.DrawAAPolyLine(4f, line.Points.ToArray());
-					}
-
-					if (y < line.Points.Count - 1)
-					{
-						if (showDistances)
-						{
-							GUIStyle style = new GUIStyle();
-							style.normal.textColor = line.lineColor;
-
-							Handles.Label((point + line.Points[y + 1]) / 2, line.SegmentLengths[y].ToString(), style);
-						}
-					}
-				}
+				CompoundLineRenderer.RenderLine(line);
 			}
 
 			HandleUtility.Repaint();
