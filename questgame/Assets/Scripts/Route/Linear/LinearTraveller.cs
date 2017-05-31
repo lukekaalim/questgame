@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-using Controllers;
 
 namespace Route.Linear
 {
+	/*
 	public class LinearTraveller : Traveller<LinearRoute>
 	{
 		[SerializeField]
@@ -48,11 +48,6 @@ namespace Route.Linear
 			}
 		}
 
-		public override IControllable ApplyInput(Intention controllerIntent)
-		{
-			return _nextTraveller;
-		}
-
 		protected virtual void OnEnable()
 		{
 			_nextTraveller = this;
@@ -70,6 +65,8 @@ namespace Route.Linear
 			UpdatePosition();
 		}
 
+		/*
+
 		public override void UpdatePosition()
 		{
 			float absoluteDistance;
@@ -78,7 +75,7 @@ namespace Route.Linear
 			//distanceFromIndex += _velocity.x * Time.deltaTime;
 
 			//Get Position
-			transform.position = _currentRoute.LinearTraversable.AdvanceAlongLine(ref currentPointIndex, ref distanceFromIndex, out absoluteDistance, out progress) + new Vector3(0,_position.y);
+			transform.position = _currentRoute.LinearTraversable.AdvanceAlongLine(ref currentPointIndex, ref distanceFromIndex, out absoluteDistance, out progress) + new Vector3(0, _position.y);
 
 			_position.x = absoluteDistance;
 
@@ -99,6 +96,8 @@ namespace Route.Linear
 
 			transform.rotation = Quaternion.LookRotation(lerpedDirection, Vector3.up);
 		}
+
+	
 
 
 		public override void Assign(LinearRoute newRoute)
@@ -149,4 +148,5 @@ namespace Route.Linear
 
 #endif
 	}
+	*/
 }

@@ -4,6 +4,7 @@ using System;
 
 namespace Route.Linear
 {
+	/*
 	public class LinearLimitCollider : RouteCollider<LinearRoute>
 	{
 		[SerializeField]
@@ -97,4 +98,5 @@ namespace Route.Linear
 			}
 		}
 	}
+	*/
 }

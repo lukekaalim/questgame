@@ -1,10 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-using Controllers;
-
 namespace Route.Linear
 {
+	/*
 	public class LinearCharacterTraveller : LinearTraveller
 	{
 		[SerializeField]
@@ -28,20 +27,6 @@ namespace Route.Linear
 		[SerializeField]
 		Vector3 pointOnRoute = Vector3.zero;
 
-		public override IControllable ApplyInput(Intention controllerIntent)
-		{
-			if (_activeController != null)
-			{
-				if (_isOnGround && (controllerIntent & Intention.Tap) == Intention.Tap)
-				{
-					_activeController.ConsumeIntention(Intention.Tap);
-
-					_velocity.y += jumpVelocity;
-				}
-			}
-
-			return _nextTraveller as IControllable;
-		}
 
 		//Time for movement calculations
 		public override void FixedUpdate()
@@ -71,7 +56,7 @@ namespace Route.Linear
 			if (_velocity.y < _velocityMinimum && _velocity.y > -_velocityMinimum)
 			{
 				_velocity.y = 0;
-			}*/
+			}
 
 			_worldSpaceHeight += _velocity.y * time;
 
@@ -103,7 +88,7 @@ namespace Route.Linear
 
 			newWorldSpacePosition.y = _worldSpaceHeight;
 
-			if(_isOnGround)
+			if (_isOnGround)
 			{
 				_worldSpaceHeight = _floorHeight;
 				_position.y = 0;
@@ -138,4 +123,5 @@ namespace Route.Linear
 			return pointOnRoute;
 		}
 	}
+	*/
 }

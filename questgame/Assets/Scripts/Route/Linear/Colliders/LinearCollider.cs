@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Route.Linear
 {
+	/*
 	public class LinearCollider : RouteCollider<LinearRoute>
 	{
 		public event Action<LinearTraveller, Vector2> OnDetailedEnter;
@@ -155,7 +156,7 @@ namespace Route.Linear
 			Gizmos.DrawCube(
 				_position.GetWorldSpacePosition(_collisionBounds.extents.x),
 				new Vector3(0.1f, _collisionBounds.size.y, 0.1f));
-				*/
+				
 
 			List<Vector3> samples = ParentRoute.LinearTraversable.GetPointSample(
 				_collisionBounds.center.x - _collisionBounds.extents.x,
@@ -191,4 +192,6 @@ namespace Route.Linear
 		}
 
 	}
+	*/
+
 }

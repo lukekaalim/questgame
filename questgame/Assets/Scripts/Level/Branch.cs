@@ -10,6 +10,7 @@ namespace Level
 {
 	public class Branch : MonoBehaviour
 	{
+		/*
 		//The start point
 		[SerializeField]
 		RouteCollider _collider;
@@ -132,8 +133,8 @@ namespace Level
 			// Register the creation in the undo system
 			UnityEditor.Undo.RegisterCreatedObjectUndo(gameObject, "Create " + gameObject.name);
 		}
-		*/
+		
 #endif
-
+		*/
 	}
 }

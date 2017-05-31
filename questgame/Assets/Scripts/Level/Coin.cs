@@ -4,6 +4,7 @@ using Route;
 
 namespace Level
 {
+	/*
 	public class Coin : MonoBehaviour
 	{
 		[SerializeField]
@@ -56,4 +57,5 @@ namespace Level
 
 #endif
 	}
+	*/
 }

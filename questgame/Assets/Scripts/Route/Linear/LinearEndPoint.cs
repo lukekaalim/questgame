@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Route.Linear
 {
+	/*
 	[ExecuteInEditMode]
 	public class LinearEndPoint : LinearPoint
 	{
@@ -42,4 +43,5 @@ namespace Route.Linear
 		}
 #endif
 	}
+	*/
 }

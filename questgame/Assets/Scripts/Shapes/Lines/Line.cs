@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Shapes
 {
 	//Global functions for interacting with a line, aka a collection of points.
-	public abstract class Line : MonoBehaviour, IPathable
+	public abstract class Line : MonoBehaviour
 	{
 		public abstract int PointCount
 		{
@@ -34,8 +34,8 @@ namespace Shapes
 			{
 				Gizmos.DrawLine(this[i], this[i + 1]);
 
-				Gizmos.DrawSphere(this[i], UnityEditor.HandleUtility.GetHandleSize(this[i])/15);
-				Gizmos.DrawSphere(this[i + 1], UnityEditor.HandleUtility.GetHandleSize(this[i + 1])/15);
+				Gizmos.DrawSphere(this[i], UnityEditor.HandleUtility.GetHandleSize(this[i]) / 15);
+				Gizmos.DrawSphere(this[i + 1], UnityEditor.HandleUtility.GetHandleSize(this[i + 1]) / 15);
 			}
 		}
 #endif

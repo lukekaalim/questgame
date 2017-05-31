@@ -3,40 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Shapes;
-using Serialization;
 using Utility;
 
 namespace Route.Linear
 {
+	/*
 	[ExecuteInEditMode]
 	public class LinearRoute : RouteBase
 	{
+		
 		[SerializeField]
 		HashSet<LinearCollider> _boundsColliders = new HashSet<LinearCollider>();
 
 		[SerializeField]
 		HashSet<LinearLimitCollider> _limitsColliders = new HashSet<LinearLimitCollider>();
 
-		[SerializeField]
-		SIPointLine _linearTraversable;
-
 		public override float Length
 		{
 			get
 			{
-				return _linearTraversable.Value.AbsoluteLength;
-			}
-		}
-
-		public IPointLine LinearTraversable
-		{
-			get
-			{
-				return _linearTraversable.Value;
-			}
-			set
-			{
-				_linearTraversable.Value = value;
+				throw new NotImplementedException();
 			}
 		}
 
@@ -119,14 +105,6 @@ namespace Route.Linear
 			return point;
 		}
 
-		void OnEnable()
-		{
-			if (_linearTraversable == null)
-			{
-				_linearTraversable = ScriptableObject.CreateInstance<SIPointLine>();
-			}
-		}
-
 #if UNITY_EDITOR
 		[UnityEditor.MenuItem("Routing/Make new Traversible Route")]
 		static void CreateCustomGameObject(UnityEditor.MenuCommand menuCommand)
@@ -156,8 +134,11 @@ namespace Route.Linear
 		[UnityEditor.MenuItem("Routing/Make Traveller from selected Route", true, 10)]
 		static bool CanMakeTraveller(UnityEditor.MenuCommand menuCommand)
 		{
-			return (UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponent<RouteBase>() != null) ;
+			return (UnityEditor.Selection.activeGameObject != null && UnityEditor.Selection.activeGameObject.GetComponent<RouteBase>() != null);
 		}
 #endif
+	
 	}
+
+	*/
 }

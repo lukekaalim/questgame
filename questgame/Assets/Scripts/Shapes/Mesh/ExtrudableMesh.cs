@@ -2,8 +2,6 @@
 
 using System.Collections.Generic;
 
-using Serialization;
-
 namespace Shapes
 {
 	[RequireComponent(typeof(MeshRenderer), typeof(MeshFilter)), ExecuteInEditMode]
@@ -34,7 +32,7 @@ namespace Shapes
 
 		void OnEnable()
 		{
-			if(_spline != null)
+			if (_spline != null)
 				_spline.OnLineResample += Resample;
 		}
 
@@ -46,7 +44,7 @@ namespace Shapes
 
 		private void Resample(CompoundLine line)
 		{
-			if(IsValidForGeneration)
+			if (IsValidForGeneration)
 				GenerateMesh();
 		}
 
@@ -89,14 +87,14 @@ namespace Shapes
 		public void TransformVertices(ref List<Brush.ExtrudableVertex> vertexList, List<int> vertexIndex, Vector3 position, Quaternion direction)
 		{
 			List<Vector3> points = new List<Vector3>();
-			for(int i = 0; i < vertexIndex.Count; i++)
+			for (int i = 0; i < vertexIndex.Count; i++)
 			{
 				points.Add(vertexList[vertexIndex[i]].Position);
 			}
 
 			Vector3 center = GetCenter(points);
 
-			for(int i = 0; i < points.Count; i++)
+			for (int i = 0; i < points.Count; i++)
 			{
 				Brush.ExtrudableVertex oldVertex = vertexList[vertexIndex[i]];
 

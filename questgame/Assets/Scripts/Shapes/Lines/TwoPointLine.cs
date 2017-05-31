@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Shapes
 {
 	//A simple line made of two points.
-	public class TwoPointLine : Line, IPointLine
+	public class TwoPointLine : Line
 	{
 		[SerializeField]
 		Color _displayColor = Color.white;

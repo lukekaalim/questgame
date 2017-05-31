@@ -2,6 +2,7 @@
 
 namespace Route
 {
+	/*
 	[CustomEditor(typeof(Traveller), true)]
 	public class TravellerInspector : Editor
 	{
@@ -17,4 +18,5 @@ namespace Route
 			}
 		}
 	}
+	*/
 }

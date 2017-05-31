@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Route.Linear
 {
+	/*
 	public class LinearPoint : RoutePoint<LinearRoute>
 	{
 		[SerializeField]
@@ -108,4 +109,5 @@ namespace Route.Linear
 		}
 #endif
 	}
+	*/
 }

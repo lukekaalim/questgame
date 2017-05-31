@@ -3,10 +3,10 @@ using UnityEngine;
 using UnityEditor;
 
 using Utils;
-using Serialization;
 
 namespace Trade
 {
+	/*
 	[CustomPropertyDrawer(typeof(SingleCurrencyContainer))]
 	class SingleCurrencyDrawer : PropertyDrawer
 	{
@@ -86,8 +86,6 @@ namespace Trade
 	[CustomPropertyDrawer(typeof(MultipleCurrencyContainer))]
 	class MultipleCurrencyDrawer : PropertyDrawer
 	{
-		SerializableDictionaryStringIntEditor editor;
-
 		SerializedProperty dictionaryProperty;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -111,12 +109,7 @@ namespace Trade
 				SerializedObject serializedObject = new SerializedObject(container);
 
 				dictionaryProperty = serializedObject.FindProperty("dictionary");
-
-				if (editor == null)
-				{
-					editor = new SerializableDictionaryStringIntEditor();
-				}
-				editor.OnGUI(position,dictionaryProperty,GUIContent.none);
+				
 			}
 
 			EditorGUI.EndProperty();
@@ -131,10 +124,6 @@ namespace Trade
 			}
 			else
 			{
-				if (editor == null)
-				{
-					editor = new SerializableDictionaryStringIntEditor();
-				}
 				if (dictionaryProperty == null)
 				{
 					SerializedObject serializedObject = new SerializedObject(container);
@@ -144,4 +133,5 @@ namespace Trade
 			}
 		}
 	}
+	*/
 }

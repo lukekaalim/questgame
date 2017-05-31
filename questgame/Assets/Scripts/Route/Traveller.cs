@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-using Controllers;
 using Utility;
 
 namespace Route
@@ -15,10 +14,9 @@ namespace Route
 	 *		the travellers intent.
 	 *
 	 */
-	public abstract class Traveller : MonoBehaviour, IControllable
+	public abstract class Traveller : MonoBehaviour
 	{
-		[SerializeField]
-		protected Controller _activeController;
+		/*
 
 		protected Traveller _nextTraveller;
 
@@ -31,8 +29,6 @@ namespace Route
 		{
 			get;
 		}
-
-		public abstract IControllable ApplyInput(Intention controllerIntent);
 
 		public abstract void UnAssign(Traveller nextTraveller);
 
@@ -52,11 +48,6 @@ namespace Route
 				return traveller;
 			}
 			return null;
-		}
-
-		public virtual void SetController(Controller newController)
-		{
-			_activeController = newController;
 		}
 
 
@@ -89,7 +80,8 @@ namespace Route
 			}
 		}
 
-		public abstract void Assign (T newRoute);
-		public abstract void Assign (T newRoute, RoutePoint<T> position);
+		public abstract void Assign(T newRoute);
+		public abstract void Assign(T newRoute, RoutePoint<T> position);
+		*/
 	}
 }

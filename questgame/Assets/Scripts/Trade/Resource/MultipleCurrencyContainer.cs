@@ -2,15 +2,13 @@
 using UnityEngine;
 
 using System;
-using Serialization;
 
 namespace Trade
 {
 	[Serializable, ExecuteInEditMode]
 	public class MultipleCurrencyContainer : ScriptableObject, ICurrencyContainer
 	{
-		[SerializeField]
-		SerializableDictionaryStringInt dictionary;
+		Dictionary<string, int> dictionary;
 
 		[SerializeField]
 		public int Prime = 5;
@@ -20,10 +18,6 @@ namespace Trade
 
 		void Awake()
 		{
-			if (dictionary == null)
-			{
-				dictionary = CreateInstance<SerializableDictionaryStringInt>();
-			}
 		}
 
 		public string DefaultCurrency

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Shapes
 {
-	public class BezierCurve : MonoBehaviour, IPathable
+	public class BezierCurve : MonoBehaviour
 	{
 		[SerializeField]
 		List<Vector3> _controlPoints = new List<Vector3>();
@@ -20,7 +20,7 @@ namespace Shapes
 
 		public Vector3 GetPoint(float position, bool worldPosition = true)
 		{
-			return worldPosition ? transform.TransformPoint(Bezier.GetPoint(_controlPoints,position)) : Bezier.GetPoint(_controlPoints, position);
+			return worldPosition ? transform.TransformPoint(Bezier.GetPoint(_controlPoints, position)) : Bezier.GetPoint(_controlPoints, position);
 		}
 
 		public Vector3 GetControlPoint(int index, bool worldPosition = true)
