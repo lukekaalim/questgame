@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-using Shapes.Renderers;
+using Shapes.Editors;
 
 namespace Shapes
 {
 	public class ShapeTray : EditorWindow
 	{
 		bool showDistances = true;
+		VisualEditor editor;
 
 		[MenuItem("Window/Shapes")]
 		static void ShowWindow()
@@ -20,25 +21,51 @@ namespace Shapes
 		void OnEnable()
 		{
 			SceneView.onSceneGUIDelegate += OnSceneGUI;
+			Selection.selectionChanged += OnSelectionChanged;
 		}
 
 		void OnDestroy()
 		{
 			SceneView.onSceneGUIDelegate -= OnSceneGUI;
+			Selection.selectionChanged -= OnSelectionChanged;
 		}
 
 		void OnSceneGUI(SceneView view)
 		{
+			if(editor != null)
+			{
+				editor.RenderScene();
+			}
+
 			foreach (CompoundLine line in CompoundLine.enabledCompoundLines)
 			{
-				CompoundLineRenderer.RenderLine(line);
+				CompoundLineRenderer.Render(line);
 			}
 
 			HandleUtility.Repaint();
 		}
 
+		void OnSelectionChanged()
+		{
+			Repaint();
+
+			CompoundLine line = Selection.activeObject as CompoundLine;
+			if (line != null)
+			{
+				editor = new CompoundLineEditor(line);
+				return;
+			}
+
+			editor = null;
+		}
+
 		void OnGUI()
 		{
+			
+			if (editor != null)
+			{
+				editor.DrawGUI();
+			}
 			EditorGUILayout.LabelField("CompoundLine count", CompoundLine.enabledCompoundLines.Count.ToString());
 			showDistances = EditorGUILayout.Toggle("Show Point Distances", showDistances);
 			for (int i = 0; i < CompoundLine.enabledCompoundLines.Count; i++)
