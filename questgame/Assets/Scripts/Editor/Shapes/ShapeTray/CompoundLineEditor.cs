@@ -7,17 +7,72 @@ namespace Shapes.Editors
 	{
 		CompoundLine target;
 		int selectedIndex = -1;
+		Texture sliderBackground, pointTexture;
+		float scaleMin, scaleMax;
 
 		public CompoundLineEditor(CompoundLine target)
 		{
 			this.target = target;
+			sliderBackground = EditorGUIUtility.Load("scrollBackground.png") as Texture;
+			pointTexture = EditorGUIUtility.Load("point.png") as Texture;
+			scaleMin = 0;
+			scaleMax = 1;
 		}
 
 		public void DrawGUI()
 		{
-			if (GUILayout.Button("Recalculate Line"))
+			const float TOTAL_HEIGHT = 60f;
+			const float HORIZONTAL_PADDING = 20f;
+			const float LINE_HEIGHT = 5f;
+			const float VERTICAL_PADDING = 10f;
+			const float SCALE_HEIGHT = 15f;
+
+			Rect pointEditorRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, TOTAL_HEIGHT);
+			Rect scaleRect = new Rect(pointEditorRect);
+			scaleRect.xMin += HORIZONTAL_PADDING;
+			scaleRect.xMax -= HORIZONTAL_PADDING;
+			scaleRect.yMin += 5f;
+			scaleRect.yMax = scaleRect.yMin + SCALE_HEIGHT;
+
+			Rect scrollBackground = new Rect(pointEditorRect);
+
+			scrollBackground.xMin += HORIZONTAL_PADDING;
+			scrollBackground.xMax -= HORIZONTAL_PADDING;
+
+			scrollBackground.yMin += (VERTICAL_PADDING * 2) + SCALE_HEIGHT;
+			scrollBackground.yMax = scrollBackground.yMin + LINE_HEIGHT;
+
+			GUI.DrawTexture(scrollBackground, sliderBackground);
+
+			EditorGUI.MinMaxSlider(scaleRect, ref scaleMin, ref scaleMax, 0, 1);
+
+			for(int i = 0; i < target.Points.Count; i++)
 			{
-				target.Recalculate();
+				float relativeDistance = 1;
+				if(i != target.Points.Count - 1)
+				{
+					relativeDistance = target.PointDistances[i] / target.TotalLength;
+				}
+				float scale =  (scaleMax - scaleMin);
+				float offset = scaleMin;
+				float calculatedPosition = (relativeDistance - offset) / scale;
+				if(calculatedPosition < 0 || calculatedPosition > 1)
+				{
+					continue;
+				}
+
+				float xPosition = Mathf.LerpUnclamped(scrollBackground.xMin, scrollBackground.xMax, calculatedPosition);
+
+				float yPosition = (scrollBackground.yMax + scrollBackground.yMin) / 2;
+
+				float textWidth = GUI.skin.button.CalcSize(new GUIContent(i.ToString())).x + 0f;
+
+				Rect pointPosition = new Rect(xPosition -textWidth/2, yPosition - 7f, textWidth, 14f);
+
+				if(GUI.Button(pointPosition, new GUIContent(i.ToString())))
+				{
+					selectedIndex = i;
+				} 
 			}
 		}
 

@@ -22,6 +22,7 @@ namespace Shapes
 		{
 			SceneView.onSceneGUIDelegate += OnSceneGUI;
 			Selection.selectionChanged += OnSelectionChanged;
+			OnSelectionChanged();
 		}
 
 		void OnDestroy()
@@ -35,6 +36,7 @@ namespace Shapes
 			if(editor != null)
 			{
 				editor.RenderScene();
+				Repaint();
 			}
 
 			foreach (CompoundLine line in CompoundLine.enabledCompoundLines)
@@ -61,23 +63,14 @@ namespace Shapes
 
 		void OnGUI()
 		{
-			
 			if (editor != null)
 			{
 				editor.DrawGUI();
 			}
-			EditorGUILayout.LabelField("CompoundLine count", CompoundLine.enabledCompoundLines.Count.ToString());
-			showDistances = EditorGUILayout.Toggle("Show Point Distances", showDistances);
-			for (int i = 0; i < CompoundLine.enabledCompoundLines.Count; i++)
+
+			if(GUILayout.Button("Reset", GUILayout.Width(50f)))
 			{
-				CompoundLine line = CompoundLine.enabledCompoundLines[i];
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PrefixLabel(line.Points.Count.ToString());
-				if (GUILayout.Button("delete line"))
-				{
-					DestroyImmediate(line);
-				}
-				EditorGUILayout.EndHorizontal();
+				OnSelectionChanged();
 			}
 		}
 	}

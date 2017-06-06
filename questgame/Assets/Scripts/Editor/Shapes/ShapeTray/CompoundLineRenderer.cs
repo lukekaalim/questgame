@@ -5,7 +5,7 @@ namespace Shapes.Editors
 {
 	public static class CompoundLineRenderer
 	{
-		static int controlHandleId = 0;
+		public static int controlHandleId = 0;
 
 		public static void Render(CompoundLine lineToRender)
 		{
@@ -16,7 +16,7 @@ namespace Shapes.Editors
 				lineToRender.lineColor,
 				3f);
 
-			if(MouseClickedOnLine(points))
+			if (MouseClickedOnLine(points))
 			{
 				Selection.activeObject = lineToRender;
 			}
@@ -30,7 +30,6 @@ namespace Shapes.Editors
 			{
 				return false;
 			}
-			
 			controlHandleId = GUIUtility.GetControlID(FocusType.Passive);
 			EventType currentEventType = Event.current.GetTypeForControl(controlHandleId);
 
@@ -44,15 +43,15 @@ namespace Shapes.Editors
 
 			float distance = HandleUtility.DistanceToPolyLine(points);
 
-			if(distance > MIN_CLICK_PIXEL_DISTANCE)
+			if (distance > MIN_CLICK_PIXEL_DISTANCE)
 			{
-				if(GUIUtility.hotControl == controlHandleId)
+				if (GUIUtility.hotControl == controlHandleId)
 				{
 					GUIUtility.hotControl = 0;
 				}
 				return false;
 			}
-			
+
 			Event.current.Use();
 
 			if (mouseUp)
@@ -66,7 +65,6 @@ namespace Shapes.Editors
 				return false;
 			}
 		}
-
 
 		private static void RenderLines(Vector3[] points, Color color, float width)
 		{

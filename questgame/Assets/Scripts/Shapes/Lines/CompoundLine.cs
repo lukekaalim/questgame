@@ -172,6 +172,7 @@ namespace Shapes
 		public static List<CompoundLine> enabledCompoundLines = new List<CompoundLine>();
 
 		public List<float> SegmentLengths { get { return segmentLengths; } }
+		public List<float> PointDistances { get { return pointDistances; } }
 
 		public void Recalculate()
 		{
