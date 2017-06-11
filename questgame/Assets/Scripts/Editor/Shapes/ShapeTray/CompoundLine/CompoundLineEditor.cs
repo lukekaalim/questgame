@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shapes.Editors
 {
-	public class CompoundLineEditor : VisualEditor
+	public class CompoundLineEditor : IVisualEditor
 	{
 		CompoundLine target;
 		int selectedIndex = -1;

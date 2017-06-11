@@ -8,7 +8,7 @@ namespace Shapes
 	public class ShapeTray : EditorWindow
 	{
 		bool showDistances = true;
-		VisualEditor editor;
+		IVisualEditor editor;
 
 		[MenuItem("Window/Shapes")]
 		static void ShowWindow()
