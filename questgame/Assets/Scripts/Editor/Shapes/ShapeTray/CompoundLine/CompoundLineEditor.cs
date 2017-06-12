@@ -1,104 +1,196 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using Utility;
+using System.Collections.Generic;
 
 namespace Shapes.Editors
 {
+	// TODO split and refactor this into mode sub classes
 	public class CompoundLineEditor : IVisualEditor
 	{
 		CompoundLine target;
-		int selectedIndex = -1;
-		Texture sliderBackground, pointTexture;
-		float scaleMin, scaleMax;
+
+		bool currentlyGUIDragSelecting = false;
+		bool currentlySceneDragSelecting = false;
+		float dragStartPosition = 0;
+		float dragEndPosition = 0;
+		HashSet<int> selection = new HashSet<int>();
+		float scaleMin = 0;
+		float scaleMax = 1;
+
+		Texture sliderBackground, scrollSelected;
 
 		public CompoundLineEditor(CompoundLine target)
 		{
 			this.target = target;
 			sliderBackground = EditorGUIUtility.Load("scrollBackground.png") as Texture;
-			pointTexture = EditorGUIUtility.Load("point.png") as Texture;
-			scaleMin = 0;
-			scaleMax = 1;
+			scrollSelected = EditorGUIUtility.Load("scrollSelected.png") as Texture;
+		}
+
+		void DrawScaler()
+		{
+			const float SCALER_HEIGHT = 20f;
+			const float HORIZONTAL_PADDING = 15f;
+
+			Rect scalerRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, SCALER_HEIGHT);
+			scalerRect = scalerRect.AddHorizontalPadding(HORIZONTAL_PADDING);
+			EditorGUI.MinMaxSlider(scalerRect, ref scaleMin, ref scaleMax, 0, 1);
+		}
+		
+		void DrawSelector()
+		{
+			const float SELECTOR_HEIGHT = 20f;
+			const float HORIZONTAL_PADDING = 15f;
+			const float VERTICAL_PADDING = -5f;
+
+			Rect selectorRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, SELECTOR_HEIGHT);
+			selectorRect = selectorRect.AddPadding(HORIZONTAL_PADDING, VERTICAL_PADDING);
+
+			GUI.DrawTexture(selectorRect, sliderBackground);
+
+			if(currentlyGUIDragSelecting)
+			{
+				Rect highlighRect = new Rect(selectorRect)
+				{
+					xMin = Mathf.LerpUnclamped(selectorRect.xMin, selectorRect.xMax, dragStartPosition),
+					xMax = Mathf.LerpUnclamped(selectorRect.xMin, selectorRect.xMax, dragEndPosition)
+				};
+				GUI.DrawTexture(highlighRect, scrollSelected);
+			}
+
+			for (int i = 0; i < target.Points.Count; i++)
+			{
+				DrawPointHandle(i, selectorRect);
+			}
+
+			Event currentEvent = Event.current;
+
+			if(currentEvent.button == 0 && selectorRect.Contains(currentEvent.mousePosition) && currentEvent.type == EventType.MouseDown)
+			{
+				if(currentEvent.type == EventType.MouseDown)
+				{
+					currentlyGUIDragSelecting = true;
+					dragStartPosition = selectorRect.GetRelativePosition(currentEvent.mousePosition).x;
+					dragEndPosition = dragStartPosition;
+					selection.Clear();
+					currentEvent.Use();
+				}
+			}
+
+			if(currentlyGUIDragSelecting)
+			{
+				if(currentEvent.type == EventType.MouseDrag)
+				{
+					dragEndPosition = selectorRect.GetRelativePosition(currentEvent.mousePosition).x;
+					currentEvent.Use();
+				}
+				else if (currentEvent.type == EventType.MouseUp)
+				{
+					currentlyGUIDragSelecting = false;
+					currentEvent.Use();
+				}
+			}
+		}
+
+		void DrawPointHandle(int pointIndex, Rect container)
+		{
+			float relativeDistance = 1;
+			if (pointIndex != target.Points.Count - 1)
+			{
+				relativeDistance = target.PointDistances[pointIndex] / target.TotalLength;
+			}
+
+			float scale = (scaleMax - scaleMin);
+			float offset = scaleMin;
+			float calculatedPosition = (relativeDistance - offset) / scale;
+
+			if (calculatedPosition < -0.001 || calculatedPosition > 1.001)
+			{
+				return;
+			}
+
+			float xPosition = Mathf.LerpUnclamped(container.xMin, container.xMax, calculatedPosition);
+			float yPosition = (container.yMax + container.yMin) / 2;
+			Vector2 textSize = GUI.skin.button.CalcSize(new GUIContent(pointIndex.ToString()));
+
+			Rect pointPosition = RectUtilities.CreatePositionRect(new Vector2(xPosition, yPosition), textSize);
+
+			if(currentlyGUIDragSelecting)
+			{
+				if (calculatedPosition >= dragStartPosition && calculatedPosition <= dragEndPosition)
+				{
+					selection.Add(pointIndex);
+				}
+				else
+				{
+					selection.Remove(pointIndex);
+				}
+			}
+			GUIStyle style = new GUIStyle(GUI.skin.button);
+			if(selection.Contains(pointIndex))
+			{
+				style.normal.background = style.active.background;
+			}
+			if (GUI.Button(pointPosition, new GUIContent(pointIndex.ToString()), style))
+			{
+				SelectPoint(pointIndex);
+			}
 		}
 
 		public void DrawGUI()
 		{
-			const float TOTAL_HEIGHT = 60f;
-			const float HORIZONTAL_PADDING = 20f;
-			const float LINE_HEIGHT = 5f;
-			const float VERTICAL_PADDING = 10f;
-			const float SCALE_HEIGHT = 15f;
+			DrawScaler();
+			DrawSelector();
+		}
 
-			Rect pointEditorRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, TOTAL_HEIGHT);
-			Rect scaleRect = new Rect(pointEditorRect);
-			scaleRect.xMin += HORIZONTAL_PADDING;
-			scaleRect.xMax -= HORIZONTAL_PADDING;
-			scaleRect.yMin += 5f;
-			scaleRect.yMax = scaleRect.yMin + SCALE_HEIGHT;
-
-			Rect scrollBackground = new Rect(pointEditorRect);
-
-			scrollBackground.xMin += HORIZONTAL_PADDING;
-			scrollBackground.xMax -= HORIZONTAL_PADDING;
-
-			scrollBackground.yMin += (VERTICAL_PADDING * 2) + SCALE_HEIGHT;
-			scrollBackground.yMax = scrollBackground.yMin + LINE_HEIGHT;
-
-			GUI.DrawTexture(scrollBackground, sliderBackground);
-
-			EditorGUI.MinMaxSlider(scaleRect, ref scaleMin, ref scaleMax, 0, 1);
-
-			for(int i = 0; i < target.Points.Count; i++)
+		public void SelectPoint(int pointIndex)
+		{
+			if (!Event.current.shift)
 			{
-				float relativeDistance = 1;
-				if(i != target.Points.Count - 1)
-				{
-					relativeDistance = target.PointDistances[i] / target.TotalLength;
-				}
-				float scale =  (scaleMax - scaleMin);
-				float offset = scaleMin;
-				float calculatedPosition = (relativeDistance - offset) / scale;
-				if(calculatedPosition < 0 || calculatedPosition > 1)
-				{
-					continue;
-				}
-
-				float xPosition = Mathf.LerpUnclamped(scrollBackground.xMin, scrollBackground.xMax, calculatedPosition);
-
-				float yPosition = (scrollBackground.yMax + scrollBackground.yMin) / 2;
-
-				float textWidth = GUI.skin.button.CalcSize(new GUIContent(i.ToString())).x + 0f;
-
-				Rect pointPosition = new Rect(xPosition -textWidth/2, yPosition - 7f, textWidth, 14f);
-
-				if(GUI.Button(pointPosition, new GUIContent(i.ToString())))
-				{
-					selectedIndex = i;
-				} 
+				selection.Clear();
 			}
+			selection.Add(pointIndex);
 		}
 
 		public void RenderScene()
 		{
+			Dictionary<int, Vector3> selectedVectors = new Dictionary<int, Vector3>();
+
 			for (int i = 0; i < target.Points.Count; i++)
 			{
 				Vector3 point = target.Points[i];
 
-				if(selectedIndex == i)
+				if(selection.Contains(i))
 				{
-					Vector3 newPosition = Handles.DoPositionHandle(point, Quaternion.identity);
-					if(newPosition != target.Points[i])
+					selectedVectors.Add(i, target.Points[i]);
+					if (selection.Count == 1)
 					{
-						target.Points[i] = newPosition;
-						target.Recalculate();
+						Vector3 newPosition = Handles.DoPositionHandle(point, Quaternion.identity);
+						if (newPosition != target.Points[i])
+						{
+							target.Points[i] = newPosition;
+							target.Recalculate();
+						}
+					}
+					else
+					{
+						using(new Handles.DrawingScope(target.lineColor * 2))
+						{
+							if(CompoundLineRenderer.RenderPointButton(point))
+							{
+								SelectPoint(i);
+							}
+						}
 					}
 				}
-				else if(RenderPointButton(point))
+				else if(CompoundLineRenderer.RenderPointButton(point))
 				{
-					selectedIndex = i;
+					SelectPoint(i);
 				}
 
 				if (i < target.Points.Count - 1)
 				{
-					RenderLabelAtMidpoint(
+					CompoundLineRenderer.RenderLabelAtMidpoint(
 						point,
 						target.Points[i + 1],
 						target.SegmentLengths[i].ToString(),
@@ -106,41 +198,21 @@ namespace Shapes.Editors
 						);
 				}
 			}
-		}
 
-		static bool RenderPointButton(Vector3 point)
-		{
-			const float MIN_SIZE = 0.1f;
-
-			float consistentHandleSize = HandleUtility.GetHandleSize(point) * 0.1f;
-			float size = (consistentHandleSize > MIN_SIZE) ? consistentHandleSize : MIN_SIZE;
-
-			Quaternion rotation = Quaternion.identity;
-
-			if (Camera.current != null)
+			if(selection.Count > 1)
 			{
-				rotation = Camera.current.transform.rotation;
-			}
-
-			bool selectPoint = Handles.Button(
-				point,
-				rotation,
-				size,
-				size,
-				Handles.CircleHandleCap
-				);
-
-			return selectPoint;
-		}
-
-		static void RenderLabelAtMidpoint(Vector3 start, Vector3 end, string label, Color color)
-		{
-			if (EditorPrefs.GetBool("CompoundLineEditor/RenderMidpointLengths", false))
-			{
-				GUIStyle style = new GUIStyle();
-				style.normal.textColor = color;
-
-				Handles.Label((start + end) / 2, label, style);
+				Vector3 average = VectorUtilities.AverageVectors(selectedVectors.Values);
+				Vector3 movedPosition = Handles.PositionHandle(average, Quaternion.identity);
+				if(average != movedPosition)
+				{
+					Vector3 delta = movedPosition - average;
+					foreach (KeyValuePair<int, Vector3> entry in selectedVectors)
+					{
+						Vector3 newPosition = entry.Value + delta;
+						target.Points[entry.Key] = newPosition;
+					}
+					target.Recalculate();
+				}
 			}
 		}
 	}

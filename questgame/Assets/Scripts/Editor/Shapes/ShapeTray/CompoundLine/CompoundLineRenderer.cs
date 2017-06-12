@@ -66,11 +66,47 @@ namespace Shapes.Editors
 			}
 		}
 
-		private static void RenderLines(Vector3[] points, Color color, float width)
+		public static void RenderLines(Vector3[] points, Color color, float width)
 		{
 			using (new Handles.DrawingScope(color))
 			{
 				Handles.DrawAAPolyLine(width, points);
+			}
+		}
+
+		public static bool RenderPointButton(Vector3 point)
+		{
+			const float MIN_SIZE = 0.1f;
+
+			float consistentHandleSize = HandleUtility.GetHandleSize(point) * 0.1f;
+			float size = (consistentHandleSize > MIN_SIZE) ? consistentHandleSize : MIN_SIZE;
+
+			Quaternion rotation = Quaternion.identity;
+
+			if (Camera.current != null)
+			{
+				rotation = Camera.current.transform.rotation;
+			}
+
+			bool selectPoint = Handles.Button(
+				point,
+				rotation,
+				size,
+				size,
+				Handles.CircleHandleCap
+				);
+
+			return selectPoint;
+		}
+
+		public static void RenderLabelAtMidpoint(Vector3 start, Vector3 end, string label, Color color)
+		{
+			if (EditorPrefs.GetBool("CompoundLineEditor/RenderMidpointLengths", false))
+			{
+				GUIStyle style = new GUIStyle();
+				style.normal.textColor = color;
+
+				Handles.Label((start + end) / 2, label, style);
 			}
 		}
 	}
